@@ -36,6 +36,7 @@ class Integrity_Check extends Frontend
 	public function checkFiles()
 	{
 	    $contao_version_live = VERSION . '.' . BUILD;
+	    $this->loadLanguageFile('tl_integrity_check');
 	    
 	    foreach ($this->getFileList() as $file) 
 	    {
@@ -72,11 +73,11 @@ class Integrity_Check extends Frontend
 	    {
 	        if ($value[1] === false) 
 	        {
-	            $this->log('Integrity status for file '.$value[0].' is: Corrupt!', 'Integrity_Check checkFiles()', TL_ERROR);
+	            $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['corrupt'], $value[0]), 'Integrity_Check checkFiles()', TL_ERROR);
 	        }
 	        elseif ($GLOBALS['TL_CONFIG']['mod_integrity_check']['debug'] === true) 
 	        { 
-	            $this->log('Integrity status for file '.$value[0].' is: OK', 'Integrity_Check checkFiles()', TL_CRON);
+	            $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['ok'], $value[0]), 'Integrity_Check checkFiles()', TL_CRON);
 	        }
 	    }
 	    
@@ -84,7 +85,7 @@ class Integrity_Check extends Frontend
 	    
 	    
     	// Add log entry
-    	$this->log('Check files for integrity is finished.', 'Integrity_Check checkFiles()', TL_CRON);
+    	$this->log($GLOBALS['TL_LANG']['tl_integrity_check']['finished'], 'Integrity_Check checkFiles()', TL_CRON);
 		
 	}
 	
