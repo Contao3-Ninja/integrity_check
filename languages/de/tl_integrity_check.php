@@ -18,7 +18,16 @@
  * CRON Output (de)
  */
 $GLOBALS['TL_LANG']['tl_integrity_check']['ok']       = 'Integritäts-Status für Datei %s ist: OK';
-$GLOBALS['TL_LANG']['tl_integrity_check']['corrupt']  = 'Integritäts-Status für Datei %s ist: Corrupt';
+$GLOBALS['TL_LANG']['tl_integrity_check']['corrupt']  = 'Integritäts-Status für Datei %s ist: beschädigt';
 $GLOBALS['TL_LANG']['tl_integrity_check']['finished'] = 'Integritäts-Überprüfung der Dateien abgeschlossen.';
+
+/**
+ * Mail to admin
+ */
+$GLOBALS['TL_LANG']['tl_integrity_check']['subject']   = 'Contao :: Integritäts-Überprüfung auf %s';
+$GLOBALS['TL_LANG']['tl_integrity_check']['message_1'] = 'Die Integritäts-Überprüfung auf %s hat beschädigte Dateien gefunden:';
+$GLOBALS['TL_LANG']['tl_integrity_check']['message_2'] = 'Diese Information ist auch im System-Log zu finden.';
+
+
 
 ?>

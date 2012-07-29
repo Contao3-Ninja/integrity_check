@@ -37,6 +37,7 @@ class Integrity_Check extends Frontend
 	{
 	    $contao_version_live = VERSION . '.' . BUILD;
 	    $this->loadLanguageFile('tl_integrity_check');
+	    $status = true;
 	    
 	    foreach ($this->getFileList() as $file) 
 	    {
@@ -56,6 +57,7 @@ class Integrity_Check extends Frontend
 	                if (md5(preg_replace('@/\*.*\*/@Us', '', $buffer)) != $md5_code) 
 	                {
 	                    $this->fileStatus[] = array($file,false);
+	                    
 	                }
 	                else 
 	                {
@@ -74,6 +76,7 @@ class Integrity_Check extends Frontend
 	        if ($value[1] === false) 
 	        {
 	            $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['corrupt'], $value[0]), 'Integrity_Check checkFiles()', TL_ERROR);
+	            $status = false;
 	        }
 	        elseif ($GLOBALS['TL_CONFIG']['mod_integrity_check']['debug'] === true) 
 	        { 
@@ -81,14 +84,21 @@ class Integrity_Check extends Frontend
 	        }
 	    }
 	    
-	    
-	    
-	    
-    	// Add log entry
+	    //Mail to Admin
+	    if ($status === false) 
+	    {
+	        $this->sendCheckEmail();
+	    }
+
+	    // Add log entry
     	$this->log($GLOBALS['TL_LANG']['tl_integrity_check']['finished'], 'Integrity_Check checkFiles()', TL_CRON);
 		
 	}
 	
+	/**
+	 * Filelist with checksums
+	 * @return    array    file,checksum_file,checksum_code,contao_version
+	 */
 	private function getFileList() 
 	{
 	    return array (
@@ -139,5 +149,42 @@ class Integrity_Check extends Frontend
 	                 );
 	
 	}//getFileList
+	
+	/**
+	 * Send eMail to Admin
+	 */
+	private function sendCheckEmail()
+	{
+	    if ($GLOBALS['TL_CONFIG']['mod_integrity_check']['send_email_to_admin'] == false) 
+	    {
+	        return; //email to admin is off
+	    }
+	    if (!isset($GLOBALS['TL_CONFIG']['adminEmail'])) 
+	    {
+	        return; //admin email not set
+	    }
+	    // Notification
+	    list($GLOBALS['TL_ADMIN_NAME'], $GLOBALS['TL_ADMIN_EMAIL']) = $this->splitFriendlyName($GLOBALS['TL_CONFIG']['adminEmail']); //from index.php
+	    $objEmail = new Email();
+	    $objEmail->from     = $GLOBALS['TL_ADMIN_EMAIL'];
+	    $objEmail->fromName = $GLOBALS['TL_ADMIN_NAME'];
+	    
+	    $objEmail->subject  = sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['subject']  , $this->Environment->host);
+	    $objEmail->text     = sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['message_1'], $this->Environment->host);
+	    
+	    foreach ($this->fileStatus as $key => $value)
+	    {
+	        if ($value[1] === false)
+	        {
+	            $objEmail->text .= "\n".$value[0];
+	        }
+	    }
+	    $objEmail->text .= "\n\n".$GLOBALS['TL_LANG']['tl_integrity_check']['message_2'];
+	    $objEmail->sendTo($GLOBALS['TL_CONFIG']['adminEmail']);
+	    return ;
+	    
+	}//sendCheckEmail
+	
+	
 }
 ?>
