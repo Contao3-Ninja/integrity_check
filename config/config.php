@@ -37,4 +37,10 @@ $GLOBALS['TL_CRON']['daily'][]  = array('Integrity_Check', 'checkFiles');
  */
 $GLOBALS['TL_CONFIG']['mod_integrity_check']['debug'] = false;
 
+/**
+ * eMail to Admin, default Off
+ * use: $GLOBALS['TL_CONFIG']['adminEmail']
+ */
+$GLOBALS['TL_CONFIG']['mod_integrity_check']['send_email_to_admin'] = false;
+
 ?>
