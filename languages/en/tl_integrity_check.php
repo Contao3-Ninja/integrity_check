@@ -19,7 +19,7 @@
  */
 $GLOBALS['TL_LANG']['tl_integrity_check']['ok']       = 'Integrity status for file %s is: OK';
 $GLOBALS['TL_LANG']['tl_integrity_check']['corrupt']  = 'Integrity status for file %s is: Corrupt';
-$GLOBALS['TL_LANG']['tl_integrity_check']['finished'] = 'Check files for integrity is finished.';
+$GLOBALS['TL_LANG']['tl_integrity_check']['finished'] = 'Checking files for integrity is completed.';
 
 /**
  * Mail to admin
