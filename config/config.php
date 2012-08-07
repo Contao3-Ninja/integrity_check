@@ -14,33 +14,25 @@
  * @filesource
  */
 
+$GLOBALS['BE_MOD']['system']['integrity_check'] = array
+(
+        'tables'       => array('tl_integrity_check'),
+        'icon'       => 'system/modules/integrity_check/html/integrity_check.png',
+        //'stylesheet' => 'system/modules/integrity_check/html/mod_integrity_check_be.css',
+);
+
 /**
  * -------------------------------------------------------------------------
  * CRON JOBS
  * -------------------------------------------------------------------------
  *
  * Register methods to be executed at certain intervals.
- * 
- *   weekly = run once a week
- *   daily  = run once a day
- *   hourly = run every hour
  */
-//$GLOBALS['TL_CRON']['weekly'][] = array('Integrity_Check', 'checkFiles');
-$GLOBALS['TL_CRON']['daily'][]  = array('Integrity_Check', 'checkFiles');
-
+$GLOBALS['TL_CRON']['monthly'][] = array('Integrity_Check', 'checkFilesMonthly');
+$GLOBALS['TL_CRON']['weekly'][]  = array('Integrity_Check', 'checkFilesWeekly');
+$GLOBALS['TL_CRON']['daily'][]   = array('Integrity_Check', 'checkFilesDaily');
 //from contao 2.11, hourly is possible.
-//$GLOBALS['TL_CRON']['hourly'][] = array('Integrity_Check', 'checkFiles');
+$GLOBALS['TL_CRON']['hourly'][]  = array('Integrity_Check', 'checkFilesHourly');
 
-
-/**
- * DEBUG Modus, default: Off
- */
-$GLOBALS['TL_CONFIG']['mod_integrity_check']['debug'] = false;
-
-/**
- * eMail to Admin, default Off
- * use: $GLOBALS['TL_CONFIG']['adminEmail']
- */
-$GLOBALS['TL_CONFIG']['mod_integrity_check']['send_email_to_admin'] = false;
 
 ?>

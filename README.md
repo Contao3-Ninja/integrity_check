@@ -17,3 +17,6 @@ Test for Contao versions 2.10.0 to 2.11.5
 **dev** This is the current unstable upstream development branch.
 
 **uat** This is the current release candidate branch. (see tags with "rc" in name)
+
+
+This software using the Fugue Icons from http://p.yusukekamiyamane.com/icons/search/fugue/

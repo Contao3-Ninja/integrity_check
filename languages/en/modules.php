@@ -17,6 +17,6 @@
 /**
  * For Backend List
  */
-$GLOBALS['TL_LANG']['MOD']['integrity_check'] = 'Integrity Check (CRON)';
+$GLOBALS['TL_LANG']['MOD']['integrity_check'] = array('Integrity Check','Integrity Check (CRON)');
 
 ?>
