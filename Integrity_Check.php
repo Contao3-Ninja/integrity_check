@@ -110,9 +110,9 @@ class Integrity_Check extends Frontend
 	    } //foreach plan step
 	    if ($checkSummary) 
 	    {
-    	    $this->sendCheckEmail();
-    	    // Add log entry
-    	    $this->log($GLOBALS['TL_LANG']['tl_integrity_check']['finished'], 'Integrity_Check checkFiles()', TL_CRON);
+            $this->sendCheckEmail();
+            // Add log entry
+            $this->log('['.$this->check_title .'] '. $GLOBALS['TL_LANG']['tl_integrity_check']['finished'], 'Integrity_Check checkFiles()', TL_CRON);
 	    }
 	}
 	
@@ -242,7 +242,7 @@ class Integrity_Check extends Frontend
 	    {
 	        if ($value === true)
 	        {
-	            $objEmail->text .= "\n".$key;
+	            $objEmail->text .= "\n* ".$key;
 	            $sendmail = true;
 	        }
 	    }
