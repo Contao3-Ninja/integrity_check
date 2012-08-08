@@ -85,26 +85,34 @@ class Integrity_Check extends Frontend
 	    $this->loadLanguageFile('tl_integrity_check');
 	    $this->getCheckPlan();
 	    $this->getFileList();
+	    $checkSummary = false; //false=kein check erfolgt, keine Mail, keine completed Meldung
 	    
 	    //Zeilenweise den Plan durchgehen
 	    foreach ($this->check_plans as $check_plan_step)
 	    {
 	        if ($this->cron_moment == $check_plan_step['cp_moment']) 
 	        {
+	            $resMD5 = false;
+	            $resTS  = false;
 	            //diese Datei muss jetzt geprüft werden.
 	            switch ($check_plan_step['cp_type_of_test'])
 	            {
 	                case 'md5' :
-	                    $this->checkFileMD5($check_plan_step['cp_files'], $check_plan_step['cp_action']);
+	                    $resMD5 = $this->checkFileMD5($check_plan_step['cp_files'], $check_plan_step['cp_action']);
 	                    break;
 	                case 'timestamp' :
-	                    $this->checkFileTimestamp($check_plan_step['cp_files'], $check_plan_step['cp_action']);
+	                    $resTS = $this->checkFileTimestamp($check_plan_step['cp_files'], $check_plan_step['cp_action']);
 	                    break;
 	            }
-	            $this->sendCheckEmail();
-	            // Add log entry
-	            $this->log($GLOBALS['TL_LANG']['tl_integrity_check']['finished'], 'Integrity_Check checkFiles()', TL_CRON);
-	        }
+	            //einmal true immer true
+	            $checkSummary = ($resMD5 == true || $resTS == true) ? true : $checkSummary;
+	        } //moment
+	    } //foreach plan step
+	    if ($checkSummary) 
+	    {
+    	    $this->sendCheckEmail();
+    	    // Add log entry
+    	    $this->log($GLOBALS['TL_LANG']['tl_integrity_check']['finished'], 'Integrity_Check checkFiles()', TL_CRON);
 	    }
 	}
 	
@@ -115,6 +123,10 @@ class Integrity_Check extends Frontend
 	 */  
 	protected function checkFileMD5($cp_file, $cp_action)
 	{
+	    if ($cp_file == '') 
+	    {
+	        return false; // kein check
+	    }
 	    $status = true;
 	    
 	    foreach ($this->file_list as $files)
@@ -155,23 +167,29 @@ class Integrity_Check extends Frontend
                     $this->fileEmailStatus[$cp_file] = true; // true = mail 
                     if ($this->check_debug == true) 
                     {
-                        $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['corrupt'], $cp_file), 'Integrity_Check checkFilesMD5()', TL_ERROR);
+                        $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['corrupt'], $cp_file), 'Integrity_Check checkFileMD5()', TL_ERROR);
                     }
                     break;
                 case 'only_logging':
-                    $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['corrupt'], $cp_file), 'Integrity_Check checkFilesMD5()', TL_ERROR);
+                    $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['corrupt'], $cp_file), 'Integrity_Check checkFileMD5()', TL_ERROR);
                     break;
             }
         }
         elseif ($this->check_debug == true)
         {
-            $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['ok'], $cp_file), 'Integrity_Check checkFilesMD5()', TL_CRON);
+            $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['ok'], $cp_file), 'Integrity_Check checkFileMD5()', TL_CRON);
         }
+        return true;
 	}
 	
 	protected function checkFileTimestamp($cp_file, $cp_action)
 	{
-	    
+	    if ($cp_file == '')
+	    {
+	        return false; // kein check
+	    }
+	    $this->log('Timestamp-Check not yet implemented.', 'Integrity_Check checkFileTimestamp()', TL_CRON);
+	    return false; // kein check
 	}
 	
 	private function getCheckPlan()
