@@ -37,13 +37,35 @@ $GLOBALS['TL_LANG']['tl_integrity_check']['delete'] = array('Überprüfung lösc
 $GLOBALS['TL_LANG']['tl_integrity_check']['show']   = array('Details der Überprüfung','Details der Überprüfung');
 $GLOBALS['TL_LANG']['tl_integrity_check']['toggle'] = array('Überprüfung veröffentlichen/unveröffentlichen', 'Überprüfung veröffentlichen/unveröffentlichen');
 
+/**
+ * Fields
+ */
 $GLOBALS['TL_LANG']['tl_integrity_check']['check_title'] = array('Titel','Titel für die Übersicht');
-$GLOBALS['TL_LANG']['tl_integrity_check']['check_debug'] = array('Debug','Debug Modus aktivieren');
+$GLOBALS['TL_LANG']['tl_integrity_check']['check_debug'] = array('Debug','Debug Modus aktivieren, zusätzliche Ausgaben in System-Log');
 $GLOBALS['TL_LANG']['tl_integrity_check']['check_plans'] = array('Überprüfungsplan','Planung der Überprüfungen und Aktionen');
+$GLOBALS['TL_LANG']['tl_integrity_check']['published']   = array('Integritäts-Überprüfung aktivieren', 'Diese Integritäts-Überprüfung aktivieren.');
 
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_files']  = array('Dateien','Dateien auswählen zur Überprüfung');
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_moment'] = array('Zeitpunkt','Zeitpunkt der Überprüfung');
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_type_of_test'] = array('Erkennung','Art der Erkennung');
-$GLOBALS['TL_LANG']['tl_integrity_check']['cp_action'] = array('Action','Art der Reaktion');
- 
+$GLOBALS['TL_LANG']['tl_integrity_check']['cp_action'] = array('Aktion','Art der Reaktion');
+
+/**
+ * Reference
+ */
+$GLOBALS['TL_LANG']['tl_integrity_check']['hourly']  = 'stündlich';
+$GLOBALS['TL_LANG']['tl_integrity_check']['daily']   = 'täglich';
+$GLOBALS['TL_LANG']['tl_integrity_check']['weekly']  = 'wöchentlich';
+$GLOBALS['TL_LANG']['tl_integrity_check']['monthly'] = 'monatlich';
+
+$GLOBALS['TL_LANG']['tl_integrity_check']['md5']       = 'MD5';
+$GLOBALS['TL_LANG']['tl_integrity_check']['timestamp'] = 'Zeitstempel';
+
+$GLOBALS['TL_LANG']['tl_integrity_check']['only_logging']     = 'System-Log';
+$GLOBALS['TL_LANG']['tl_integrity_check']['admin_email']      = 'Mail an Admin';
+$GLOBALS['TL_LANG']['tl_integrity_check']['restore']          = 'Wiederherstellung'; //future feature ?
+$GLOBALS['TL_LANG']['tl_integrity_check']['maintenance_mode'] = 'Wartunsseite'; //future feature ?
+
+
+
 ?>

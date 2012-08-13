@@ -28,7 +28,11 @@ $GLOBALS['TL_DCA']['tl_integrity_check'] = array
 	'config' => array
 	(
 		'dataContainer'               => 'Table',
-		'enableVersioning'            => true
+		'enableVersioning'            => true/*,
+        'onsubmit_callback'           => array
+        (
+                array('tl_integrity_check', 'setPublished')
+        )*/
 	),
 
     // List
@@ -36,13 +40,14 @@ $GLOBALS['TL_DCA']['tl_integrity_check'] = array
     (
         'sorting' => array
         (
-            'mode'                    => 0,
+            'mode'                    => 1,
             'fields'                  => array('check_title'),
         ),
 		'label' => array
 		(
 			'fields'                  => array('check_title'),
 			'format'                  => '%s' ,
+		    'label_callback'          => array('tl_integrity_check', 'listChecks')
 		),
 		'operations' => array
 		(
@@ -58,14 +63,14 @@ $GLOBALS['TL_DCA']['tl_integrity_check'] = array
 				'href'                => 'act=delete',
 				'icon'                => 'delete.gif',
 				'attributes'          => 'onclick="if(!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\'))return false;Backend.getScrollOffset()"',
-			),/*
+			),
 			'toggle' => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_article']['toggle'],
+				'label'               => &$GLOBALS['TL_LANG']['tl_integrity_check']['toggle'],
 				'icon'                => 'visible.gif',
-				'attributes'          => 'onclick="Backend.getScrollOffset();return AjaxRequest.toggleVisibility(this,%s)"',
-				'button_callback'     => array('tl_article', 'toggleIcon')
-			),*/
+				//'attributes'          => 'onclick="Backend.getScrollOffset();return AjaxRequest.toggleVisibility(this,%s)"',
+				'button_callback'     => array('tl_integrity_check', 'toggleIcon')
+			),
 			'show' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_integrity_check']['show'],
@@ -79,13 +84,13 @@ $GLOBALS['TL_DCA']['tl_integrity_check'] = array
 	'palettes' => array
 	(
 	      //'__selector__'                => array(),
-		  'default'                     => 'check_title,check_debug;check_plans'
+		  'default'                     => 'check_title;check_plans;published,check_debug'
 	),
     // Subpalettes
     /*
 	'subpalettes' => array
 	(
-		'banner_until'                => 'banner_views_until,banner_clicks_until'
+		'sub_fields'                => 'field1,field2'
 	),
 	*/
 
@@ -105,7 +110,7 @@ $GLOBALS['TL_DCA']['tl_integrity_check'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_integrity_check']['check_debug'],
 			'exclude'                 => true,
 			'inputType'               => 'checkbox',
-			'eval'                    => array('tl_class' => 'w50 m12')
+			'eval'                    => array('tl_class' => 'w50')
 		),
 		'check_plans' => array
 		(
@@ -127,55 +132,179 @@ $GLOBALS['TL_DCA']['tl_integrity_check'] = array
                             'contao/index.php'  => 'contao/index.php',
                             'contao/main.php'   => 'contao/main.php',
 	                    ),
-	                    'eval' 			        => array('style' => 'width:150px', 'includeBlankOption'=>true, 'chosen'=>false, 'submitOnChange'=>true)
+	                    'eval' 			        => array('style' => 'width:150px', 'includeBlankOption'=>true, 'chosen'=>true)
 		            ),
 		            'cp_moment' => array
 		            (
 	                    'label'                 => &$GLOBALS['TL_LANG']['tl_integrity_check']['cp_moment'],
 	                    'exclude'               => true,
 	                    'inputType'             => 'select',
-	                    'options'            	=> array
-	                    (
-	                        'hourly'            => 'hourly',
-	                        'daily'             => 'daily',
-	                        'weekly'            => 'weekly',
-	                        'monthly'           => 'monthly',
-	                    ),
-	                    'eval' 			        => array('style' => 'width:150px', 'includeBlankOption'=>false, 'submitOnChange'=>true)
+		                'options'               => array('hourly','daily','weekly','monthly'),
+		                'reference'             => &$GLOBALS['TL_LANG']['tl_integrity_check'],
+	                    'eval' 			        => array('style' => 'width:150px', 'includeBlankOption'=>false, 'chosen'=>true)
 		            ),
 		            'cp_type_of_test' => array
 		            (
 	                    'label'                 => &$GLOBALS['TL_LANG']['tl_integrity_check']['cp_type_of_test'],
 	                    'exclude'               => true,
 	                    'inputType'             => 'select',
-	                    'options'            	=> array
-	                    (
-                            'md5'               => 'MD5',
-                            'timestamp'         => 'Timestamp',
-	                    ),
-	                    'eval' 			        => array('style' => 'width:100px', 'includeBlankOption'=>false, 'submitOnChange'=>true)
+	                    'options'            	=> array('md5'), // 'timestamp'
+	                    'reference'             => &$GLOBALS['TL_LANG']['tl_integrity_check'],
+	                    'eval' 			        => array('style' => 'width:100px', 'includeBlankOption'=>false, 'chosen'=>true)
 		            ),
 		            'cp_action' => array
 		            (
 	                    'label'                 => &$GLOBALS['TL_LANG']['tl_integrity_check']['cp_action'],
 	                    'exclude'               => true,
 	                    'inputType'             => 'select',
-	                    'options'            	=> array
-	                    (
-	                        'only_logging'      => 'System Log',
-                            'admin_email'       => 'eMail to Admin',
-                            //'restore'           => 'Restore',
-                            //'maintenance_mode'  => 'Maintenance Modus'
-                            
-	                    ),
-	                    'eval' 			        => array('style' => 'width:150px', 'includeBlankOption'=>false, 'submitOnChange'=>true)
+	                    'options'            	=> array('only_logging','admin_email'), //'restore','maintenance_mode'
+		                'reference'             => &$GLOBALS['TL_LANG']['tl_integrity_check'],
+	                    'eval' 			        => array('style' => 'width:150px', 'includeBlankOption'=>false, 'chosen'=>true)
 		            )
                 )//columnFields
 		    )//eval of check_plans
-		)//check_plans
+		),//check_plans
+		'published' => array
+		(
+		        'exclude'             => true,
+		        'label'               => &$GLOBALS['TL_LANG']['tl_integrity_check']['published'],
+		        'inputType'           => 'checkbox',
+		        'eval'                => array('doNotCopy'=>true, 'tl_class' => 'w50'),
+		        'save_callback' => array
+		        (
+		                array('tl_integrity_check', 'setPublished')
+		        )
+		)
 	)//fields
 );
 
+class tl_integrity_check extends Backend
+{
 
+    /**
+     * Import the back end user object
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->import('BackendUser', 'User');
+    }
+    
+    /**
+     * Return the "toggle visibility" button
+     * @param array
+     * @param string
+     * @param string
+     * @param string
+     * @param string
+     * @param string
+     * @return string
+     */
+    public function toggleIcon($row, $href, $label, $title, $icon, $attributes)
+    {
+        if (strlen($this->Input->get('tid')))
+        {
+            $this->toggleVisibility($this->Input->get('tid'), ($this->Input->get('state') == 1));
+            $this->redirect($this->getReferer());
+        }
+    
+        // Check permissions AFTER checking the tid, so hacking attempts are logged
+        if (!$this->User->isAdmin && !$this->User->hasAccess('tl_integrity_check::published', 'alexf'))
+        {
+            return '';
+        }
+    
+        $href .= '&amp;tid='.$row['id'].'&amp;state='.($row['published'] ? '' : 1);
+    
+        if (!$row['published'])
+        {
+            $icon = 'invisible.gif';
+        }
+    
+        return '<a href="'.$this->addToUrl($href).'" title="'.specialchars($title).'"'.$attributes.'>'.$this->generateImage($icon, $label).'</a> ';
+    }
+    
+    
+    /**
+     * Disable/enable a check
+     * @param integer
+     * @param boolean
+     */
+    public function toggleVisibility($intId, $blnVisible)
+    {
+        // Check permissions to edit
+        $this->Input->setGet('id', $intId);
+        $this->Input->setGet('act', 'toggle');
+        
+    
+        // Check permissions to publish
+        if (!$this->User->isAdmin && !$this->User->hasAccess('tl_integrity_check::published', 'alexf'))
+        {
+            $this->log('Not enough permissions to publish/unpublish integrity check "'.$intId.'"', 'tl_integrity_check toggleVisibility', TL_ERROR);
+            $this->redirect('contao/main.php?act=error');
+        }
+    
+        // Update the database
+        $this->Database->prepare("UPDATE tl_integrity_check SET tstamp=". time() .", published='" . ($blnVisible ? 1 : '') . "' WHERE id=?")
+                       ->execute($intId);
+        // There can be only one.
+        $this->Database->prepare("UPDATE tl_integrity_check SET tstamp=". time() .", published='' WHERE id!=?")
+                       ->execute($intId);
+    
+    }
+    
+    /**
+     * Label Callback
+     * @param array $arrRow
+     * @return string
+     */
+    public function listChecks($arrRow)
+    {
+        $lineCount = 0;
+        $check_plans = deserialize($arrRow[check_plans]);
+        $title ='
+  <table class="tl_listing_checks">
+  <tr>
+    <td class="tl_folder_tlist">'.$GLOBALS['TL_LANG']['tl_integrity_check']['cp_files'][0].'</td>
+    <td class="tl_folder_tlist">'.$GLOBALS['TL_LANG']['tl_integrity_check']['cp_moment'][0].'</td>
+    <td class="tl_folder_tlist">'.$GLOBALS['TL_LANG']['tl_integrity_check']['cp_type_of_test'][0].'</td>
+    <td class="tl_folder_tlist">'.$GLOBALS['TL_LANG']['tl_integrity_check']['cp_action'][0].'</td>
+  </tr>
+  ';
+        //Zeilenweise den Plan durchgehen
+        foreach ($check_plans as $step)
+        {
+            $class = (($lineCount % 2) == 0) ? ' even' : ' odd';
+            $title .= '<tr class='.$class.'>
+    <td class="tl_file_list"><span class="cp_files">'. $step['cp_files'].'</span></td>
+    <td class="tl_file_list"><span class="cp_moment">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_moment']].'</span></td>
+    <td class="tl_file_list"><span class="cp_type_of_test">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_type_of_test']].'</span></td>
+    <td class="tl_file_list"><span class="cp_action">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_action']].'</span></td>
+  </tr>
+  ';
+            $lineCount++;
+        }
+        $title .= '</table>
+';
+        return $title;
+    }
+    
+    /**
+     * Set published to '' on other checks
+     * @param mixed
+     * @param DataContainer
+     * @return string 
+     */
+    public function setPublished($varValue, DataContainer $dc)
+    {
+        if ($varValue)
+        {
+            // There can be only one.
+            $this->Database->prepare("UPDATE tl_integrity_check SET tstamp=". time() .", published='' WHERE id!=?")
+                           ->execute($dc->id);
+        }
+        return $varValue; 
+    }
 
+}
 ?>

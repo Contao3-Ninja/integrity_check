@@ -18,7 +18,7 @@ $GLOBALS['BE_MOD']['system']['integrity_check'] = array
 (
         'tables'       => array('tl_integrity_check'),
         'icon'       => 'system/modules/integrity_check/html/integrity_check.png',
-        //'stylesheet' => 'system/modules/integrity_check/html/mod_integrity_check_be.css',
+        'stylesheet' => 'system/modules/integrity_check/html/mod_integrity_check_be.css',
 );
 
 /**

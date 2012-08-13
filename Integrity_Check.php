@@ -195,8 +195,12 @@ class Integrity_Check extends Frontend
 	private function getCheckPlan()
 	{
 	    $objCheckPlan = $this->Database->prepare("SELECT `check_debug`, `check_plans`, `check_title` 
-                                                  FROM `tl_integrity_check` WHERE 1")
-	                                   ->execute();
+                                                  FROM `tl_integrity_check` WHERE published=?")
+	                                   ->execute(1);
+	    if ($objCheckPlan->numRows < 1) 
+	    {
+	        return ;
+	    }
 	    $this->check_debug = ($objCheckPlan->check_debug) ? 1 : 0;
 	    $this->check_plans = deserialize($objCheckPlan->check_plans);
 	    $this->check_title = $objCheckPlan->check_title;

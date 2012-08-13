@@ -19,6 +19,7 @@ CREATE TABLE `tl_integrity_check` (
   `check_title` varchar(255) NOT NULL default '',
   `check_debug` char(1) NOT NULL default '', 
   `check_plans` blob NULL,
+  `published` char(1) NOT NULL default '',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
