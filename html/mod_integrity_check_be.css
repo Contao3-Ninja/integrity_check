@@ -1,0 +1,12 @@
+.tl_listing_checks {
+    margin: 2px 0 10px !important;
+    width: 560px;
+}
+
+.tl_listing_checks tr.odd td {
+    background-color: #FAFAFA;
+}
+
+#tl_integrity_check .tl_tip {
+	height: 26px;
+}
