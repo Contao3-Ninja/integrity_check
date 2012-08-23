@@ -28,71 +28,183 @@
  */
 class Integrity_Check extends Frontend 
 {
-    protected $fileStatus = array();
+    protected $fileEmailStatus = array();
+    
+    protected $check_debug = false;
+    protected $check_plans = array();
+    protected $check_title = '';
+    
+    protected $cron_moment = '';
+    
+    /**
+     * Filelist with checksums
+     * @var array    file,checksum_file,checksum_code,contao_version
+     */
+    protected $file_list   = array();
+
+    
+    /**
+     *  CRON Hourly Call
+     */
+    public function checkFilesHourly()
+    {
+        $this->cron_moment = 'hourly';
+        $this->checkFiles();
+    }
+    /**
+     *  CRON Daily Call
+     */
+    public function checkFilesDaily()
+    {
+        $this->cron_moment = 'daily';
+        $this->checkFiles();
+    }
+    /**
+     *  CRON Weekly Call
+     */
+    public function checkFilesWeekly()
+    {
+        $this->cron_moment = 'weekly';
+        $this->checkFiles();
+    }
+    /**
+     *  CRON Monthly Call
+     */
+    public function checkFilesMonthly()
+    {
+        $this->cron_moment = 'monthly';
+        $this->checkFiles();
+    }
+    
     
 	/**
 	 * Check files for integrity
 	 */
-	public function checkFiles()
+	protected function checkFiles()
 	{
-	    $contao_version_live = VERSION . '.' . BUILD;
 	    $this->loadLanguageFile('tl_integrity_check');
+	    $this->getCheckPlan();
+	    $this->getFileList();
+	    $checkSummary = false; //false=kein check erfolgt, keine Mail, keine completed Meldung
+	    
+	    //Zeilenweise den Plan durchgehen
+	    foreach ($this->check_plans as $check_plan_step)
+	    {
+	        if ($this->cron_moment == $check_plan_step['cp_moment']) 
+	        {
+	            $resMD5 = false;
+	            $resTS  = false;
+	            //diese Datei muss jetzt geprüft werden.
+	            switch ($check_plan_step['cp_type_of_test'])
+	            {
+	                case 'md5' :
+	                    $resMD5 = $this->checkFileMD5($check_plan_step['cp_files'], $check_plan_step['cp_action']);
+	                    break;
+	                case 'timestamp' :
+	                    $resTS = $this->checkFileTimestamp($check_plan_step['cp_files'], $check_plan_step['cp_action']);
+	                    break;
+	            }
+	            //einmal true immer true
+	            $checkSummary = ($resMD5 == true || $resTS == true) ? true : $checkSummary;
+	        } //moment
+	    } //foreach plan step
+	    if ($checkSummary) 
+	    {
+            $this->sendCheckEmail();
+            // Add log entry
+            $this->log('['.$this->check_title .'] '. $GLOBALS['TL_LANG']['tl_integrity_check']['finished'], 'Integrity_Check checkFiles()', TL_CRON);
+	    }
+	}
+	
+	
+	 
+	/**
+	 * Check file, use MD5 
+	 */  
+	protected function checkFileMD5($cp_file, $cp_action)
+	{
+	    if ($cp_file == '') 
+	    {
+	        return false; // kein check
+	    }
 	    $status = true;
 	    
-	    foreach ($this->getFileList() as $file) 
+	    foreach ($this->file_list as $files)
 	    {
-	        list($file, $md5_file, $md5_code, $contao_version) = $file;
-	        if ($contao_version_live != $contao_version) 
+	        list($file, $md5_file, $md5_code, $contao_version) = $files;
+	        if ($file == $cp_file) 
 	        {
-	            continue;
-	        }
-	    
-	        if (is_file(TL_ROOT . '/' . $file)) 
-	        {
-	            $buffer  = str_replace("\r", '', file_get_contents(TL_ROOT . '/' . $file));
-	            // Check the content
-	            if (md5($buffer) != $md5_file) 
-	            {
-	                // Check the content without comments
-	                if (md5(preg_replace('@/\*.*\*/@Us', '', $buffer)) != $md5_code) 
-	                {
-	                    $this->fileStatus[] = array($file,false);
-	                    
-	                }
-	                else 
-	                {
-	                    $this->fileStatus[] = array($file,true);
-	                }
-	            }
-	            else
-	            {
-	                $this->fileStatus[] = array($file,true);
-	            }
-	            unset($buffer);
-	        }
-	    }
-	    foreach ($this->fileStatus as $key => $value)
-	    {
-	        if ($value[1] === false) 
-	        {
-	            $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['corrupt'], $value[0]), 'Integrity_Check checkFiles()', TL_ERROR);
-	            $status = false;
-	        }
-	        elseif ($GLOBALS['TL_CONFIG']['mod_integrity_check']['debug'] === true) 
-	        { 
-	            $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['ok'], $value[0]), 'Integrity_Check checkFiles()', TL_CRON);
+	            break; // gefunden
 	        }
 	    }
 	    
-	    //Mail to Admin
-	    if ($status === false) 
+        if (is_file(TL_ROOT . '/' . $cp_file)) 
+        {
+            $buffer  = str_replace("\r", '', file_get_contents(TL_ROOT . '/' . $cp_file));
+            // Check the content
+            if (md5($buffer) != $md5_file) 
+            {
+                // Check the content without comments
+                if (md5(preg_replace('@/\*.*\*/@Us', '', $buffer)) != $md5_code) 
+                {
+                    $status = false;
+                }
+                else 
+                {
+                    $status = true;
+                }
+            }
+            unset($buffer);
+        }
+	    
+        //Ergebniss verarbeiten
+        if ($status === false) 
+        {
+            //File corrupt
+            switch ($cp_action)
+            {
+                case 'admin_email' :
+                    $this->fileEmailStatus[$cp_file] = true; // true = mail 
+                    if ($this->check_debug == true) 
+                    {
+                        $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['corrupt'], $cp_file), 'Integrity_Check checkFileMD5()', TL_ERROR);
+                    }
+                    break;
+                case 'only_logging':
+                    $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['corrupt'], $cp_file), 'Integrity_Check checkFileMD5()', TL_ERROR);
+                    break;
+            }
+        }
+        elseif ($this->check_debug == true)
+        {
+            $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['ok'], $cp_file), 'Integrity_Check checkFileMD5()', TL_CRON);
+        }
+        return true;
+	}
+	
+	protected function checkFileTimestamp($cp_file, $cp_action)
+	{
+	    if ($cp_file == '')
 	    {
-	        $this->sendCheckEmail();
+	        return false; // kein check
 	    }
-
-	    // Add log entry
-    	$this->log($GLOBALS['TL_LANG']['tl_integrity_check']['finished'], 'Integrity_Check checkFiles()', TL_CRON);
-		
+	    $this->log('Timestamp-Check not yet implemented.', 'Integrity_Check checkFileTimestamp()', TL_CRON);
+	    return false; // kein check
+	}
+	
+	private function getCheckPlan()
+	{
+	    $objCheckPlan = $this->Database->prepare("SELECT `check_debug`, `check_plans`, `check_title` 
+                                                  FROM `tl_integrity_check` WHERE published=?")
+	                                   ->execute(1);
+	    if ($objCheckPlan->numRows < 1) 
+	    {
+	        return ;
+	    }
+	    $this->check_debug = ($objCheckPlan->check_debug) ? 1 : 0;
+	    $this->check_plans = deserialize($objCheckPlan->check_plans);
+	    $this->check_title = $objCheckPlan->check_title;
+	    return ;
 	}
 	
 	/**
@@ -101,53 +213,14 @@ class Integrity_Check extends Frontend
 	 */
 	private function getFileList() 
 	{
-	    return array (
-	            /*2.11.5.1*/
-	                    array('index.php', '1b223120dfb3083a36c6e36f1eb276f6', 'f5a8ccfabeb8b26d62032cfacb3e005a','2.11.5'),
-                        array('contao/index.php', 'ccf20e724fd76a58676b85cd549bf228', '9d74ad1a5a129df17268b2a45494cb1f','2.11.5'),
-                        array('contao/main.php', '3fd192985d0454f61a43271b5c1c643e', '14ae4550377d73ce1251a4a9a0a8d7a7','2.11.5'),
-	            /*2.11.4.0*/
-	                    array('index.php', '1b223120dfb3083a36c6e36f1eb276f6', 'f5a8ccfabeb8b26d62032cfacb3e005a','2.11.4'),
-	                    array('contao/index.php', 'ccf20e724fd76a58676b85cd549bf228', '9d74ad1a5a129df17268b2a45494cb1f','2.11.4'),
-	                    array('contao/main.php', '3fd192985d0454f61a43271b5c1c643e', '14ae4550377d73ce1251a4a9a0a8d7a7','2.11.4'),
-	            /*2.11.3.0*/	            
-        	            array('index.php', '1b223120dfb3083a36c6e36f1eb276f6', 'f5a8ccfabeb8b26d62032cfacb3e005a','2.11.3'),
-        	            array('contao/index.php', 'ccf20e724fd76a58676b85cd549bf228', '9d74ad1a5a129df17268b2a45494cb1f','2.11.3'),
-        	            array('contao/main.php', '3fd192985d0454f61a43271b5c1c643e', '14ae4550377d73ce1251a4a9a0a8d7a7','2.11.3'),
-	            /*2.11.2.1*/
-	                    array('index.php', '1b223120dfb3083a36c6e36f1eb276f6', 'f5a8ccfabeb8b26d62032cfacb3e005a','2.11.2'),
-	                    array('contao/index.php', 'ccf20e724fd76a58676b85cd549bf228', '9d74ad1a5a129df17268b2a45494cb1f','2.11.2'),
-	                    array('contao/main.php', '3fd192985d0454f61a43271b5c1c643e', '14ae4550377d73ce1251a4a9a0a8d7a7','2.11.2'),
-	            /*2.11.1.1*/
-	                    array('index.php', '1b223120dfb3083a36c6e36f1eb276f6', 'f5a8ccfabeb8b26d62032cfacb3e005a','2.11.1'),
-	                    array('contao/index.php', 'ccf20e724fd76a58676b85cd549bf228', '9d74ad1a5a129df17268b2a45494cb1f','2.11.1'),
-	                    array('contao/main.php', '3fd192985d0454f61a43271b5c1c643e', '14ae4550377d73ce1251a4a9a0a8d7a7','2.11.1'),
-	            /*2.11.0.0*/
-	                    array('index.php', '1b223120dfb3083a36c6e36f1eb276f6', 'f5a8ccfabeb8b26d62032cfacb3e005a','2.11.0'),
-	                    array('contao/index.php', 'ccf20e724fd76a58676b85cd549bf228', '9d74ad1a5a129df17268b2a45494cb1f','2.11.0'),
-	                    array('contao/main.php', '3fd192985d0454f61a43271b5c1c643e', '14ae4550377d73ce1251a4a9a0a8d7a7','2.11.0'),
-	            /*2.10.4.0*/
-	                    array('index.php', 'e1239574cdcbe65d7d27bb6a8212dca3', '946faca1c0462bc33f3601966a597ecc','2.10.4'),
-	                    array('contao/index.php', '27cb36a9489e3c937388b2ad1b523b8c', 'c074c5a659abcce83662304546282f15','2.10.4'),
-	                    array('contao/main.php', '1b09cf86e2660d5bdc43738374dd7d36', '277816b2a1df8f925dc7e21708dbe484','2.10.4'),
-	            /*2.10.3.0*/
-	                    array('index.php', 'e1239574cdcbe65d7d27bb6a8212dca3', '946faca1c0462bc33f3601966a597ecc','2.10.3'),
-	                    array('contao/index.php', '27cb36a9489e3c937388b2ad1b523b8c', 'c074c5a659abcce83662304546282f15','2.10.3'),
-	                    array('contao/main.php', '1b09cf86e2660d5bdc43738374dd7d36', '277816b2a1df8f925dc7e21708dbe484','2.10.3'),
-	            /*2.10.2.0*/
-	                    array('index.php', 'e1239574cdcbe65d7d27bb6a8212dca3', '946faca1c0462bc33f3601966a597ecc','2.10.2'),
-	                    array('contao/index.php', '27cb36a9489e3c937388b2ad1b523b8c', 'c074c5a659abcce83662304546282f15','2.10.2'),
-	                    array('contao/main.php', '1b09cf86e2660d5bdc43738374dd7d36', '277816b2a1df8f925dc7e21708dbe484','2.10.2'),
-	            /*2.10.1.0*/
-	                    array('index.php', 'e1239574cdcbe65d7d27bb6a8212dca3', '946faca1c0462bc33f3601966a597ecc','2.10.1'),
-	                    array('contao/index.php', '27cb36a9489e3c937388b2ad1b523b8c', 'c074c5a659abcce83662304546282f15','2.10.1'),
-	                    array('contao/main.php', '1b09cf86e2660d5bdc43738374dd7d36', '277816b2a1df8f925dc7e21708dbe484','2.10.1'),
-	            /*2.10.0.0*/
-	                    array('index.php', '7307a3432fd0c012eb79c01f09c17001', '9fbd48db6c18ac52ddbcca71ebcd4de9','2.10.0'),
-	                    array('contao/index.php', '27cb36a9489e3c937388b2ad1b523b8c', 'c074c5a659abcce83662304546282f15','2.10.0'),
-	                    array('contao/main.php', '1b09cf86e2660d5bdc43738374dd7d36', '277816b2a1df8f925dc7e21708dbe484','2.10.0'),
-	                 );
-	
+	    $contao_version_live = VERSION . '.' . BUILD;
+	    $files2check = ''; // overwrite in file_list_...php
+	    if (file_exists(TL_ROOT . '/system/modules/integrity_check/config/file_list_'.$contao_version_live.'.php')) 
+	    {
+	        require(TL_ROOT . '/system/modules/integrity_check/config/file_list_'.$contao_version_live.'.php');
+	        $this->file_list = $files2check;
+	    }
+	    return;
 	}//getFileList
 	
 	/**
@@ -155,14 +228,11 @@ class Integrity_Check extends Frontend
 	 */
 	private function sendCheckEmail()
 	{
-	    if ($GLOBALS['TL_CONFIG']['mod_integrity_check']['send_email_to_admin'] == false) 
-	    {
-	        return; //email to admin is off
-	    }
 	    if (!isset($GLOBALS['TL_CONFIG']['adminEmail'])) 
 	    {
 	        return; //admin email not set
 	    }
+	    $sendmail = false;
 	    // Notification
 	    list($GLOBALS['TL_ADMIN_NAME'], $GLOBALS['TL_ADMIN_EMAIL']) = $this->splitFriendlyName($GLOBALS['TL_CONFIG']['adminEmail']); //from index.php
 	    $objEmail = new Email();
@@ -172,15 +242,23 @@ class Integrity_Check extends Frontend
 	    $objEmail->subject  = sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['subject']  , $this->Environment->host);
 	    $objEmail->text     = sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['message_1'], $this->Environment->host);
 	    
-	    foreach ($this->fileStatus as $key => $value)
+	    foreach ($this->fileEmailStatus as $key => $value)
 	    {
-	        if ($value[1] === false)
+	        if ($value === true)
 	        {
-	            $objEmail->text .= "\n".$value[0];
+	            $objEmail->text .= "\n* ".$key;
+	            $sendmail = true;
 	        }
 	    }
-	    $objEmail->text .= "\n\n".$GLOBALS['TL_LANG']['tl_integrity_check']['message_2'];
-	    $objEmail->sendTo($GLOBALS['TL_CONFIG']['adminEmail']);
+	    if ($sendmail) 
+	    {
+    	    $objEmail->text .= "\n\n".$GLOBALS['TL_LANG']['tl_integrity_check']['message_2'];
+    	    $objEmail->sendTo($GLOBALS['TL_CONFIG']['adminEmail']);
+	    }
+	    else
+	    {
+	        unset($objEmail);
+	    }
 	    return ;
 	    
 	}//sendCheckEmail

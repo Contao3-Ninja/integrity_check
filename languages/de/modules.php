@@ -17,6 +17,6 @@
 /**
  * Fuer Backend Anzeige in Einstellungen
  */
-$GLOBALS['TL_LANG']['MOD']['integrity_check'] = 'Integrity Check (CRON)';
+$GLOBALS['TL_LANG']['MOD']['integrity_check'] = array('Integritäts-Check','Integritäts-Check (CRON)');
 
 ?>
