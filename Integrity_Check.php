@@ -34,7 +34,7 @@ class Integrity_Check extends Frontend
     protected $check_plans = array();
     protected $check_title = '';
     
-    protected $cron_moment = '';
+    protected $cron_interval = '';
     
     /**
      * Filelist with checksums
@@ -48,7 +48,7 @@ class Integrity_Check extends Frontend
      */
     public function checkFilesHourly()
     {
-        $this->cron_moment = 'hourly';
+        $this->cron_interval = 'hourly';
         $this->checkFiles();
     }
     /**
@@ -56,7 +56,7 @@ class Integrity_Check extends Frontend
      */
     public function checkFilesDaily()
     {
-        $this->cron_moment = 'daily';
+        $this->cron_interval = 'daily';
         $this->checkFiles();
     }
     /**
@@ -64,7 +64,7 @@ class Integrity_Check extends Frontend
      */
     public function checkFilesWeekly()
     {
-        $this->cron_moment = 'weekly';
+        $this->cron_interval = 'weekly';
         $this->checkFiles();
     }
     /**
@@ -72,7 +72,7 @@ class Integrity_Check extends Frontend
      */
     public function checkFilesMonthly()
     {
-        $this->cron_moment = 'monthly';
+        $this->cron_interval = 'monthly';
         $this->checkFiles();
     }
     
@@ -90,7 +90,7 @@ class Integrity_Check extends Frontend
 	    //Zeilenweise den Plan durchgehen
 	    foreach ($this->check_plans as $check_plan_step)
 	    {
-	        if ($this->cron_moment == $check_plan_step['cp_moment']) 
+	        if ($this->cron_interval == $check_plan_step['cp_interval']) 
 	        {
 	            $resMD5 = false;
 	            $resTS  = false;

@@ -130,13 +130,13 @@ $GLOBALS['TL_DCA']['tl_integrity_check'] = array
 	                    ),
 	                    'eval' 			        => array('style' => 'width:150px', 'includeBlankOption'=>true, 'chosen'=>true)
 		            ),
-		            'cp_moment' => array
+		            'cp_interval' => array
 		            (
-	                    'label'                 => &$GLOBALS['TL_LANG']['tl_integrity_check']['cp_moment'],
+	                    'label'                 => &$GLOBALS['TL_LANG']['tl_integrity_check']['cp_interval'],
 	                    'exclude'               => true,
 	                    'inputType'             => 'select',
 		                //'options'               => array('hourly','daily','weekly','monthly'),
-		                'options_callback'      => array('tl_integrity_check', 'getCronMoments'),
+		                'options_callback'      => array('tl_integrity_check', 'getCronIntervals'),
 		                'reference'             => &$GLOBALS['TL_LANG']['tl_integrity_check'],
 	                    'eval' 			        => array('style' => 'width:150px', 'includeBlankOption'=>false, 'chosen'=>true)
 		            ),
@@ -263,7 +263,7 @@ class tl_integrity_check extends Backend
   <table class="tl_listing_checks">
   <tr>
     <td class="tl_folder_tlist">'.$GLOBALS['TL_LANG']['tl_integrity_check']['cp_files'][0].'</td>
-    <td class="tl_folder_tlist">'.$GLOBALS['TL_LANG']['tl_integrity_check']['cp_moment'][0].'</td>
+    <td class="tl_folder_tlist">'.$GLOBALS['TL_LANG']['tl_integrity_check']['cp_interval'][0].'</td>
     <td class="tl_folder_tlist">'.$GLOBALS['TL_LANG']['tl_integrity_check']['cp_type_of_test'][0].'</td>
     <td class="tl_folder_tlist">'.$GLOBALS['TL_LANG']['tl_integrity_check']['cp_action'][0].'</td>
   </tr>
@@ -275,10 +275,10 @@ class tl_integrity_check extends Backend
             {
                 $class = (($lineCount % 2) == 0) ? ' even' : ' odd';
                 $title .= '<tr class='.$class.'>
-    <td class="tl_file_list"><span class="cp_files">'. $step['cp_files'].'</span></td>
-    <td class="tl_file_list"><span class="cp_moment">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_moment']].'</span></td>
-    <td class="tl_file_list"><span class="cp_type_of_test">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_type_of_test']].'</span></td>
-    <td class="tl_file_list"><span class="cp_action">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_action']].'</span></td>
+    <td class="tl_file_list" style="width: 30%;"><span class="cp_files">'. $step['cp_files'].'</span></td>
+    <td class="tl_file_list" style="width: 24%;"><span class="cp_interval">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_interval']].'</span></td>
+    <td class="tl_file_list" style="width: 22%;"><span class="cp_type_of_test">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_type_of_test']].'</span></td>
+    <td class="tl_file_list" style="width: 24%;"><span class="cp_action">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_action']].'</span></td>
   </tr>
   ';
                 $lineCount++;
@@ -311,15 +311,15 @@ class tl_integrity_check extends Backend
      * @param DataContainer
      * @return array
      */
-    public function getCronMoments()
+    public function getCronIntervals()
     {
-        $arrCronMoments = array('hourly','daily','weekly','monthly');
+        $arrCronIntervals = array('hourly','daily','weekly','monthly');
         //hourly not in Contao 2.10
         if (version_compare(VERSION, '2.11', '<'))
         {
-            $arrCronMoments = array('daily','weekly','monthly');
+            $arrCronIntervals = array('daily','weekly','monthly');
         }
-        return $arrCronMoments;
+        return $arrCronIntervals;
     }
 
 }
