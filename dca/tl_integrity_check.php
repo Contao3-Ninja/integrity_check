@@ -363,6 +363,7 @@ class tl_integrity_check extends Backend
             $this->Database->prepare("UPDATE tl_integrity_timestamps SET tstamp=?,check_timestamps=? WHERE id=?")
                            ->execute(time(),serialize($arrTimestamps),1);
         }
+        $this->addConfirmationMessage($GLOBALS['TL_LANG']['tl_integrity_check']['confirm_message']);  
         $this->redirect($this->getReferer());
     }
 }
