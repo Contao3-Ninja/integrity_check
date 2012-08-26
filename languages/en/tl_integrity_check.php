@@ -69,5 +69,6 @@ $GLOBALS['TL_LANG']['tl_integrity_check']['restore']          = 'Restore'; //fut
 $GLOBALS['TL_LANG']['tl_integrity_check']['maintenance_mode'] = 'Maintenance Page'; //future feature ?
 
 $GLOBALS['TL_LANG']['tl_integrity_check']['refreshConfirm'] = 'Update the timestamp of the files? Old timestamps will be overwritten.';
+$GLOBALS['TL_LANG']['tl_integrity_check']['confirm_message']= 'The timestamps have been updated.';
 
 ?>
