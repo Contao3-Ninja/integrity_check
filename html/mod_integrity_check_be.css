@@ -15,3 +15,7 @@
 	visibility: hidden;
 }
 
+.tl_integrity_check_star {
+    background: url("../../../../system/themes/default/images/featured.gif") no-repeat scroll 5px center transparent;
+    padding: 2px 0 3px 24px;
+}
