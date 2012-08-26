@@ -17,9 +17,10 @@
 /**
  * CRON Output (de)
  */
-$GLOBALS['TL_LANG']['tl_integrity_check']['ok']       = 'Integritäts-Status für Datei %s ist: OK';
-$GLOBALS['TL_LANG']['tl_integrity_check']['corrupt']  = 'Integritäts-Status für Datei %s ist: beschädigt';
-$GLOBALS['TL_LANG']['tl_integrity_check']['finished'] = 'Integritäts-Überprüfung der Dateien abgeschlossen.';
+$GLOBALS['TL_LANG']['tl_integrity_check']['ok']           = 'Integritäts-Status für Datei %s ist: OK';
+$GLOBALS['TL_LANG']['tl_integrity_check']['corrupt']      = 'Integritäts-Status für Datei %s ist: beschädigt';
+$GLOBALS['TL_LANG']['tl_integrity_check']['finished']     = 'Integritäts-Überprüfung der Dateien abgeschlossen.';
+$GLOBALS['TL_LANG']['tl_integrity_check']['mail_blocked'] = 'Die Mail für die Datei %s wird nicht versendet.(blockiert)';
 
 /**
  * Mail to admin
@@ -36,6 +37,7 @@ $GLOBALS['TL_LANG']['tl_integrity_check']['edit']   = array('Überprüfung bearb
 $GLOBALS['TL_LANG']['tl_integrity_check']['delete'] = array('Überprüfung löschen','Überprüfung löschen');
 $GLOBALS['TL_LANG']['tl_integrity_check']['show']   = array('Details der Überprüfung','Details der Überprüfung');
 $GLOBALS['TL_LANG']['tl_integrity_check']['toggle'] = array('Überprüfung veröffentlichen/unveröffentlichen', 'Überprüfung veröffentlichen/unveröffentlichen');
+$GLOBALS['TL_LANG']['tl_integrity_check']['refresh']= array('Zeitstempel aktualisieren','Zeitstempel der Dateien aktualisieren');
 
 /**
  * Fields
@@ -64,8 +66,8 @@ $GLOBALS['TL_LANG']['tl_integrity_check']['timestamp'] = 'Zeitstempel';
 $GLOBALS['TL_LANG']['tl_integrity_check']['only_logging']     = 'System-Log';
 $GLOBALS['TL_LANG']['tl_integrity_check']['admin_email']      = 'Mail an Admin';
 $GLOBALS['TL_LANG']['tl_integrity_check']['restore']          = 'Wiederherstellung'; //future feature ?
-$GLOBALS['TL_LANG']['tl_integrity_check']['maintenance_mode'] = 'Wartunsseite'; //future feature ?
+$GLOBALS['TL_LANG']['tl_integrity_check']['maintenance_mode'] = 'Wartungsseite'; //future feature ?
 
-
+$GLOBALS['TL_LANG']['tl_integrity_check']['refreshConfirm'] = 'Zeitstempel der Dateien erneut erfassen? Alte Zeitstempel werden überschrieben.';
 
 ?>
