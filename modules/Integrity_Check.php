@@ -266,6 +266,7 @@ class Integrity_Check extends \Frontend
 	    if ($sendmail) 
 	    {
     	    $objEmail->text .= "\n\n".$GLOBALS['TL_LANG']['tl_integrity_check']['message_2'];
+    	    $objEmail->text .= "\n[".date($GLOBALS['TL_CONFIG']['datimFormat'])."]";
     	    $objEmail->sendTo($GLOBALS['TL_CONFIG']['adminEmail']);
 	    }
 	    else
