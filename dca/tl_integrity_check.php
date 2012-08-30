@@ -1,4 +1,5 @@
-<?php if (!defined('TL_ROOT')) die('You can not access this file directly!');
+<?php
+
 /**
  * Contao Open Source CMS
  * Copyright (C) 2005-2011 Leo Feyer
@@ -313,14 +314,8 @@ class tl_integrity_check extends Backend
      */
     public function getCronMoments()
     {
-        $arrCronMoments = array('hourly','daily','weekly','monthly');
-        //hourly not in Contao 2.10
-        if (version_compare(VERSION, '2.11', '<'))
-        {
-            $arrCronMoments = array('daily','weekly','monthly');
-        }
+        $arrCronMoments = array('minutely','hourly','daily','weekly','monthly');
         return $arrCronMoments;
     }
 
 }
-?>

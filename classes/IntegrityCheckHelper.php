@@ -1,4 +1,4 @@
-<?php if (!defined('TL_ROOT')) die('You can not access this file directly!');
+<?php
 
 /**
  * Contao Open Source CMS
@@ -15,6 +15,10 @@
  * @license    LGPL
  */
 
+/**
+ * Run in a custom namespace, so the class can be replaced
+ */
+namespace BugBuster\IntegrityCheck; 
 
 /**
  * Class IntegrityCheckHelper
@@ -23,12 +27,12 @@
  * @author     Glen Langer
  * @package    Integrity_Check
  */
-class IntegrityCheckHelper extends BackendModule
+class IntegrityCheckHelper extends \BackendModule
 {
-    /**
-	 * Current object instance
-	 * @var object
-	 */
+   /**
+    * Current object instance
+    * @var object
+    */
     protected static $instance = null;
     
     /**

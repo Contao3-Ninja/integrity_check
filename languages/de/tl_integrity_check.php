@@ -1,4 +1,4 @@
-<?php if (!defined('TL_ROOT')) die('You can not access this file directly!');
+<?php
 
 /**
  * Contao Open Source CMS
@@ -53,10 +53,11 @@ $GLOBALS['TL_LANG']['tl_integrity_check']['cp_action'] = array('Aktion','Art der
 /**
  * Reference
  */
-$GLOBALS['TL_LANG']['tl_integrity_check']['hourly']  = 'stündlich';
-$GLOBALS['TL_LANG']['tl_integrity_check']['daily']   = 'täglich';
-$GLOBALS['TL_LANG']['tl_integrity_check']['weekly']  = 'wöchentlich';
-$GLOBALS['TL_LANG']['tl_integrity_check']['monthly'] = 'monatlich';
+$GLOBALS['TL_LANG']['tl_integrity_check']['minutely'] = 'minütlich';
+$GLOBALS['TL_LANG']['tl_integrity_check']['hourly']   = 'stündlich';
+$GLOBALS['TL_LANG']['tl_integrity_check']['daily']    = 'täglich';
+$GLOBALS['TL_LANG']['tl_integrity_check']['weekly']   = 'wöchentlich';
+$GLOBALS['TL_LANG']['tl_integrity_check']['monthly']  = 'monatlich';
 
 $GLOBALS['TL_LANG']['tl_integrity_check']['md5']       = 'MD5';
 $GLOBALS['TL_LANG']['tl_integrity_check']['timestamp'] = 'Zeitstempel';
@@ -66,6 +67,3 @@ $GLOBALS['TL_LANG']['tl_integrity_check']['admin_email']      = 'Mail an Admin';
 $GLOBALS['TL_LANG']['tl_integrity_check']['restore']          = 'Wiederherstellung'; //future feature ?
 $GLOBALS['TL_LANG']['tl_integrity_check']['maintenance_mode'] = 'Wartunsseite'; //future feature ?
 
-
-
-?>

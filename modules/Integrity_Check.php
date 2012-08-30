@@ -1,4 +1,4 @@
-<?php if (!defined('TL_ROOT')) die('You can not access this file directly!');
+<?php
 
 /**
  * Contao Open Source CMS
@@ -14,7 +14,10 @@
  * @filesource
  */
 
-
+/**
+ * Run in a custom namespace, so the class can be replaced
+ */
+namespace BugBuster\IntegrityCheck; 
 
 /**
  * Class Integrity_Check 
@@ -26,7 +29,7 @@
  * @author     Leo Feyer (sourcecode parts from contao check tool)
  * @package    Integrity_Check
  */
-class Integrity_Check extends Frontend 
+class Integrity_Check extends \Frontend 
 {
     protected $fileEmailStatus = array();
     
@@ -41,7 +44,15 @@ class Integrity_Check extends Frontend
      * @var array    file,checksum_file,checksum_code,contao_version
      */
     protected $file_list   = array();
-
+	
+    /**
+     *  CRON Minutely Call
+     */
+    public function checkFilesMinutely()
+    {
+    	$this->cron_moment = 'minutely';
+    	$this->checkFiles();
+    }
     
     /**
      *  CRON Hourly Call
@@ -154,6 +165,8 @@ class Integrity_Check extends Frontend
                     $status = true;
                 }
             }
+            //DEV
+            //$this->log('Summen '.$cp_file.':'.md5($buffer).'-'.md5(preg_replace('@/\*.*\*/@Us', '', $buffer)), 'Integrity_Check MD5()', TL_ERROR);
             unset($buffer);
         }
 	    
@@ -235,7 +248,7 @@ class Integrity_Check extends Frontend
 	    $sendmail = false;
 	    // Notification
 	    list($GLOBALS['TL_ADMIN_NAME'], $GLOBALS['TL_ADMIN_EMAIL']) = $this->splitFriendlyName($GLOBALS['TL_CONFIG']['adminEmail']); //from index.php
-	    $objEmail = new Email();
+	    $objEmail = new \Email();
 	    $objEmail->from     = $GLOBALS['TL_ADMIN_EMAIL'];
 	    $objEmail->fromName = $GLOBALS['TL_ADMIN_NAME'];
 	    
@@ -265,4 +278,4 @@ class Integrity_Check extends Frontend
 	
 	
 }
-?>
+
