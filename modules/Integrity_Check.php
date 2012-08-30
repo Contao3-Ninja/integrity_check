@@ -36,6 +36,7 @@ class Integrity_Check extends \Frontend
     protected $check_debug = false;
     protected $check_plans = array();
     protected $check_title = '';
+    protected $last_mail   = array();
     
     protected $cron_interval = '';
     
@@ -122,8 +123,11 @@ class Integrity_Check extends \Frontend
 	    if ($checkSummary) 
 	    {
             $this->sendCheckEmail();
-            // Add log entry
-            $this->log('['.$this->check_title .'] '. $GLOBALS['TL_LANG']['tl_integrity_check']['finished'], 'Integrity_Check checkFiles()', TL_CRON);
+            if ($this->check_debug == true)
+            {
+                // Add log entry
+                $this->log('['.$this->check_title .'] '. $GLOBALS['TL_LANG']['tl_integrity_check']['finished'], 'Integrity_Check checkFiles()', TL_CRON);
+            }
 	    }
 	}
 	
@@ -178,31 +182,65 @@ class Integrity_Check extends \Frontend
             {
                 case 'admin_email' :
                     $this->fileEmailStatus[$cp_file] = true; // true = mail 
-                    if ($this->check_debug == true) 
-                    {
-                        $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['corrupt'], $cp_file), 'Integrity_Check checkFileMD5()', TL_ERROR);
-                    }
+                    //wenn mail dann auch log
+                    $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['corrupt'], $cp_file) . ' ['.$GLOBALS['TL_LANG']['tl_integrity_check']['md5'].']', 'Integrity_Check checkFileMD5()', TL_ERROR);
                     break;
                 case 'only_logging':
-                    $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['corrupt'], $cp_file), 'Integrity_Check checkFileMD5()', TL_ERROR);
+                    $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['corrupt'], $cp_file) . ' ['.$GLOBALS['TL_LANG']['tl_integrity_check']['md5'].']', 'Integrity_Check checkFileMD5()', TL_ERROR);
                     break;
             }
         }
         elseif ($this->check_debug == true)
         {
-            $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['ok'], $cp_file), 'Integrity_Check checkFileMD5()', TL_CRON);
+            $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['ok'], $cp_file) . ' ['.$GLOBALS['TL_LANG']['tl_integrity_check']['md5'].']', 'Integrity_Check checkFileMD5()', TL_CRON);
         }
         return true;
 	}
 	
 	protected function checkFileTimestamp($cp_file, $cp_action)
 	{
+	    $cp_file_ts = 0;
 	    if ($cp_file == '')
 	    {
 	        return false; // kein check
 	    }
-	    $this->log('Timestamp-Check not yet implemented.', 'Integrity_Check checkFileTimestamp()', TL_CRON);
-	    return false; // kein check
+	    $objTimestamps = $this->Database->prepare("SELECT `check_timestamps` FROM `tl_integrity_timestamps` WHERE `id`=?")
+	                                    ->execute(1);
+	    if ($objTimestamps->numRows < 1)
+	    {
+	        return false; // kein check möglich
+	    }
+	    
+	    $arrTimestamps = deserialize($objTimestamps->check_timestamps);
+	    if (is_file(TL_ROOT . '/' . $cp_file))
+	    {
+	        $objFile = new \File($cp_file);
+	        $cp_file_ts = $objFile->mtime;
+	        $objFile->close();
+	    }	    
+	    
+	    //Ergebniss verarbeiten
+	    if ($cp_file_ts != $arrTimestamps[$cp_file])
+	    {
+	        //File corrupt
+	        switch ($cp_action)
+	        {
+	            case 'admin_email' :
+	                $this->fileEmailStatus[$cp_file] = true; // true = mail
+	                //wenn mail dann auch log
+	                $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['corrupt'], $cp_file) . ' ['.$GLOBALS['TL_LANG']['tl_integrity_check']['timestamp'].']', 'Integrity_Check checkFileTimestamp()', TL_ERROR);
+	                break;
+	            case 'only_logging':
+	                $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['corrupt'], $cp_file) . ' ['.$GLOBALS['TL_LANG']['tl_integrity_check']['timestamp'].']', 'Integrity_Check checkFileTimestamp()', TL_ERROR);
+	                break;
+	        }
+	    }
+	    elseif ($this->check_debug == true)
+	    {
+	        $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['ok'], $cp_file) . ' ['.$GLOBALS['TL_LANG']['tl_integrity_check']['timestamp'].']', 'Integrity_Check checkFileTimestamp()', TL_CRON);
+	    }
+	    
+	    return true;
 	}
 	
 	private function getCheckPlan()
@@ -245,6 +283,18 @@ class Integrity_Check extends \Frontend
 	    {
 	        return; //admin email not set
 	    }
+	    $bolLastMail = false;	    
+	    $arrFiles = array('index.php'=>0,'cron.php'=>0,'contao/index.php'=> 0,'contao/main.php'=> 0);
+	    $objLastMail = $this->Database->prepare("SELECT `last_mail_tstamps` FROM `tl_integrity_timestamps` WHERE `id`=?")
+	                                  ->execute(2);
+	    if ($objLastMail->numRows >0) 
+	    {
+	        $arrFiles = array_merge($arrFiles, deserialize($objLastMail->last_mail_tstamps));
+	        $bolLastMail = true;
+	    }
+	    $time_block = time() - (24 * 60 * 60); // -24h
+	    
+	    //////////////// MAIL OUT \\\\\\\\\\\\\\\\
 	    $sendmail = false;
 	    // Notification
 	    list($GLOBALS['TL_ADMIN_NAME'], $GLOBALS['TL_ADMIN_EMAIL']) = $this->splitFriendlyName($GLOBALS['TL_CONFIG']['adminEmail']); //from index.php
@@ -255,19 +305,49 @@ class Integrity_Check extends \Frontend
 	    $objEmail->subject  = sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['subject']  , $this->Environment->host);
 	    $objEmail->text     = sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['message_1'], $this->Environment->host);
 	    
-	    foreach ($this->fileEmailStatus as $key => $value)
+	    foreach ($this->fileEmailStatus as $key => $value) // file => true/false
 	    {
 	        if ($value === true)
 	        {
 	            $objEmail->text .= "\n* ".$key;
-	            $sendmail = true;
+	            $sendmail_temp = true;
+	            //nur wenn die letzte Mail 24h her ist für diese Datei
+	            if ($arrFiles[$key] > $time_block) 
+	            {
+	                $sendmail_temp = false;
+    	            if ($this->check_debug == true)
+                    {
+                        $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['mail_blocked'], $key), 'Integrity_Check sendCheckEmail()', TL_CRON);
+                    }
+	            }
+                //wenn mail dann timestamp erneuern
+                if ($sendmail_temp) 
+                {
+                    $arrFiles[$key] = time();
+                    $sendmail = true;
+                }
 	        }
 	    }
+	    
 	    if ($sendmail) 
 	    {
     	    $objEmail->text .= "\n\n".$GLOBALS['TL_LANG']['tl_integrity_check']['message_2'];
     	    $objEmail->text .= "\n[".date($GLOBALS['TL_CONFIG']['datimFormat'])."]";
     	    $objEmail->sendTo($GLOBALS['TL_CONFIG']['adminEmail']);
+
+    	    if ($bolLastMail) 
+    	    {
+    	        //update
+    	        $this->Database->prepare("UPDATE tl_integrity_timestamps SET tstamp=?,last_mail_tstamps=? WHERE id=?")
+    	                       ->execute(time(),serialize($arrFiles),2);
+    	    }
+    	    else 
+    	    {
+    	        //insert
+    	        $this->Database->prepare("INSERT INTO `tl_integrity_timestamps` ( `id` , `tstamp` , `last_mail_tstamps` )
+    	                                  VALUES (?, ?, ?)")
+    	                       ->execute(2, time(), serialize($arrFiles));
+    	    }
 	    }
 	    else
 	    {

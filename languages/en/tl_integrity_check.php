@@ -17,9 +17,10 @@
 /**
  * CRON Output (en)
  */
-$GLOBALS['TL_LANG']['tl_integrity_check']['ok']       = 'Integrity status for file %s is: OK';
-$GLOBALS['TL_LANG']['tl_integrity_check']['corrupt']  = 'Integrity status for file %s is: Corrupt';
-$GLOBALS['TL_LANG']['tl_integrity_check']['finished'] = 'Checking files for integrity is completed.';
+$GLOBALS['TL_LANG']['tl_integrity_check']['ok']           = 'Integrity status for file %s is: OK';
+$GLOBALS['TL_LANG']['tl_integrity_check']['corrupt']      = 'Integrity status for file %s is: Corrupt';
+$GLOBALS['TL_LANG']['tl_integrity_check']['finished']     = 'Checking files for integrity is completed.';
+$GLOBALS['TL_LANG']['tl_integrity_check']['mail_blocked'] = 'The mail for the file %s is not sent. (blocked)';
 
 /**
  * Mail to admin
@@ -36,6 +37,7 @@ $GLOBALS['TL_LANG']['tl_integrity_check']['edit']   = array('Edit Integrity-Chec
 $GLOBALS['TL_LANG']['tl_integrity_check']['delete'] = array('Delete Integrity-Check','Delete Integrity-Check');
 $GLOBALS['TL_LANG']['tl_integrity_check']['show']   = array('Details Integrity-Check','Details Integrity-Check');
 $GLOBALS['TL_LANG']['tl_integrity_check']['toggle'] = array('Activate/Deactivate Integrity-Check', 'Activate/Deactivate Integrity-Check');
+$GLOBALS['TL_LANG']['tl_integrity_check']['refresh']= array('Update timestamps','Update the timestamp of the files.');
 
 /**
  * Fields

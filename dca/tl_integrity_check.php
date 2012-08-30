@@ -46,6 +46,16 @@ $GLOBALS['TL_DCA']['tl_integrity_check'] = array
 			'format'                  => '%s' ,
 		    'label_callback'          => array('tl_integrity_check', 'listChecks')
 		),
+		'global_operations' => array
+		(
+			'refresh'                 => array
+			(
+			    'label'               => &$GLOBALS['TL_LANG']['tl_integrity_check']['refresh'],
+			    'href'                => '&amp;refresh=true',
+			    'class'               => 'tl_integrity_check_star',
+    			'attributes'          => 'onclick="if(!confirm(\'' . $GLOBALS['TL_LANG']['tl_integrity_check']['refreshConfirm'] . '\'))return false;Backend.getScrollOffset()"'
+			)
+		),
 		'operations' => array
 		(
 			'edit' => array
@@ -67,12 +77,6 @@ $GLOBALS['TL_DCA']['tl_integrity_check'] = array
 				'icon'                => 'visible.gif',
 				//'attributes'          => 'onclick="Backend.getScrollOffset();return AjaxRequest.toggleVisibility(this,%s)"',
 				'button_callback'     => array('tl_integrity_check', 'toggleIcon')
-			),
-			'show' => array
-			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_integrity_check']['show'],
-				'href'                => 'act=show',
-				'icon'                => 'show.gif'
 			)
 		)
 		
@@ -102,13 +106,6 @@ $GLOBALS['TL_DCA']['tl_integrity_check'] = array
 	        'inputType'               => 'text',
 	        'eval'                    => array('tl_class' => 'w50', 'mandatory'=>true, 'maxlength'=>255)
     	),
-		'check_debug' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_integrity_check']['check_debug'],
-			'exclude'                 => true,
-			'inputType'               => 'checkbox',
-			'eval'                    => array('tl_class' => 'w50')
-		),
 		'check_plans' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_integrity_check']['check_plans'],
@@ -147,7 +144,7 @@ $GLOBALS['TL_DCA']['tl_integrity_check'] = array
 	                    'label'                 => &$GLOBALS['TL_LANG']['tl_integrity_check']['cp_type_of_test'],
 	                    'exclude'               => true,
 	                    'inputType'             => 'select',
-	                    'options'            	=> array('md5'), // 'timestamp'
+	                    'options'            	=> array('md5','timestamp'),
 	                    'reference'             => &$GLOBALS['TL_LANG']['tl_integrity_check'],
 	                    'eval' 			        => array('style' => 'width:100px', 'includeBlankOption'=>false, 'chosen'=>true)
 		            ),
@@ -173,6 +170,13 @@ $GLOBALS['TL_DCA']['tl_integrity_check'] = array
 	        (
 	                array('tl_integrity_check', 'setPublished')
 	        )
+		),
+		'check_debug' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_integrity_check']['check_debug'],
+			'exclude'                 => true,
+			'inputType'               => 'checkbox',
+			'eval'                    => array('tl_class' => 'w50')
 		)
 	)//fields
 );
@@ -187,6 +191,10 @@ class tl_integrity_check extends Backend
     {
         parent::__construct();
         $this->import('BackendUser', 'User');
+        if (strlen($this->Input->get('refresh')))
+        {
+            $this->refreshTimestamps();
+        }
     }
     
     /**
@@ -310,7 +318,6 @@ class tl_integrity_check extends Backend
     
     /**
      * Return all possible cron moments
-     * @param DataContainer
      * @return array
      */
     public function getCronIntervals()
