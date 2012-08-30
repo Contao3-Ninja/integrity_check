@@ -45,10 +45,10 @@ $GLOBALS['TL_LANG']['tl_integrity_check']['check_debug'] = array('Debug','Debug 
 $GLOBALS['TL_LANG']['tl_integrity_check']['check_plans'] = array('Überprüfungsplan','Planung der Überprüfungen und Aktionen');
 $GLOBALS['TL_LANG']['tl_integrity_check']['published']   = array('Integritäts-Überprüfung aktivieren', 'Diese Integritäts-Überprüfung aktivieren.');
 
-$GLOBALS['TL_LANG']['tl_integrity_check']['cp_files']  = array('Dateien','Dateien auswählen zur Überprüfung');
-$GLOBALS['TL_LANG']['tl_integrity_check']['cp_moment'] = array('Zeitpunkt','Zeitpunkt der Überprüfung');
+$GLOBALS['TL_LANG']['tl_integrity_check']['cp_files']        = array('Dateien','Dateien auswählen zur Überprüfung');
+$GLOBALS['TL_LANG']['tl_integrity_check']['cp_interval']     = array('Zeitpunkt','Zeitpunkt der Überprüfung');
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_type_of_test'] = array('Erkennung','Art der Erkennung');
-$GLOBALS['TL_LANG']['tl_integrity_check']['cp_action'] = array('Aktion','Art der Reaktion');
+$GLOBALS['TL_LANG']['tl_integrity_check']['cp_action']       = array('Aktion','Art der Reaktion');
 
 /**
  * Reference

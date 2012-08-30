@@ -10,3 +10,8 @@
 #tl_integrity_check .tl_tip {
 	height: 26px;
 }
+
+#tl_integrity_check #saveNcreate {
+	visibility: hidden;
+}
+
