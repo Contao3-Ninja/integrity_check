@@ -126,6 +126,7 @@ $GLOBALS['TL_DCA']['tl_integrity_check'] = array
 	                    'options'            	=> array
 	                    (
                             'index.php'         => 'index.php',
+                            'cron.php'          => 'cron.php',
                             'contao/index.php'  => 'contao/index.php',
                             'contao/main.php'   => 'contao/main.php',
 	                    ),
