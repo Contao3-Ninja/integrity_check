@@ -51,7 +51,8 @@ class Integrity_Check extends \Frontend
      */
     public function checkFilesMinutely()
     {
-    	$this->cron_moment = 'minutely';
+    	$this->cron_interval = 'minutely';
+    	//$this->log('Start: '.$this->cron_interval, 'Integrity_Check checkFilesMinutely()', TL_CRON);
     	$this->checkFiles();
     }
     
@@ -61,6 +62,7 @@ class Integrity_Check extends \Frontend
     public function checkFilesHourly()
     {
         $this->cron_interval = 'hourly';
+        //$this->log('Start: '.$this->cron_interval, 'Integrity_Check checkFilesHourly()', TL_CRON);
         $this->checkFiles();
     }
     /**
@@ -69,6 +71,7 @@ class Integrity_Check extends \Frontend
     public function checkFilesDaily()
     {
         $this->cron_interval = 'daily';
+        //$this->log('Start: '.$this->cron_interval, 'Integrity_Check checkFilesDaily()', TL_CRON);
         $this->checkFiles();
     }
     /**
@@ -77,6 +80,7 @@ class Integrity_Check extends \Frontend
     public function checkFilesWeekly()
     {
         $this->cron_interval = 'weekly';
+        //$this->log('Start: '.$this->cron_interval, 'Integrity_Check checkFilesWeekly()', TL_CRON);
         $this->checkFiles();
     }
     /**
@@ -85,6 +89,7 @@ class Integrity_Check extends \Frontend
     public function checkFilesMonthly()
     {
         $this->cron_interval = 'monthly';
+        //$this->log('Start: '.$this->cron_interval, 'Integrity_Check checkFilesMonthly()', TL_CRON);
         $this->checkFiles();
     }
     
@@ -98,7 +103,7 @@ class Integrity_Check extends \Frontend
 	    $this->getCheckPlan();
 	    $this->getFileList();
 	    $checkSummary = false; //false=kein check erfolgt, keine Mail, keine completed Meldung
-	    
+
 	    //Zeilenweise den Plan durchgehen
 	    foreach ($this->check_plans as $check_plan_step)
 	    {
@@ -143,7 +148,7 @@ class Integrity_Check extends \Frontend
 	        return false; // kein check
 	    }
 	    $status = true;
-	    
+
 	    foreach ($this->file_list as $files)
 	    {
 	        list($file, $md5_file, $md5_code, $contao_version) = $files;
