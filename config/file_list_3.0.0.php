@@ -21,6 +21,7 @@
 $files2check = array
 (
     array('index.php'       , '2411e24bc18b4dcff8cc98ee243432c3', '23139b12d3f5d24f0135ac143c3aef5f','3.0.0'),
+	array('cron.php'        , 'a932794b641c3cb5f7b7c53e2f122832', 'b8039280cc3b58053d45353db1c10234','3.0.0'),
     array('contao/index.php', 'b6847888847d9f6c6b073b3e248b9592', '2159a928be1165055abf6b9fd1d24f7b','3.0.0'),
     array('contao/main.php' , '933d4bd7b32bebe173f12922969c327b', '6c1e170eb322bc59cb236c64cf76e62e','3.0.0')
 );

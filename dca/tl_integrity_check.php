@@ -46,6 +46,16 @@ $GLOBALS['TL_DCA']['tl_integrity_check'] = array
 			'format'                  => '%s' ,
 		    'label_callback'          => array('tl_integrity_check', 'listChecks')
 		),
+		'global_operations' => array
+		(
+			'refresh'                 => array
+			(
+			    'label'               => &$GLOBALS['TL_LANG']['tl_integrity_check']['refresh'],
+			    'href'                => '&amp;refresh=true',
+			    'class'               => 'tl_integrity_check_star',
+    			'attributes'          => 'onclick="if(!confirm(\'' . $GLOBALS['TL_LANG']['tl_integrity_check']['refreshConfirm'] . '\'))return false;Backend.getScrollOffset()"'
+			)
+		),
 		'operations' => array
 		(
 			'edit' => array
@@ -67,12 +77,6 @@ $GLOBALS['TL_DCA']['tl_integrity_check'] = array
 				'icon'                => 'visible.gif',
 				//'attributes'          => 'onclick="Backend.getScrollOffset();return AjaxRequest.toggleVisibility(this,%s)"',
 				'button_callback'     => array('tl_integrity_check', 'toggleIcon')
-			),
-			'show' => array
-			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_integrity_check']['show'],
-				'href'                => 'act=show',
-				'icon'                => 'show.gif'
 			)
 		)
 		
@@ -102,13 +106,6 @@ $GLOBALS['TL_DCA']['tl_integrity_check'] = array
 	        'inputType'               => 'text',
 	        'eval'                    => array('tl_class' => 'w50', 'mandatory'=>true, 'maxlength'=>255)
     	),
-		'check_debug' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_integrity_check']['check_debug'],
-			'exclude'                 => true,
-			'inputType'               => 'checkbox',
-			'eval'                    => array('tl_class' => 'w50')
-		),
 		'check_plans' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_integrity_check']['check_plans'],
@@ -125,19 +122,20 @@ $GLOBALS['TL_DCA']['tl_integrity_check'] = array
 	                    'inputType'             => 'select',
 	                    'options'            	=> array
 	                    (
-                            'index.php'         => 'index.php',
-                            'contao/index.php'  => 'contao/index.php',
-                            'contao/main.php'   => 'contao/main.php',
+                            'index.php'            => 'index.php',
+                            'system/cron/cron.php' => 'system/cron/cron.php',
+                            'contao/index.php'     => 'contao/index.php',
+                            'contao/main.php'      => 'contao/main.php',
 	                    ),
 	                    'eval' 			        => array('style' => 'width:150px', 'includeBlankOption'=>true, 'chosen'=>true)
 		            ),
-		            'cp_moment' => array
+		            'cp_interval' => array
 		            (
-	                    'label'                 => &$GLOBALS['TL_LANG']['tl_integrity_check']['cp_moment'],
+	                    'label'                 => &$GLOBALS['TL_LANG']['tl_integrity_check']['cp_interval'],
 	                    'exclude'               => true,
 	                    'inputType'             => 'select',
 		                //'options'               => array('hourly','daily','weekly','monthly'),
-		                'options_callback'      => array('tl_integrity_check', 'getCronMoments'),
+		                'options_callback'      => array('tl_integrity_check', 'getCronIntervals'),
 		                'reference'             => &$GLOBALS['TL_LANG']['tl_integrity_check'],
 	                    'eval' 			        => array('style' => 'width:150px', 'includeBlankOption'=>false, 'chosen'=>true)
 		            ),
@@ -146,7 +144,7 @@ $GLOBALS['TL_DCA']['tl_integrity_check'] = array
 	                    'label'                 => &$GLOBALS['TL_LANG']['tl_integrity_check']['cp_type_of_test'],
 	                    'exclude'               => true,
 	                    'inputType'             => 'select',
-	                    'options'            	=> array('md5'), // 'timestamp'
+	                    'options'            	=> array('md5','timestamp'),
 	                    'reference'             => &$GLOBALS['TL_LANG']['tl_integrity_check'],
 	                    'eval' 			        => array('style' => 'width:100px', 'includeBlankOption'=>false, 'chosen'=>true)
 		            ),
@@ -172,6 +170,13 @@ $GLOBALS['TL_DCA']['tl_integrity_check'] = array
 	        (
 	                array('tl_integrity_check', 'setPublished')
 	        )
+		),
+		'check_debug' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_integrity_check']['check_debug'],
+			'exclude'                 => true,
+			'inputType'               => 'checkbox',
+			'eval'                    => array('tl_class' => 'w50')
 		)
 	)//fields
 );
@@ -186,6 +191,10 @@ class tl_integrity_check extends Backend
     {
         parent::__construct();
         $this->import('BackendUser', 'User');
+        if (strlen($this->Input->get('refresh')))
+        {
+            $this->refreshTimestamps();
+        }
     }
     
     /**
@@ -264,7 +273,7 @@ class tl_integrity_check extends Backend
   <table class="tl_listing_checks">
   <tr>
     <td class="tl_folder_tlist">'.$GLOBALS['TL_LANG']['tl_integrity_check']['cp_files'][0].'</td>
-    <td class="tl_folder_tlist">'.$GLOBALS['TL_LANG']['tl_integrity_check']['cp_moment'][0].'</td>
+    <td class="tl_folder_tlist">'.$GLOBALS['TL_LANG']['tl_integrity_check']['cp_interval'][0].'</td>
     <td class="tl_folder_tlist">'.$GLOBALS['TL_LANG']['tl_integrity_check']['cp_type_of_test'][0].'</td>
     <td class="tl_folder_tlist">'.$GLOBALS['TL_LANG']['tl_integrity_check']['cp_action'][0].'</td>
   </tr>
@@ -276,10 +285,10 @@ class tl_integrity_check extends Backend
             {
                 $class = (($lineCount % 2) == 0) ? ' even' : ' odd';
                 $title .= '<tr class='.$class.'>
-    <td class="tl_file_list"><span class="cp_files">'. $step['cp_files'].'</span></td>
-    <td class="tl_file_list"><span class="cp_moment">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_moment']].'</span></td>
-    <td class="tl_file_list"><span class="cp_type_of_test">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_type_of_test']].'</span></td>
-    <td class="tl_file_list"><span class="cp_action">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_action']].'</span></td>
+    <td class="tl_file_list" style="width: 30%;"><span class="cp_files">'. $step['cp_files'].'</span></td>
+    <td class="tl_file_list" style="width: 24%;"><span class="cp_interval">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_interval']].'</span></td>
+    <td class="tl_file_list" style="width: 22%;"><span class="cp_type_of_test">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_type_of_test']].'</span></td>
+    <td class="tl_file_list" style="width: 24%;"><span class="cp_action">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_action']].'</span></td>
   </tr>
   ';
                 $lineCount++;
@@ -309,13 +318,49 @@ class tl_integrity_check extends Backend
     
     /**
      * Return all possible cron moments
-     * @param DataContainer
      * @return array
      */
-    public function getCronMoments()
+    public function getCronIntervals()
     {
         $arrCronMoments = array('minutely','hourly','daily','weekly','monthly');
         return $arrCronMoments;
+    }
+
+    /**
+     * Refresh Timestamps in Database
+     */
+    public function refreshTimestamps()
+    {
+        $insertId = 0;
+        $arrFiles = array
+        (
+                'index.php',
+                'system/cron/cron.php',
+                'contao/index.php',
+                'contao/main.php'
+        );
+        $arrTimestamps = array();
+        foreach ($arrFiles as $arrFile) 
+        {
+            if (is_file(TL_ROOT . '/' . $arrFile))
+            {
+                $objFile = new File($arrFile);
+                $arrTimestamps[$arrFile] = $objFile->mtime;
+                $objFile->close();
+            }
+        }
+        // Insert Ignore
+        $objInsert = $this->Database->prepare("INSERT IGNORE INTO `tl_integrity_timestamps` ( `id` , `tstamp` , `check_timestamps` )
+                                               VALUES (?, ?, ?)")
+                                    ->execute(1, time(), serialize($arrTimestamps));
+        if ($objInsert->insertId == 0)
+        {
+            // Update the database
+            $this->Database->prepare("UPDATE tl_integrity_timestamps SET tstamp=?,check_timestamps=? WHERE id=?")
+                           ->execute(time(),serialize($arrTimestamps),1);
+        }
+        $this->addConfirmationMessage($GLOBALS['TL_LANG']['tl_integrity_check']['confirm_message']);  
+        $this->redirect($this->getReferer());
     }
 
 }

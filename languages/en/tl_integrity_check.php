@@ -17,9 +17,10 @@
 /**
  * CRON Output (en)
  */
-$GLOBALS['TL_LANG']['tl_integrity_check']['ok']       = 'Integrity status for file %s is: OK';
-$GLOBALS['TL_LANG']['tl_integrity_check']['corrupt']  = 'Integrity status for file %s is: Corrupt';
-$GLOBALS['TL_LANG']['tl_integrity_check']['finished'] = 'Checking files for integrity is completed.';
+$GLOBALS['TL_LANG']['tl_integrity_check']['ok']           = 'Integrity status for file %s is: OK';
+$GLOBALS['TL_LANG']['tl_integrity_check']['corrupt']      = 'Integrity status for file %s is: Corrupt';
+$GLOBALS['TL_LANG']['tl_integrity_check']['finished']     = 'Checking files for integrity is completed.';
+$GLOBALS['TL_LANG']['tl_integrity_check']['mail_blocked'] = 'The mail for the file %s is not sent. (blocked)';
 
 /**
  * Mail to admin
@@ -36,6 +37,7 @@ $GLOBALS['TL_LANG']['tl_integrity_check']['edit']   = array('Edit Integrity-Chec
 $GLOBALS['TL_LANG']['tl_integrity_check']['delete'] = array('Delete Integrity-Check','Delete Integrity-Check');
 $GLOBALS['TL_LANG']['tl_integrity_check']['show']   = array('Details Integrity-Check','Details Integrity-Check');
 $GLOBALS['TL_LANG']['tl_integrity_check']['toggle'] = array('Activate/Deactivate Integrity-Check', 'Activate/Deactivate Integrity-Check');
+$GLOBALS['TL_LANG']['tl_integrity_check']['refresh']= array('Update timestamps','Update the timestamp of the files.');
 
 /**
  * Fields
@@ -45,10 +47,10 @@ $GLOBALS['TL_LANG']['tl_integrity_check']['check_debug'] = array('Debug','Activa
 $GLOBALS['TL_LANG']['tl_integrity_check']['check_plans'] = array('Check plan','Planning of the checks and actions');
 $GLOBALS['TL_LANG']['tl_integrity_check']['published']   = array('Activate Integrity-Check', 'Activate the Integrity-Check.');
 
-$GLOBALS['TL_LANG']['tl_integrity_check']['cp_files']  = array('Files','Selecting files to check');
-$GLOBALS['TL_LANG']['tl_integrity_check']['cp_moment'] = array('Time','Time of the check');
+$GLOBALS['TL_LANG']['tl_integrity_check']['cp_files']        = array('Files','Selecting files to check');
+$GLOBALS['TL_LANG']['tl_integrity_check']['cp_interval']     = array('Time','Time of the check');
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_type_of_test'] = array('Identification','Kind of identification');
-$GLOBALS['TL_LANG']['tl_integrity_check']['cp_action'] = array('Action','Kind of action');
+$GLOBALS['TL_LANG']['tl_integrity_check']['cp_action']       = array('Action','Kind of action');
 
 /**
  * Reference
@@ -67,3 +69,5 @@ $GLOBALS['TL_LANG']['tl_integrity_check']['admin_email']      = 'Mail to Admin';
 $GLOBALS['TL_LANG']['tl_integrity_check']['restore']          = 'Restore'; //future feature ?
 $GLOBALS['TL_LANG']['tl_integrity_check']['maintenance_mode'] = 'Maintenance Page'; //future feature ?
 
+$GLOBALS['TL_LANG']['tl_integrity_check']['refreshConfirm'] = 'Update the timestamp of the files? Old timestamps will be overwritten.';
+$GLOBALS['TL_LANG']['tl_integrity_check']['confirm_message']= 'The timestamps have been updated.';
