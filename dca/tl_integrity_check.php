@@ -122,10 +122,10 @@ $GLOBALS['TL_DCA']['tl_integrity_check'] = array
 	                    'inputType'             => 'select',
 	                    'options'            	=> array
 	                    (
-                            'index.php'         => 'index.php',
-                            'cron.php'          => 'cron.php',
-                            'contao/index.php'  => 'contao/index.php',
-                            'contao/main.php'   => 'contao/main.php',
+                            'index.php'            => 'index.php',
+                            'system/cron/cron.php' => 'system/cron/cron.php',
+                            'contao/index.php'     => 'contao/index.php',
+                            'contao/main.php'      => 'contao/main.php',
 	                    ),
 	                    'eval' 			        => array('style' => 'width:150px', 'includeBlankOption'=>true, 'chosen'=>true)
 		            ),
@@ -335,7 +335,7 @@ class tl_integrity_check extends Backend
         $arrFiles = array
         (
                 'index.php',
-                'cron.php',
+                'system/cron/cron.php',
                 'contao/index.php',
                 'contao/main.php'
         );

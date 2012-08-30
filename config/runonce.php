@@ -47,7 +47,7 @@ class IntegrityCheckRunonce extends Controller
 	    	$arrFiles = array
 	    	(
 	    	        'index.php',
-	    	        'cron.php',
+	    	        'system/cron/cron.php',
 	    	        'contao/index.php',
 	    	        'contao/main.php'
 	    	);
