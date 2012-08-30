@@ -319,4 +319,41 @@ class tl_integrity_check extends Backend
         return $arrCronMoments;
     }
 
+    /**
+     * Refresh Timestamps in Database
+     */
+    public function refreshTimestamps()
+    {
+        $insertId = 0;
+        $arrFiles = array
+        (
+                'index.php',
+                'cron.php',
+                'contao/index.php',
+                'contao/main.php'
+        );
+        $arrTimestamps = array();
+        foreach ($arrFiles as $arrFile) 
+        {
+            if (is_file(TL_ROOT . '/' . $arrFile))
+            {
+                $objFile = new File($arrFile);
+                $arrTimestamps[$arrFile] = $objFile->mtime;
+                $objFile->close();
+            }
+        }
+        // Insert Ignore
+        $objInsert = $this->Database->prepare("INSERT IGNORE INTO `tl_integrity_timestamps` ( `id` , `tstamp` , `check_timestamps` )
+                                               VALUES (?, ?, ?)")
+                                    ->execute(1, time(), serialize($arrTimestamps));
+        if ($objInsert->insertId == 0)
+        {
+            // Update the database
+            $this->Database->prepare("UPDATE tl_integrity_timestamps SET tstamp=?,check_timestamps=? WHERE id=?")
+                           ->execute(time(),serialize($arrTimestamps),1);
+        }
+        $this->addConfirmationMessage($GLOBALS['TL_LANG']['tl_integrity_check']['confirm_message']);  
+        $this->redirect($this->getReferer());
+    }
+
 }

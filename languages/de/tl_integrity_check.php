@@ -67,3 +67,5 @@ $GLOBALS['TL_LANG']['tl_integrity_check']['admin_email']      = 'Mail an Admin';
 $GLOBALS['TL_LANG']['tl_integrity_check']['restore']          = 'Wiederherstellung'; //future feature ?
 $GLOBALS['TL_LANG']['tl_integrity_check']['maintenance_mode'] = 'Wartunsseite'; //future feature ?
 
+$GLOBALS['TL_LANG']['tl_integrity_check']['refreshConfirm'] = 'Zeitstempel der Dateien erneut erfassen? Alte Zeitstempel werden überschrieben.';
+$GLOBALS['TL_LANG']['tl_integrity_check']['confirm_message']= 'Die Zeitstempel wurden aktualisiert.';
