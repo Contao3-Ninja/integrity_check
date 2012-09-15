@@ -38,6 +38,7 @@ $GLOBALS['TL_LANG']['tl_integrity_check']['delete'] = array('Überprüfung lösc
 $GLOBALS['TL_LANG']['tl_integrity_check']['show']   = array('Details der Überprüfung','Details der Überprüfung');
 $GLOBALS['TL_LANG']['tl_integrity_check']['toggle'] = array('Überprüfung veröffentlichen/unveröffentlichen', 'Überprüfung veröffentlichen/unveröffentlichen');
 $GLOBALS['TL_LANG']['tl_integrity_check']['refresh']= array('Zeitstempel aktualisieren','Zeitstempel der Dateien aktualisieren');
+$GLOBALS['TL_LANG']['tl_integrity_check']['init']   = array('Neue Standard Integritäts-Überprüfung','Ein Standard Integritäts-Überprüfung anlegen mit allen 4 Dateien');
 
 /**
  * Fields
@@ -68,7 +69,10 @@ $GLOBALS['TL_LANG']['tl_integrity_check']['admin_email']      = 'Mail an Admin';
 $GLOBALS['TL_LANG']['tl_integrity_check']['restore']          = 'Wiederherstellung'; //future feature ?
 $GLOBALS['TL_LANG']['tl_integrity_check']['maintenance_mode'] = 'Wartungsseite'; //future feature ?
 
-$GLOBALS['TL_LANG']['tl_integrity_check']['refreshConfirm'] = 'Zeitstempel der Dateien erneut erfassen? Alte Zeitstempel werden überschrieben.';
-$GLOBALS['TL_LANG']['tl_integrity_check']['confirm_message']= 'Die Zeitstempel wurden aktualisiert.';
+$GLOBALS['TL_LANG']['tl_integrity_check']['refreshConfirm']          = 'Zeitstempel der Dateien erneut erfassen? Alte Zeitstempel werden überschrieben.';
+$GLOBALS['TL_LANG']['tl_integrity_check']['refresh_confirm_message'] = 'Die Zeitstempel wurden aktualisiert.';
+
+$GLOBALS['TL_LANG']['tl_integrity_check']['initConfirm']          = 'Neue Standard Integritäts-Überprüfung anlegen mit allen 4 Dateien?';
+$GLOBALS['TL_LANG']['tl_integrity_check']['init_confirm_message'] = 'Es wurde ein Integritäts-Check angelegt. Diesen bitte nun editieren und/oder aktivieren.';
 
 ?>
