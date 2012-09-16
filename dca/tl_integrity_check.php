@@ -389,7 +389,7 @@ class tl_integrity_check extends Backend
                         'cp_action' => 'admin_email'
                 ),
                 1 => array(
-                        'cp_files' => 'cron.php',
+                        'cp_files' => 'system/cron/cron.php',
                         'cp_interval' => 'hourly',
                         'cp_type_of_test' => 'md5',
                         'cp_action' => 'admin_email'
