@@ -20,7 +20,8 @@
 $GLOBALS['TL_LANG']['tl_integrity_check']['ok']           = 'Integritäts-Status für Datei %s ist: OK';
 $GLOBALS['TL_LANG']['tl_integrity_check']['corrupt']      = 'Integritäts-Status für Datei %s ist: beschädigt';
 $GLOBALS['TL_LANG']['tl_integrity_check']['finished']     = 'Integritäts-Überprüfung der Dateien abgeschlossen.';
-$GLOBALS['TL_LANG']['tl_integrity_check']['mail_blocked'] = 'Die Mail für die Datei %s wird nicht versendet.(blockiert)';
+$GLOBALS['TL_LANG']['tl_integrity_check']['mail_blocked'] = 'Die Mail für die Datei %s wurde nicht versendet.(blockiert)';
+$GLOBALS['TL_LANG']['tl_integrity_check']['log_blocked']  = 'Der System-Log Eintrag für die Datei %s wurde nicht durchgeführt.(blockiert)';
 
 /**
  * Mail to admin
