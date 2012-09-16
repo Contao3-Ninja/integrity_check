@@ -139,7 +139,7 @@ $GLOBALS['TL_DCA']['tl_integrity_check'] = array
                             'contao/index.php'     => 'contao/index.php',
                             'contao/main.php'      => 'contao/main.php',
 	                    ),
-	                    'eval' 			        => array('style' => 'width:150px', 'includeBlankOption'=>true, 'chosen'=>true)
+	                    'eval' 			        => array('style' => 'width:180px', 'includeBlankOption'=>true, 'chosen'=>true)
 		            ),
 		            'cp_interval' => array
 		            (
@@ -148,7 +148,7 @@ $GLOBALS['TL_DCA']['tl_integrity_check'] = array
 	                    'inputType'             => 'select',
 		                'options_callback'      => array('tl_integrity_check', 'getCronIntervals'),
 		                'reference'             => &$GLOBALS['TL_LANG']['tl_integrity_check'],
-	                    'eval' 			        => array('style' => 'width:150px', 'includeBlankOption'=>false, 'chosen'=>true)
+	                    'eval' 			        => array('style' => 'width:120px', 'includeBlankOption'=>false, 'chosen'=>true)
 		            ),
 		            'cp_type_of_test' => array
 		            (
@@ -157,7 +157,7 @@ $GLOBALS['TL_DCA']['tl_integrity_check'] = array
 	                    'inputType'             => 'select',
 	                    'options'            	=> array('md5','timestamp'),
 	                    'reference'             => &$GLOBALS['TL_LANG']['tl_integrity_check'],
-	                    'eval' 			        => array('style' => 'width:100px', 'includeBlankOption'=>false, 'chosen'=>true)
+	                    'eval' 			        => array('style' => 'width:110px', 'includeBlankOption'=>false, 'chosen'=>true)
 		            ),
 		            'cp_action' => array
 		            (
@@ -166,7 +166,7 @@ $GLOBALS['TL_DCA']['tl_integrity_check'] = array
 	                    'inputType'             => 'select',
 	                    'options'            	=> array('only_logging','admin_email'), //'restore','maintenance_mode'
 		                'reference'             => &$GLOBALS['TL_LANG']['tl_integrity_check'],
-	                    'eval' 			        => array('style' => 'width:150px', 'includeBlankOption'=>false, 'chosen'=>true)
+	                    'eval' 			        => array('style' => 'width:140px', 'includeBlankOption'=>false, 'chosen'=>true)
 		            )
                 )//columnFields
 		    )//eval of check_plans
@@ -300,8 +300,8 @@ class tl_integrity_check extends Backend
             {
                 $class = (($lineCount % 2) == 0) ? ' even' : ' odd';
                 $title .= '<tr class='.$class.'>
-    <td class="tl_file_list" style="width: 30%;"><span class="cp_files">'. $step['cp_files'].'</span></td>
-    <td class="tl_file_list" style="width: 24%;"><span class="cp_interval">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_interval']].'</span></td>
+    <td class="tl_file_list" style="width: 32%;"><span class="cp_files">'. $step['cp_files'].'</span></td>
+    <td class="tl_file_list" style="width: 22%;"><span class="cp_interval">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_interval']].'</span></td>
     <td class="tl_file_list" style="width: 22%;"><span class="cp_type_of_test">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_type_of_test']].'</span></td>
     <td class="tl_file_list" style="width: 24%;"><span class="cp_action">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_action']].'</span></td>
   </tr>
