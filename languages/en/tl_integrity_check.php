@@ -26,19 +26,20 @@ $GLOBALS['TL_LANG']['tl_integrity_check']['log_blocked']  = 'The system log entr
 /**
  * Mail to admin
  */
-$GLOBALS['TL_LANG']['tl_integrity_check']['subject']   = 'Contao :: Integrity-Check for %s';
+$GLOBALS['TL_LANG']['tl_integrity_check']['subject']   = 'Contao :: Integrity Check for %s';
 $GLOBALS['TL_LANG']['tl_integrity_check']['message_1'] = 'The integrity check for %s has found corrupt files:';
 $GLOBALS['TL_LANG']['tl_integrity_check']['message_2'] = 'This information can also be found in the system log.';
 
 /**
  * Buttons
  */
-$GLOBALS['TL_LANG']['tl_integrity_check']['new']    = array('New Integrity-Check', 'Add a new Integrity-Check');
-$GLOBALS['TL_LANG']['tl_integrity_check']['edit']   = array('Edit Integrity-Check','Edit Integrity-Check');
-$GLOBALS['TL_LANG']['tl_integrity_check']['delete'] = array('Delete Integrity-Check','Delete Integrity-Check');
-$GLOBALS['TL_LANG']['tl_integrity_check']['show']   = array('Details Integrity-Check','Details Integrity-Check');
-$GLOBALS['TL_LANG']['tl_integrity_check']['toggle'] = array('Activate/Deactivate Integrity-Check', 'Activate/Deactivate Integrity-Check');
+$GLOBALS['TL_LANG']['tl_integrity_check']['new']    = array('New integrity check', 'Add a new integrity check');
+$GLOBALS['TL_LANG']['tl_integrity_check']['edit']   = array('Edit integrity check','Edit integrity check');
+$GLOBALS['TL_LANG']['tl_integrity_check']['delete'] = array('Delete integrity check','Delete integrity check');
+$GLOBALS['TL_LANG']['tl_integrity_check']['show']   = array('Details integrity check','Details integrity check');
+$GLOBALS['TL_LANG']['tl_integrity_check']['toggle'] = array('Activate/Deactivate integrity check', 'Activate/Deactivate integrity check');
 $GLOBALS['TL_LANG']['tl_integrity_check']['refresh']= array('Update timestamps','Update the timestamp of the files.');
+$GLOBALS['TL_LANG']['tl_integrity_check']['init']   = array('New default integrity check','Add a new default integrity check with all 4 files.');
 
 /**
  * Fields
@@ -46,7 +47,7 @@ $GLOBALS['TL_LANG']['tl_integrity_check']['refresh']= array('Update timestamps',
 $GLOBALS['TL_LANG']['tl_integrity_check']['check_title'] = array('Title','Title for Summary');
 $GLOBALS['TL_LANG']['tl_integrity_check']['check_debug'] = array('Debug','Activate debug mode, extended logging to system log');
 $GLOBALS['TL_LANG']['tl_integrity_check']['check_plans'] = array('Check plan','Planning of the checks and actions');
-$GLOBALS['TL_LANG']['tl_integrity_check']['published']   = array('Activate Integrity-Check', 'Activate the Integrity-Check.');
+$GLOBALS['TL_LANG']['tl_integrity_check']['published']   = array('Activate integrity check', 'Activate the integrity check.');
 
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_files']        = array('Files','Selecting files to check');
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_interval']     = array('Time','Time of the check');
@@ -70,5 +71,8 @@ $GLOBALS['TL_LANG']['tl_integrity_check']['admin_email']      = 'Mail to Admin';
 $GLOBALS['TL_LANG']['tl_integrity_check']['restore']          = 'Restore'; //future feature ?
 $GLOBALS['TL_LANG']['tl_integrity_check']['maintenance_mode'] = 'Maintenance Page'; //future feature ?
 
-$GLOBALS['TL_LANG']['tl_integrity_check']['refreshConfirm'] = 'Update the timestamp of the files? Old timestamps will be overwritten.';
-$GLOBALS['TL_LANG']['tl_integrity_check']['confirm_message']= 'The timestamps have been updated.';
+$GLOBALS['TL_LANG']['tl_integrity_check']['refreshConfirm']          = 'Update the timestamp of the files? Old timestamps will be overwritten.';
+$GLOBALS['TL_LANG']['tl_integrity_check']['refresh_confirm_message'] = 'The timestamps have been updated.';
+
+$GLOBALS['TL_LANG']['tl_integrity_check']['initConfirm']          = 'Add a new default integrity check with all 4 files?';
+$GLOBALS['TL_LANG']['tl_integrity_check']['init_confirm_message'] = 'It has been created an integrity check. Please modify and/or activate.';

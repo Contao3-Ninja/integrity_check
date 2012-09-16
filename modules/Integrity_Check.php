@@ -307,7 +307,7 @@ class Integrity_Check extends \Frontend
 	        return; //admin email not set
 	    }
 	    $bolLastMail = false;	    
-	    $arrFiles = array('index.php'=>0,'cron.php'=>0,'contao/index.php'=> 0,'contao/main.php'=> 0);
+	    $arrFiles = array('index.php'=>0,'system/cron/cron.php'=>0,'contao/index.php'=> 0,'contao/main.php'=> 0);
 	    $objLastMail = $this->Database->prepare("SELECT `last_mail_tstamps` FROM `tl_integrity_timestamps` WHERE `id`=?")
 	                                  ->execute(2);
 	    if ($objLastMail->numRows >0) 
@@ -383,7 +383,7 @@ class Integrity_Check extends \Frontend
 	private function sendCheckLog()
 	{
 	    $bolLastLog = false;
-	    $arrFiles = array('index.php'=>0,'cron.php'=>0,'contao/index.php'=> 0,'contao/main.php'=> 0);
+	    $arrFiles = array('index.php'=>0,'system/cron/cron.php'=>0,'contao/index.php'=> 0,'contao/main.php'=> 0);
 	    $objLastLog = $this->Database->prepare("SELECT `last_minutely_log` FROM `tl_integrity_timestamps` WHERE `id`=?")
 	    							 ->execute(3);
 	    if ($objLastLog->numRows >0)
