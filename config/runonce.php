@@ -41,6 +41,7 @@ class IntegrityCheckRunonce extends Controller
                                       `tstamp` int(10) unsigned NOT NULL DEFAULT '0',
                                       `check_timestamps` varchar(255) NOT NULL DEFAULT '',
                                       `last_mail_tstamps` varchar(255) NOT NULL DEFAULT '',
+                                      `last_minutely_log` varchar(255) NOT NULL DEFAULT '',
                                       PRIMARY KEY (`id`)
                                     ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1");
             //Timestamps füllen
@@ -65,7 +66,7 @@ class IntegrityCheckRunonce extends Controller
 	    	$objInsert = $this->Database->prepare("INSERT INTO `tl_integrity_timestamps` ( `id` , `tstamp` , `check_timestamps` )
 	    	                                       VALUES (?, ?, ?)")
 	    	                            ->execute(1, time(), serialize($arrTimestamps));
-		} // if tableExists('tl_integrity_timestamps')
+		} // if !tableExists('tl_integrity_timestamps')
 	}
 }
 

@@ -32,6 +32,7 @@ namespace BugBuster\IntegrityCheck;
 class Integrity_Check extends \Frontend 
 {
     protected $fileEmailStatus = array();
+    protected $fileLogStatus = array();
     
     protected $check_debug = false;
     protected $check_plans = array();
@@ -51,7 +52,8 @@ class Integrity_Check extends \Frontend
      */
     public function checkFilesMinutely()
     {
-    	$this->cron_moment = 'minutely';
+    	$this->cron_interval = 'minutely';
+    	//$this->log('Start: '.$this->cron_interval, 'Integrity_Check checkFilesMinutely()', TL_CRON);
     	$this->checkFiles();
     }
     
@@ -61,6 +63,7 @@ class Integrity_Check extends \Frontend
     public function checkFilesHourly()
     {
         $this->cron_interval = 'hourly';
+        //$this->log('Start: '.$this->cron_interval, 'Integrity_Check checkFilesHourly()', TL_CRON);
         $this->checkFiles();
     }
     /**
@@ -69,6 +72,7 @@ class Integrity_Check extends \Frontend
     public function checkFilesDaily()
     {
         $this->cron_interval = 'daily';
+        //$this->log('Start: '.$this->cron_interval, 'Integrity_Check checkFilesDaily()', TL_CRON);
         $this->checkFiles();
     }
     /**
@@ -77,6 +81,7 @@ class Integrity_Check extends \Frontend
     public function checkFilesWeekly()
     {
         $this->cron_interval = 'weekly';
+        //$this->log('Start: '.$this->cron_interval, 'Integrity_Check checkFilesWeekly()', TL_CRON);
         $this->checkFiles();
     }
     /**
@@ -85,6 +90,7 @@ class Integrity_Check extends \Frontend
     public function checkFilesMonthly()
     {
         $this->cron_interval = 'monthly';
+        //$this->log('Start: '.$this->cron_interval, 'Integrity_Check checkFilesMonthly()', TL_CRON);
         $this->checkFiles();
     }
     
@@ -98,7 +104,7 @@ class Integrity_Check extends \Frontend
 	    $this->getCheckPlan();
 	    $this->getFileList();
 	    $checkSummary = false; //false=kein check erfolgt, keine Mail, keine completed Meldung
-	    
+
 	    //Zeilenweise den Plan durchgehen
 	    foreach ($this->check_plans as $check_plan_step)
 	    {
@@ -116,12 +122,15 @@ class Integrity_Check extends \Frontend
 	                    $resTS = $this->checkFileTimestamp($check_plan_step['cp_files'], $check_plan_step['cp_action']);
 	                    break;
 	            }
-	            //einmal true immer true
-	            $checkSummary = ($resMD5 == true || $resTS == true) ? true : $checkSummary;
+	            //einmal false immer true
+	            $checkSummary = ($resMD5 == false || $resTS == false) ? true : $checkSummary;
 	        } //moment
 	    } //foreach plan step
+	    
+	    //Log / Mail wenn notwendig
 	    if ($checkSummary) 
 	    {
+	    	$this->sendCheckLog();
             $this->sendCheckEmail();
             if ($this->check_debug == true)
             {
@@ -131,11 +140,13 @@ class Integrity_Check extends \Frontend
 	    }
 	}
 	
-	
-	 
 	/**
-	 * Check file, use MD5 
-	 */  
+	 * Check files via MD5
+	 *
+	 * @param string $cp_file
+	 * @param string $cp_action
+	 * @return bool	 true = file is corrupt, false = file is not corrupt or no check
+	 */
 	protected function checkFileMD5($cp_file, $cp_action)
 	{
 	    if ($cp_file == '') 
@@ -143,7 +154,7 @@ class Integrity_Check extends \Frontend
 	        return false; // kein check
 	    }
 	    $status = true;
-	    
+
 	    foreach ($this->file_list as $files)
 	    {
 	        list($file, $md5_file, $md5_code, $contao_version) = $files;
@@ -183,10 +194,12 @@ class Integrity_Check extends \Frontend
                 case 'admin_email' :
                     $this->fileEmailStatus[$cp_file] = true; // true = mail 
                     //wenn mail dann auch log
-                    $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['corrupt'], $cp_file) . ' ['.$GLOBALS['TL_LANG']['tl_integrity_check']['md5'].']', 'Integrity_Check checkFileMD5()', TL_ERROR);
+                    $this->fileLogStatus[$cp_file] = 'md5'; // true = log 
+                    //$this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['corrupt'], $cp_file) . ' ['.$GLOBALS['TL_LANG']['tl_integrity_check']['md5'].']', 'Integrity_Check checkFileMD5()', TL_ERROR);
                     break;
                 case 'only_logging':
-                    $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['corrupt'], $cp_file) . ' ['.$GLOBALS['TL_LANG']['tl_integrity_check']['md5'].']', 'Integrity_Check checkFileMD5()', TL_ERROR);
+                	$this->fileLogStatus[$cp_file] = 'md5'; // true = log
+                    //$this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['corrupt'], $cp_file) . ' ['.$GLOBALS['TL_LANG']['tl_integrity_check']['md5'].']', 'Integrity_Check checkFileMD5()', TL_ERROR);
                     break;
             }
         }
@@ -194,9 +207,16 @@ class Integrity_Check extends \Frontend
         {
             $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['ok'], $cp_file) . ' ['.$GLOBALS['TL_LANG']['tl_integrity_check']['md5'].']', 'Integrity_Check checkFileMD5()', TL_CRON);
         }
-        return true;
+        return $status;
 	}
 	
+	/**
+	 * Check files via timestamp
+	 * 
+	 * @param string $cp_file
+	 * @param string $cp_action
+	 * @return bool	 true = file is corrupt, false = file is not corrupt or no check  
+	 */
 	protected function checkFileTimestamp($cp_file, $cp_action)
 	{
 	    $cp_file_ts = 0;
@@ -210,7 +230,7 @@ class Integrity_Check extends \Frontend
 	    {
 	        return false; // kein check möglich
 	    }
-	    
+	    $status = true;
 	    $arrTimestamps = deserialize($objTimestamps->check_timestamps);
 	    if (is_file(TL_ROOT . '/' . $cp_file))
 	    {
@@ -222,16 +242,19 @@ class Integrity_Check extends \Frontend
 	    //Ergebniss verarbeiten
 	    if ($cp_file_ts != $arrTimestamps[$cp_file])
 	    {
+	    	$status = false;
 	        //File corrupt
 	        switch ($cp_action)
 	        {
 	            case 'admin_email' :
 	                $this->fileEmailStatus[$cp_file] = true; // true = mail
 	                //wenn mail dann auch log
-	                $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['corrupt'], $cp_file) . ' ['.$GLOBALS['TL_LANG']['tl_integrity_check']['timestamp'].']', 'Integrity_Check checkFileTimestamp()', TL_ERROR);
+	                $this->fileLogStatus[$cp_file] = 'timestamp'; // true = log
+	                //$this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['corrupt'], $cp_file) . ' ['.$GLOBALS['TL_LANG']['tl_integrity_check']['timestamp'].']', 'Integrity_Check checkFileTimestamp()', TL_ERROR);
 	                break;
 	            case 'only_logging':
-	                $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['corrupt'], $cp_file) . ' ['.$GLOBALS['TL_LANG']['tl_integrity_check']['timestamp'].']', 'Integrity_Check checkFileTimestamp()', TL_ERROR);
+	            	$this->fileLogStatus[$cp_file] = 'timestamp'; // true = log
+	                //$this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['corrupt'], $cp_file) . ' ['.$GLOBALS['TL_LANG']['tl_integrity_check']['timestamp'].']', 'Integrity_Check checkFileTimestamp()', TL_ERROR);
 	                break;
 	        }
 	    }
@@ -240,7 +263,7 @@ class Integrity_Check extends \Frontend
 	        $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['ok'], $cp_file) . ' ['.$GLOBALS['TL_LANG']['tl_integrity_check']['timestamp'].']', 'Integrity_Check checkFileTimestamp()', TL_CRON);
 	    }
 	    
-	    return true;
+	    return $status;
 	}
 	
 	private function getCheckPlan()
@@ -349,14 +372,80 @@ class Integrity_Check extends \Frontend
     	                       ->execute(2, time(), serialize($arrFiles));
     	    }
 	    }
-	    else
-	    {
-	        unset($objEmail);
-	    }
+	    unset($objEmail);
 	    return ;
 	    
 	}//sendCheckEmail
 	
-	
+	/**
+	 * System Log Entry
+	 */
+	private function sendCheckLog()
+	{
+	    $bolLastLog = false;
+	    $arrFiles = array('index.php'=>0,'cron.php'=>0,'contao/index.php'=> 0,'contao/main.php'=> 0);
+	    $objLastLog = $this->Database->prepare("SELECT `last_minutely_log` FROM `tl_integrity_timestamps` WHERE `id`=?")
+	    							 ->execute(3);
+	    if ($objLastLog->numRows >0)
+	    {
+	        $arrFiles = array_merge($arrFiles, deserialize($objLastLog->last_minutely_log));
+	        $bolLastLog = true;
+	    }
+	    $time_block = time() - (60 * 60); // -1h
+	    $sendlog = false;
+	    
+	    foreach ($this->fileLogStatus as $key => $value) // file => kind of test
+	    {
+	        if ($value == true) // md5 || timestamp
+	        {
+	        	$sendLog_temp = true;
+	        	
+	        	//nur wenn das letzte Log 1h her ist für diese Datei
+	        	if ($arrFiles[$key] > $time_block)
+	        	{
+	        	    $sendLog_temp = false;
+	        	    if ($this->check_debug == true)
+	        	    {
+	        	        $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['log_blocked'], $key), 'Integrity_Check sendCheckLog()', TL_CRON);
+	        	    }
+	        	}
+	        	
+	        	//log?
+	        	if ($sendLog_temp)
+	        	{
+	        		if ($value == 'md5') 
+	        		{
+	        			$this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['corrupt'], $key) . ' ['.$GLOBALS['TL_LANG']['tl_integrity_check']['md5'].']', 'Integrity_Check checkFileMD5()', TL_ERROR);
+	        		}
+	        		else 
+	        		{
+	        			$this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['corrupt'], $key) . ' ['.$GLOBALS['TL_LANG']['tl_integrity_check']['timestamp'].']', 'Integrity_Check checkFileTimestamp()', TL_ERROR);
+	        		}
+	        		//wenn log dann timestamp erneuern
+	        	    $arrFiles[$key] = time();
+	        	    $sendlog = true;
+	        	}
+	        }
+	    }
+	    
+	    //timestamp eintragen
+	    if ($sendlog)
+	    {
+	        if ($bolLastLog)
+	        {
+	            //update
+	            $this->Database->prepare("UPDATE tl_integrity_timestamps SET tstamp=?,last_minutely_log=? WHERE id=?")
+	            			   ->execute(time(),serialize($arrFiles),3);
+	        }
+	        else
+	        {
+	            //insert
+	            $this->Database->prepare("INSERT INTO `tl_integrity_timestamps` ( `id` , `tstamp` , `last_minutely_log` )
+	                   					  VALUES (?, ?, ?)")
+	                           ->execute(3, time(), serialize($arrFiles));
+	        }
+	    }// if sendlog
+	}// sendCheckLog()
+
 }
 
