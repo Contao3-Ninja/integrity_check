@@ -8,7 +8,7 @@ Cron job for integrity check for this files over checksums:
 * contao/index.php
 * contao/main.php
 
-Test for Contao versions 2.10.0 to 2.11.5
+Test for Contao versions 2.10.0 to 2.11.6
 
 ## Branches
 
