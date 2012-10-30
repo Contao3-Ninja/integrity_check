@@ -27,7 +27,7 @@ namespace BugBuster\IntegrityCheck;
  * @author     Glen Langer
  * @package    Integrity_Check
  */
-class IntegrityCheckHelper extends \BackendModule
+class IntegrityCheckHelper extends \System
 {
    /**
     * Current object instance
@@ -40,7 +40,6 @@ class IntegrityCheckHelper extends \BackendModule
      */
     public function __construct()
     {
-        $this->import('BackendUser', 'User');
         parent::__construct();
     }
     
