@@ -43,7 +43,7 @@ class Integrity_Check extends \Frontend
     
     /**
      * Filelist with checksums
-     * @var array    file,checksum_file,checksum_code,contao_version
+     * @var array    file,checksum_file,checksum_code
      */
     protected $file_list   = array();
 	
@@ -157,7 +157,7 @@ class Integrity_Check extends \Frontend
 
 	    foreach ($this->file_list as $files)
 	    {
-	        list($file, $md5_file, $md5_code, $contao_version) = $files;
+	        list($file, $md5_file, $md5_code) = $files;
 	        if ($file == $cp_file) 
 	        {
 	            break; // gefunden
@@ -168,10 +168,12 @@ class Integrity_Check extends \Frontend
         {
             $buffer  = str_replace("\r", '', file_get_contents(TL_ROOT . '/' . $cp_file));
             // Check the content
-            if (md5($buffer) != $md5_file) 
+            //if (md5($buffer) != $md5_file)
+            if (strncmp(md5($buffer), $md5_file, 10) !== 0) 
             {
                 // Check the content without comments
-                if (md5(preg_replace('@/\*.*\*/@Us', '', $buffer)) != $md5_code) 
+                //if (md5(preg_replace('@/\*.*\*/@Us', '', $buffer)) != $md5_code)
+            	if (strncmp(md5(preg_replace('@/\*.*\*/@Us', '', $buffer)), $md5_code, 10) !== 0)
                 {
                     $status = false;
                 }
@@ -288,11 +290,10 @@ class Integrity_Check extends \Frontend
 	private function getFileList() 
 	{
 	    $contao_version_live = VERSION . '.' . BUILD;
-	    $files2check = ''; // overwrite in file_list_...php
-	    if (file_exists(TL_ROOT . '/system/modules/integrity_check/config/file_list_'.$contao_version_live.'.php')) 
+	    if (file_exists(TL_ROOT . '/system/modules/integrity_check/config/file_list_'.$contao_version_live.'.json')) 
 	    {
-	        require(TL_ROOT . '/system/modules/integrity_check/config/file_list_'.$contao_version_live.'.php');
-	        $this->file_list = $files2check;
+	        //require(TL_ROOT . '/system/modules/integrity_check/config/file_list_'.$contao_version_live.'.php');
+	        $this->file_list = json_decode(file_get_contents(TL_ROOT . '/system/modules/integrity_check/config/file_list_'.$contao_version_live.'.json'));
 	    }
 	    return;
 	}//getFileList

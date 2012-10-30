@@ -26,8 +26,8 @@ ClassLoader::addNamespaces(array
 ClassLoader::addClasses(array
 (
 	// Modules
-	'BugBuster\IntegrityCheck\Integrity_Check'      => 'system/modules/integrity_check/modules/Integrity_Check.php',
+	'BugBuster\IntegrityCheck\Integrity_Check'          => 'system/modules/integrity_check/modules/Integrity_Check.php',
 
 	// Classes
-	'BugBuster\IntegrityCheck\IntegrityCheckHelper' => 'system/modules/integrity_check/classes/IntegrityCheckHelper.php',
+	'BugBuster\IntegrityCheck\IntegrityCheckHelper'     => 'system/modules/integrity_check/classes/IntegrityCheckHelper.php',
 ));
