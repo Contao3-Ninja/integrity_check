@@ -5,6 +5,7 @@ Contao Module Integrity Check
 
 Cron job for integrity check for this files over checksums:
 * index.php
+* cron.php
 * contao/index.php
 * contao/main.php
 
