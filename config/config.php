@@ -39,4 +39,5 @@ $GLOBALS['TL_CRON']['daily'][]   = array('IntegrityCheck\Integrity_Check', 'chec
 //from contao 2.11, hourly is possible.
 $GLOBALS['TL_CRON']['hourly'][]  = array('IntegrityCheck\Integrity_Check', 'checkFilesHourly');
 //from contao 3.0, minutely is possible.
-$GLOBALS['TL_CRON']['minutely'][]  = array('IntegrityCheck\Integrity_Check', 'checkFilesMinutely');
+//You want it? Then activate it.
+//$GLOBALS['TL_CRON']['minutely'][]  = array('IntegrityCheck\Integrity_Check', 'checkFilesMinutely');

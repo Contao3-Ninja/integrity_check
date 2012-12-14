@@ -337,7 +337,14 @@ class tl_integrity_check extends Backend
      */
     public function getCronIntervals()
     {
-        $arrCronMoments = array('minutely','hourly','daily','weekly','monthly');
+        $arrCronMoments = array('hourly','daily','weekly','monthly');
+        
+        if ( isset($GLOBALS['TL_CRON']['minutely']) &&
+             count($this->searchCron($GLOBALS['TL_CRON']['minutely'], 0, 'IntegrityCheck\Integrity_Check')) > 0 ) 
+        {
+            $arrCronMoments = array('minutely','hourly','daily','weekly','monthly');
+        }
+        
         return $arrCronMoments;
     }
 
@@ -434,5 +441,31 @@ class tl_integrity_check extends Backend
         }
         
     }
+    
+    /**
+     * Multidimensional array search function, here for Cron
+     * @author sunelbe at gmail dot com 
+     * @return array
+     */
+    public function searchCron($array, $key, $value)
+    {
+        $results = array();
+    
+        if (is_array($array))
+        {
+            if (isset($array[$key]) && $array[$key] == $value)
+            {
+                $results[] = $array;
+            }
+    
+            foreach ($array as $subarray)
+            {
+                $results = array_merge($results, $this->searchCron($subarray, $key, $value));
+            }
+        }
+    
+        return $results;
+    }
+    
 
 }
