@@ -27,7 +27,14 @@ class Generate_Checksum_Files
 		$arrHashes = json_decode(file_get_contents(__DIR__ .'/'. $file));
 		foreach ($arrHashes as $hash) 
 		{
-		    list($path, $md5_file, $md5_code) = $hash;
+		    if (count($hash)==2) 
+		    {
+		        list($path, $md5_file) = $hash;
+		    }
+		    else 
+		    {
+		        list($path, $md5_file, $md5_code) = $hash;
+		    }
 		    if ($path == 'index.php' 
 		     || $path == 'system/cron/cron.php'
 		     || $path == 'contao/index.php'
@@ -43,4 +50,4 @@ class Generate_Checksum_Files
 }
 
 $objGenerate = new Generate_Checksum_Files();
-$objGenerate->Generate_Checksum_File('3.0.1.json');
+$objGenerate->Generate_Checksum_File('3.0.3.json');
