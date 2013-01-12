@@ -22,6 +22,7 @@ $GLOBALS['TL_LANG']['tl_integrity_check']['corrupt']      = 'Integritäts-Status
 $GLOBALS['TL_LANG']['tl_integrity_check']['finished']     = 'Integritäts-Überprüfung der Dateien abgeschlossen.';
 $GLOBALS['TL_LANG']['tl_integrity_check']['mail_blocked'] = 'Die Mail für die Datei %s wurde nicht versendet.(blockiert)';
 $GLOBALS['TL_LANG']['tl_integrity_check']['log_blocked']  = 'Der System-Log Eintrag für die Datei %s wurde nicht durchgeführt.(blockiert)';
+$GLOBALS['TL_LANG']['tl_integrity_check']['md5_blocked']  = 'Integritäts-Überprüfung für die Datei %s wurde nicht durchgeführt.(keine Prüfsummen vorhanden. Update notwendig!)';
 
 /**
  * Mail to admin
@@ -29,6 +30,7 @@ $GLOBALS['TL_LANG']['tl_integrity_check']['log_blocked']  = 'Der System-Log Eint
 $GLOBALS['TL_LANG']['tl_integrity_check']['subject']   = 'Contao :: Integritäts-Überprüfung auf %s';
 $GLOBALS['TL_LANG']['tl_integrity_check']['message_1'] = 'Die Integritäts-Überprüfung auf %s hat beschädigte Dateien gefunden:';
 $GLOBALS['TL_LANG']['tl_integrity_check']['message_2'] = 'Diese Information ist auch im System-Log zu finden.';
+$GLOBALS['TL_LANG']['tl_integrity_check']['message_3'] = 'Die Integritäts-Überprüfung auf %s hat keine passenden MD5 Prüfsummen. Ein Update ist nötig.';
 
 /**
  * Buttons

@@ -1,17 +1,16 @@
 <?php
 
 /**
- * Contao Open Source CMS
- * Copyright (C) 2005-2012 Leo Feyer
+ * Contao Open Source CMS, Copyright (C) 2005-2013 Leo Feyer
  *
- * Formerly known as TYPOlight Open Source CMS.
+ * Contao Module "Integrity Check"
  *
- * PHP version 5
- * @copyright  Glen Langer 2012 
- * @author     Glen Langer 
+ * @copyright  Glen Langer 2012..2013 <http://www.contao.glen-langer.de>
+ * @author     Glen Langer (BugBuster)
  * @package    Integrity_Check 
  * @license    LGPL 
  * @filesource
+ * @see	       https://github.com/BugBuster1701/integrity_check
  */
 
 /**
@@ -24,8 +23,8 @@ namespace BugBuster\IntegrityCheck;
  * 
  * Cronjob for integrity check 
  *
- * @copyright  Glen Langer 2012 
- * @author     BugBuster 
+ * @copyright  Glen Langer 2012..2013 <http://www.contao.glen-langer.de>
+ * @author     Glen Langer (BugBuster)
  * @author     Leo Feyer (sourcecode parts from contao check tool)
  * @package    Integrity_Check
  */
@@ -38,8 +37,12 @@ class Integrity_Check extends \Frontend
     protected $check_plans = array();
     protected $check_title = '';
     protected $last_mail   = array();
+    protected $md5_block   = false;
     
     protected $cron_interval = '';
+    
+    
+    const latest_version = '3.0.3';
     
     /**
      * Filelist with checksums
@@ -153,6 +156,19 @@ class Integrity_Check extends \Frontend
 	    {
 	        return false; // kein check
 	    }
+
+	    if ( version_compare(VERSION.'.'.BUILD, $this::latest_version, '>') )
+	    {
+	        if ($this->check_debug == true)
+	        {
+	            // Add log entry
+	            $this->log('['.$this->check_title .'] '. sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['md5_blocked'], $cp_file), 'Integrity_Check checkFiles()', TL_ERROR);
+	        }
+	        // Mail to Admin
+	        $this->sendCheckEmailMD5Block();
+	        return false; // kein check	        
+	    }
+	    
 	    $status = true;
 
 	    foreach ($this->file_list as $files)
@@ -226,8 +242,8 @@ class Integrity_Check extends \Frontend
 	    {
 	        return false; // kein check
 	    }
-	    $objTimestamps = $this->Database->prepare("SELECT `check_timestamps` FROM `tl_integrity_timestamps` WHERE `id`=?")
-	                                    ->execute(1);
+	    $objTimestamps = \Database::getInstance()->prepare("SELECT `check_timestamps` FROM `tl_integrity_timestamps` WHERE `id`=?")
+	                                             ->execute(1);
 	    if ($objTimestamps->numRows < 1)
 	    {
 	        return false; // kein check möglich
@@ -268,11 +284,14 @@ class Integrity_Check extends \Frontend
 	    return $status;
 	}
 	
+	/**
+	 * Get check plan from DB
+	 */
 	private function getCheckPlan()
 	{
-	    $objCheckPlan = $this->Database->prepare("SELECT `check_debug`, `check_plans`, `check_title` 
-                                                  FROM `tl_integrity_check` WHERE published=?")
-	                                   ->execute(1);
+	    $objCheckPlan = \Database::getInstance()->prepare("SELECT `check_debug`, `check_plans`, `check_title` 
+                                                           FROM `tl_integrity_check` WHERE published=?")
+	                                            ->execute(1);
 	    if ($objCheckPlan->numRows < 1) 
 	    {
 	        return ;
@@ -309,8 +328,8 @@ class Integrity_Check extends \Frontend
 	    }
 	    $bolLastMail = false;	    
 	    $arrFiles = array('index.php'=>0,'system/cron/cron.php'=>0,'contao/index.php'=> 0,'contao/main.php'=> 0);
-	    $objLastMail = $this->Database->prepare("SELECT `last_mail_tstamps` FROM `tl_integrity_timestamps` WHERE `id`=?")
-	                                  ->execute(2);
+	    $objLastMail = \Database::getInstance()->prepare("SELECT `last_mail_tstamps` FROM `tl_integrity_timestamps` WHERE `id`=?")
+	                                           ->executeUncached(2);
 	    if ($objLastMail->numRows >0) 
 	    {
 	        $arrFiles = array_merge($arrFiles, deserialize($objLastMail->last_mail_tstamps));
@@ -362,15 +381,15 @@ class Integrity_Check extends \Frontend
     	    if ($bolLastMail) 
     	    {
     	        //update
-    	        $this->Database->prepare("UPDATE tl_integrity_timestamps SET tstamp=?,last_mail_tstamps=? WHERE id=?")
-    	                       ->execute(time(),serialize($arrFiles),2);
+    	        \Database::getInstance()->prepare("UPDATE tl_integrity_timestamps SET tstamp=?,last_mail_tstamps=? WHERE id=?")
+    	                                ->execute(time(), serialize($arrFiles), 2);
     	    }
     	    else 
     	    {
     	        //insert
-    	        $this->Database->prepare("INSERT INTO `tl_integrity_timestamps` ( `id` , `tstamp` , `last_mail_tstamps` )
-    	                                  VALUES (?, ?, ?)")
-    	                       ->execute(2, time(), serialize($arrFiles));
+    	        \Database::getInstance()->prepare("INSERT INTO `tl_integrity_timestamps` ( `id` , `tstamp` , `last_mail_tstamps` )
+    	                                           VALUES (?, ?, ?)")
+    	                                ->execute(2, time(), serialize($arrFiles));
     	    }
 	    }
 	    unset($objEmail);
@@ -385,8 +404,8 @@ class Integrity_Check extends \Frontend
 	{
 	    $bolLastLog = false;
 	    $arrFiles = array('index.php'=>0,'system/cron/cron.php'=>0,'contao/index.php'=> 0,'contao/main.php'=> 0);
-	    $objLastLog = $this->Database->prepare("SELECT `last_minutely_log` FROM `tl_integrity_timestamps` WHERE `id`=?")
-	    							 ->execute(3);
+	    $objLastLog = \Database::getInstance()->prepare("SELECT `last_minutely_log` FROM `tl_integrity_timestamps` WHERE `id`=?")
+	    							          ->executeUncached(3);
 	    if ($objLastLog->numRows >0)
 	    {
 	        $arrFiles = array_merge($arrFiles, deserialize($objLastLog->last_minutely_log));
@@ -435,18 +454,77 @@ class Integrity_Check extends \Frontend
 	        if ($bolLastLog)
 	        {
 	            //update
-	            $this->Database->prepare("UPDATE tl_integrity_timestamps SET tstamp=?,last_minutely_log=? WHERE id=?")
-	            			   ->execute(time(),serialize($arrFiles),3);
+	            \Database::getInstance()->prepare("UPDATE tl_integrity_timestamps SET tstamp=?,last_minutely_log=? WHERE id=?")
+	            			            ->execute(time(), serialize($arrFiles), 3);
 	        }
 	        else
 	        {
 	            //insert
-	            $this->Database->prepare("INSERT INTO `tl_integrity_timestamps` ( `id` , `tstamp` , `last_minutely_log` )
-	                   					  VALUES (?, ?, ?)")
-	                           ->execute(3, time(), serialize($arrFiles));
+	            \Database::getInstance()->prepare("INSERT INTO `tl_integrity_timestamps` ( `id` , `tstamp` , `last_minutely_log` )
+	                   					           VALUES (?, ?, ?)")
+	                                    ->execute(3, time(), serialize($arrFiles));
 	        }
 	    }// if sendlog
 	}// sendCheckLog()
+	
+	/**
+	 * Send eMail to Admin, an update is necessary
+	 */
+	private function sendCheckEmailMD5Block()
+	{
+	    if (!isset($GLOBALS['TL_CONFIG']['adminEmail']))
+	    {
+	        return; //admin email not set
+	    }
+	    if ($this->md5_block === true) 
+	    {
+	        return; //nicht noch ein MD5 Check 
+	    }
+	    $bolLastMail = false;
+	    $objLastMail = \Database::getInstance()->prepare("SELECT `last_mail_md5_block` FROM `tl_integrity_timestamps` WHERE `id`=?")
+                                               ->executeUncached(4);
+	    if ($objLastMail->numRows >0)
+	    {
+	        $lastMailTime = $objLastMail->last_mail_md5_block;
+	        $bolLastMail = true;
+	    }
+	    $time_block = time() - (24 * 60 * 60); // -24h
+	    if ($time_block < $lastMailTime) 
+	    {
+	        return ; //admin email not send
+	    }
+	    $this->md5_block = true; //nicht noch ein MD5 Check
+	    
+	    //////////////// MAIL OUT \\\\\\\\\\\\\\\\
+	    $sendmail = false;
+	    // Notification
+	    list($GLOBALS['TL_ADMIN_NAME'], $GLOBALS['TL_ADMIN_EMAIL']) = $this->splitFriendlyName($GLOBALS['TL_CONFIG']['adminEmail']); //from index.php
+	    $objEmail = new \Email();
+	    $objEmail->from     = $GLOBALS['TL_ADMIN_EMAIL'];
+	    $objEmail->fromName = $GLOBALS['TL_ADMIN_NAME'];
+	     
+	    $objEmail->subject  = sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['subject']  , $this->Environment->host);
+	    $objEmail->text     = sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['message_3'], $this->Environment->host);
+
+	    $objEmail->text .= "\n[".date($GLOBALS['TL_CONFIG']['datimFormat'])."]";
+	    $objEmail->sendTo($GLOBALS['TL_CONFIG']['adminEmail']);
+	    
+	    if ($bolLastMail)
+	    {
+	        //update
+	        \Database::getInstance()->prepare("UPDATE tl_integrity_timestamps SET tstamp=?,last_mail_md5_block=? WHERE id=?")
+	                                ->execute(time(), time(), 4);
+	    }
+	    else
+	    {
+	        //insert
+	        \Database::getInstance()->prepare("INSERT INTO `tl_integrity_timestamps` ( `id` , `tstamp` , `last_mail_md5_block` )
+    	                                       VALUES (?, ?, ?)")
+	        	                    ->execute(4, time(), time());
+	    }
+	    unset($objEmail);
+	    return ;
+	}//sendCheckEmailMD5Block
 
 }
 
