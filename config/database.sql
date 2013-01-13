@@ -36,6 +36,7 @@ CREATE TABLE `tl_integrity_timestamps` (
   `tstamp` int(10) unsigned NOT NULL default '0',
   `check_timestamps` varchar(255) NOT NULL default '',
   `last_mail_tstamps` varchar(255) NOT NULL default '',
+  `last_mail_md5_block` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
  

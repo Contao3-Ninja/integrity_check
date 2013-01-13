@@ -21,6 +21,7 @@ $GLOBALS['TL_LANG']['tl_integrity_check']['ok']           = 'Integrity status fo
 $GLOBALS['TL_LANG']['tl_integrity_check']['corrupt']      = 'Integrity status for file %s is: Corrupt';
 $GLOBALS['TL_LANG']['tl_integrity_check']['finished']     = 'Checking files for integrity is completed.';
 $GLOBALS['TL_LANG']['tl_integrity_check']['mail_blocked'] = 'The mail for the file %s is not sent. (blocked)';
+$GLOBALS['TL_LANG']['tl_integrity_check']['md5_blocked']  = 'Checking file %s for integrity was not performed.(No checksums available. Update is necessary!)';
 
 /**
  * Mail to admin
@@ -28,6 +29,7 @@ $GLOBALS['TL_LANG']['tl_integrity_check']['mail_blocked'] = 'The mail for the fi
 $GLOBALS['TL_LANG']['tl_integrity_check']['subject']   = 'Contao :: Integrity Check for %s';
 $GLOBALS['TL_LANG']['tl_integrity_check']['message_1'] = 'The integrity check for %s has found corrupt files:';
 $GLOBALS['TL_LANG']['tl_integrity_check']['message_2'] = 'This information can also be found in the system log.';
+$GLOBALS['TL_LANG']['tl_integrity_check']['message_3'] = 'The integrity check for %s has found no matching MD5 checksums. An update is necessary.';
 
 /**
  * Buttons
