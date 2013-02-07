@@ -37,7 +37,7 @@ class Integrity_Check extends Frontend
     
     protected $cron_interval = '';
     
-    const latest_version = '2.11.8';
+    const latest_version = '2.11.9';
     
     /**
      * Filelist with checksums
@@ -160,6 +160,8 @@ class Integrity_Check extends Frontend
         if (is_file(TL_ROOT . '/' . $cp_file)) 
         {
             $buffer  = str_replace("\r", '', file_get_contents(TL_ROOT . '/' . $cp_file));
+            //$this->log('MD5F-MD5C-'.$cp_file.' '.md5($buffer).'-'.md5(preg_replace('@/\*.*\*/@Us', '', $buffer)), 'Integrity_Check checkFileMD5()', REPOSITORY);
+            
             // Check the content
             if (md5($buffer) != $md5_file) 
             {
