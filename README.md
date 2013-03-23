@@ -9,6 +9,9 @@ Cron job for integrity check for this files over checksums:
 * contao/index.php
 * contao/main.php
 
+Special optional test over timestamp:
+* .htaccess
+
 Test for Contao versions from 3.0.0
 
 ## Branches

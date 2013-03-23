@@ -56,6 +56,10 @@ $GLOBALS['TL_LANG']['tl_integrity_check']['cp_interval']     = array('Zeitpunkt'
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_type_of_test'] = array('Erkennung','Art der Erkennung');
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_action']       = array('Aktion','Art der Reaktion');
 
+$GLOBALS['TL_LANG']['tl_integrity_check']['check_plans_expert'] = array('Überprüfungsplan','Planung der Überprüfungen und Aktionen. Bei Neuauswahl bitte Zeitstempel aktualisieren.');
+$GLOBALS['TL_LANG']['tl_integrity_check']['expert_legend']  = 'Experten-Tests';
+$GLOBALS['TL_LANG']['tl_integrity_check']['publish_legend'] = 'Veröffentlichung';
+
 /**
  * Reference
  */

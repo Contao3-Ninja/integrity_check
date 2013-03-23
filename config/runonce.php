@@ -1,17 +1,16 @@
-<?php   
+<?php 
+
 /**
- * Contao Open Source CMS
- * Copyright (C) 2005-2011 Leo Feyer
+ * Contao Open Source CMS, Copyright (C) 2005-2013 Leo Feyer
  *
- * Formerly known as TYPOlight Open Source CMS.
- * 
- * Modul Integrity Check 
+ * Contao Module "Integrity Check"
  *
- * PHP version 5
- * @copyright  Glen Langer 2012 
- * @author     Glen Langer 
+ * @copyright  Glen Langer 2012..2013 <http://www.contao.glen-langer.de>
+ * @author     Glen Langer (BugBuster)
  * @package    Integrity_Check 
  * @license    LGPL 
+ * @filesource
+ * @see	       https://github.com/BugBuster1701/integrity_check
  */
 
 /**
@@ -19,8 +18,8 @@
  *
  * Runonce for integrity check
  *
- * @copyright  Glen Langer 2012
- * @author     BugBuster
+ * @copyright  Glen Langer 2012..2013 <http://www.contao.glen-langer.de>
+ * @author     Glen Langer (BugBuster)
  * @package    Integrity_Check
  */
 class IntegrityCheckRunonce extends Controller
@@ -42,6 +41,7 @@ class IntegrityCheckRunonce extends Controller
                                       `check_timestamps` varchar(255) NOT NULL DEFAULT '',
                                       `last_mail_tstamps` varchar(255) NOT NULL DEFAULT '',
                                       `last_minutely_log` varchar(255) NOT NULL DEFAULT '',
+                                      `last_mail_md5_block` int(10) unsigned NOT NULL default '0'
                                       PRIMARY KEY (`id`)
                                     ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1");
             //Timestamps füllen
@@ -50,7 +50,8 @@ class IntegrityCheckRunonce extends Controller
 	    	        'index.php',
 	    	        'system/cron/cron.php',
 	    	        'contao/index.php',
-	    	        'contao/main.php'
+	    	        'contao/main.php',
+	    	        '.htaccess'
 	    	);
 	    	$arrTimestamps = array();
 	    	foreach ($arrFiles as $arrFile)

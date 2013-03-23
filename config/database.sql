@@ -15,15 +15,16 @@
 -- Table `tl_integrity_check`
 -- 
  
-CREATE TABLE `tl_integrity_check` (
-  `id` int(10) unsigned NOT NULL auto_increment,
-  `tstamp` int(10) unsigned NOT NULL default '0',
-  `check_debug` char(1) NOT NULL default '',
-  `check_plans` blob NULL,
-  `check_title` varchar(255) NOT NULL default '',
-  `published` char(1) NOT NULL default '',
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+--CREATE TABLE `tl_integrity_check` (
+--  `id` int(10) unsigned NOT NULL auto_increment,
+--  `tstamp` int(10) unsigned NOT NULL default '0',
+--  `check_debug` char(1) NOT NULL default '',
+--  `check_title` varchar(255) NOT NULL default '',
+--  `check_plans` blob NULL,
+--  `check_plans_expert` blob NULL,
+--  `published` char(1) NOT NULL default '',
+--  PRIMARY KEY  (`id`)
+--) ENGINE=MyISAM DEFAULT CHARSET=utf8;
  
 -- --------------------------------------------------------
  
@@ -31,14 +32,13 @@ CREATE TABLE `tl_integrity_check` (
 -- Table `tl_integrity_timestamps`
 -- 
  
-CREATE TABLE `tl_integrity_timestamps` (
-  `id` int(10) unsigned NOT NULL auto_increment,
-  `tstamp` int(10) unsigned NOT NULL default '0',
-  `check_timestamps` varchar(255) NOT NULL default '',
-  `last_mail_tstamps` varchar(255) NOT NULL default '',
-  `last_minutely_log` varchar(255) NOT NULL default '',
-  `last_mail_md5_block` int(10) unsigned NOT NULL default '0',
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
- 
-    
+--CREATE TABLE `tl_integrity_timestamps` (
+--  `id` int(10) unsigned NOT NULL auto_increment,
+--  `tstamp` int(10) unsigned NOT NULL default '0',
+--  `check_timestamps` varchar(255) NOT NULL default '',
+--  `last_mail_tstamps` varchar(255) NOT NULL default '',
+--  `last_minutely_log` varchar(255) NOT NULL default '',
+--  `last_mail_md5_block` int(10) unsigned NOT NULL default '0',
+--  PRIMARY KEY  (`id`)
+--) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+

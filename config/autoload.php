@@ -3,7 +3,7 @@
 /**
  * Contao Open Source CMS
  * 
- * Copyright (C) 2005-2012 Leo Feyer
+ * Copyright (C) 2005-2013 Leo Feyer
  * 
  * @package Integrity_check
  * @link    http://contao.org
@@ -26,8 +26,9 @@ ClassLoader::addNamespaces(array
 ClassLoader::addClasses(array
 (
 	// Modules
-	'BugBuster\IntegrityCheck\Integrity_Check'          => 'system/modules/integrity_check/modules/Integrity_Check.php',
+	'BugBuster\IntegrityCheck\Integrity_Check'      => 'system/modules/integrity_check/modules/Integrity_Check.php',
 
 	// Classes
-	'BugBuster\IntegrityCheck\IntegrityCheckHelper'     => 'system/modules/integrity_check/classes/IntegrityCheckHelper.php',
+    'BugBuster\IntegrityCheck\DCA_integrity_check'  => 'system/modules/integrity_check/classes/DCA_integrity_check.php',
+	'BugBuster\IntegrityCheck\IntegrityCheckHelper' => 'system/modules/integrity_check/classes/IntegrityCheckHelper.php',
 ));

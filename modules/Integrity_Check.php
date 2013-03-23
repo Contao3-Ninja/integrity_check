@@ -31,10 +31,11 @@ namespace BugBuster\IntegrityCheck;
 class Integrity_Check extends \Frontend 
 {
     protected $fileEmailStatus = array();
-    protected $fileLogStatus = array();
+    protected $fileLogStatus   = array();
     
-    protected $check_debug = false;
-    protected $check_plans = array();
+    protected $check_debug        = false;
+    protected $check_plans        = array();
+    protected $check_plans_expert = array();
     protected $check_title = '';
     protected $last_mail   = array();
     protected $md5_block   = false;
@@ -42,7 +43,7 @@ class Integrity_Check extends \Frontend
     protected $cron_interval = '';
     
     
-    const latest_version = '3.0.3';
+    const latest_version = '3.0.6';
     
     /**
      * Filelist with checksums
@@ -130,8 +131,30 @@ class Integrity_Check extends \Frontend
 	        } //moment
 	    } //foreach plan step
 	    
+	    //Zeilenweise den Expert Plan durchgehen
+	    foreach ($this->check_plans_expert as $check_plan_step)
+	    {
+	        if ($this->cron_interval == $check_plan_step['cp_interval_expert'])
+	        {
+	            $resMD5 = false;
+	            $resTS  = false;
+	            //diese Datei muss jetzt geprüft werden.
+	            switch ($check_plan_step['cp_type_of_test_expert'])
+	            {
+	                case 'md5' :
+	                    $resMD5 = $this->checkFileMD5($check_plan_step['cp_files_expert'], $check_plan_step['cp_action_expert']);
+	                    break;
+	                case 'timestamp' :
+	                    $resTS = $this->checkFileTimestamp($check_plan_step['cp_files_expert'], $check_plan_step['cp_action_expert']);
+	                    break;
+	            }
+	            //einmal false immer true
+	            $checkSummary_expert = ($resMD5 == false || $resTS == false) ? true : $checkSummary_expert;
+	        } //moment
+	    } //foreach plan step
+	    
 	    //Log / Mail wenn notwendig
-	    if ($checkSummary) 
+	    if ($checkSummary || $checkSummary_expert) 
 	    {
 	    	$this->sendCheckLog();
             $this->sendCheckEmail();
@@ -173,7 +196,16 @@ class Integrity_Check extends \Frontend
 
 	    foreach ($this->file_list as $files)
 	    {
-	        list($file, $md5_file, $md5_code) = $files;
+	        if (count($files)==2)
+	        {
+	            //new variant
+	            list($file, $md5_file) = $files;
+	        }
+	        else
+	        {
+	            //old variant
+	            list($file, $md5_file, $md5_code) = $files;
+	        }
 	        if ($file == $cp_file) 
 	        {
 	            break; // gefunden
@@ -182,21 +214,12 @@ class Integrity_Check extends \Frontend
 	    
         if (is_file(TL_ROOT . '/' . $cp_file)) 
         {
-            $buffer  = str_replace("\r", '', file_get_contents(TL_ROOT . '/' . $cp_file));
-            // Check the content
-            //if (md5($buffer) != $md5_file)
+            $buffer = str_replace("\r", '', file_get_contents(TL_ROOT . '/' . $cp_file));
+            $status = true;
+            //Check the content
             if (strncmp(md5($buffer), $md5_file, 10) !== 0) 
             {
-                // Check the content without comments
-                //if (md5(preg_replace('@/\*.*\*/@Us', '', $buffer)) != $md5_code)
-            	if (strncmp(md5(preg_replace('@/\*.*\*/@Us', '', $buffer)), $md5_code, 10) !== 0)
-                {
-                    $status = false;
-                }
-                else 
-                {
-                    $status = true;
-                }
+            	$status = false;
             }
             //DEV
             //$this->log('Summen '.$cp_file.':'.md5($buffer).'-'.md5(preg_replace('@/\*.*\*/@Us', '', $buffer)), 'Integrity_Check MD5()', TL_ERROR);
@@ -289,16 +312,17 @@ class Integrity_Check extends \Frontend
 	 */
 	private function getCheckPlan()
 	{
-	    $objCheckPlan = \Database::getInstance()->prepare("SELECT `check_debug`, `check_plans`, `check_title` 
+	    $objCheckPlan = \Database::getInstance()->prepare("SELECT `check_debug`, `check_plans`, `check_plans_expert`, `check_title` 
                                                            FROM `tl_integrity_check` WHERE published=?")
 	                                            ->execute(1);
 	    if ($objCheckPlan->numRows < 1) 
 	    {
 	        return ;
 	    }
-	    $this->check_debug = ($objCheckPlan->check_debug) ? 1 : 0;
-	    $this->check_plans = deserialize($objCheckPlan->check_plans);
-	    $this->check_title = $objCheckPlan->check_title;
+	    $this->check_debug        = ($objCheckPlan->check_debug) ? 1 : 0;
+	    $this->check_plans        = deserialize($objCheckPlan->check_plans);
+	    $this->check_plans_expert = deserialize($objCheckPlan->check_plans_expert);
+	    $this->check_title        = $objCheckPlan->check_title;
 	    return ;
 	}
 	
@@ -327,7 +351,7 @@ class Integrity_Check extends \Frontend
 	        return; //admin email not set
 	    }
 	    $bolLastMail = false;	    
-	    $arrFiles = array('index.php'=>0,'system/cron/cron.php'=>0,'contao/index.php'=> 0,'contao/main.php'=> 0);
+	    $arrFiles = array('index.php'=>0,'system/cron/cron.php'=>0,'contao/index.php'=> 0,'contao/main.php'=> 0,'.htaccess'=> 0);
 	    $objLastMail = \Database::getInstance()->prepare("SELECT `last_mail_tstamps` FROM `tl_integrity_timestamps` WHERE `id`=?")
 	                                           ->executeUncached(2);
 	    if ($objLastMail->numRows >0) 
@@ -403,7 +427,7 @@ class Integrity_Check extends \Frontend
 	private function sendCheckLog()
 	{
 	    $bolLastLog = false;
-	    $arrFiles = array('index.php'=>0,'system/cron/cron.php'=>0,'contao/index.php'=> 0,'contao/main.php'=> 0);
+	    $arrFiles = array('index.php'=>0,'system/cron/cron.php'=>0,'contao/index.php'=> 0,'contao/main.php'=> 0,'.htaccess'=> 0);
 	    $objLastLog = \Database::getInstance()->prepare("SELECT `last_minutely_log` FROM `tl_integrity_timestamps` WHERE `id`=?")
 	    							          ->executeUncached(3);
 	    if ($objLastLog->numRows >0)
