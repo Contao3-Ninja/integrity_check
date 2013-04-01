@@ -68,6 +68,16 @@ class IntegrityCheckRunonce extends Controller
 	    	                                       VALUES (?, ?, ?)")
 	    	                            ->execute(1, time(), serialize($arrTimestamps));
 		} // if !tableExists('tl_integrity_timestamps')
+		
+		//From Integrity Check 3.1
+		if (is_file(TL_ROOT . '/system/modules/integrity_check/config/database.sql'))
+		{
+		    $objFile = new File('system/modules/integrity_check/config/database.sql');
+		    $objFile->delete();
+		    $objFile->close();
+		    $objFile=null;
+		    unset($objFile);
+		}
 	}
 }
 
