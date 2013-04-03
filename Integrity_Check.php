@@ -37,7 +37,7 @@ class Integrity_Check extends Frontend
     
     protected $cron_interval = '';
     
-    const latest_version = '2.11.10';
+    const latest_version = '2.11.11';
     
     /**
      * Filelist with checksums
@@ -306,8 +306,8 @@ class Integrity_Check extends Frontend
 	    $objEmail->from     = $GLOBALS['TL_ADMIN_EMAIL'];
 	    $objEmail->fromName = $GLOBALS['TL_ADMIN_NAME'];
 	    
-	    $objEmail->subject  = sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['subject']  , $this->Environment->host);
-	    $objEmail->text     = sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['message_1'], $this->Environment->host);
+	    $objEmail->subject  = sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['subject']  , $this->Environment->host . TL_PATH);
+	    $objEmail->text     = sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['message_1'], $this->Environment->host . TL_PATH);
 	    
 	    foreach ($this->fileEmailStatus as $key => $value) // file => true/false
 	    {
@@ -397,8 +397,8 @@ class Integrity_Check extends Frontend
 	    $objEmail->from     = $GLOBALS['TL_ADMIN_EMAIL'];
 	    $objEmail->fromName = $GLOBALS['TL_ADMIN_NAME'];
 	
-	    $objEmail->subject  = sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['subject']  , $this->Environment->host);
-	    $objEmail->text     = sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['message_3'], $this->Environment->host);
+	    $objEmail->subject  = sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['subject']  , $this->Environment->host . TL_PATH);
+	    $objEmail->text     = sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['message_3'], $this->Environment->host . TL_PATH);
 	
 	    $objEmail->text .= "\n[".date($GLOBALS['TL_CONFIG']['datimFormat'])."]";
 	    $objEmail->sendTo($GLOBALS['TL_CONFIG']['adminEmail']);
