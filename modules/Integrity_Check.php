@@ -43,7 +43,7 @@ class Integrity_Check extends \Frontend
     protected $cron_interval = '';
     
     
-    const latest_version = '3.1.0';
+    const latest_version = '3.1.1';
     
     /**
      * Filelist with checksums
