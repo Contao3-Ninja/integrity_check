@@ -185,7 +185,7 @@ class DCA_integrity_check extends \Backend
      * @param DataContainer
      * @return string
      */
-    public function setPublished($varValue, DataContainer $dc)
+    public function setPublished($varValue, $dc)
     {
         if ($varValue)
         {
