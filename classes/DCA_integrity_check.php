@@ -162,15 +162,18 @@ class DCA_integrity_check extends \Backend
             //Zeilenweise den Plan durchgehen
             foreach ($check_plans_expert as $step)
             {
-                $class = (($lineCount % 2) == 0) ? ' even' : ' odd';
-                $title .= '<tr class='.$class.'>
-    <td class="tl_file_list" style="width: 32%;"><span class="cp_files">'. $step['cp_files_expert'].'</span></td>
-    <td class="tl_file_list" style="width: 22%;"><span class="cp_interval">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_interval_expert']].'</span></td>
-    <td class="tl_file_list" style="width: 22%;"><span class="cp_type_of_test">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_type_of_test_expert']].'</span></td>
-    <td class="tl_file_list" style="width: 24%;"><span class="cp_action">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_action_expert']].'</span></td>
-  </tr>
-  ';
-                $lineCount++;
+                if ( $step['cp_files_expert'] != '') 
+                {
+                    $class = (($lineCount % 2) == 0) ? ' even' : ' odd';
+                    $title .= '<tr class='.$class.'>
+        <td class="tl_file_list" style="width: 32%;"><span class="cp_files">'. $step['cp_files_expert'].'</span></td>
+        <td class="tl_file_list" style="width: 22%;"><span class="cp_interval">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_interval_expert']].'</span></td>
+        <td class="tl_file_list" style="width: 22%;"><span class="cp_type_of_test">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_type_of_test_expert']].'</span></td>
+        <td class="tl_file_list" style="width: 24%;"><span class="cp_action">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_action_expert']].'</span></td>
+      </tr>
+      ';
+                    $lineCount++;
+                }
             }
         }
         
