@@ -53,4 +53,4 @@ class Generate_Checksum_Files
 }
 
 $objGenerate = new Generate_Checksum_Files();
-$objGenerate->Generate_Checksum_File('3.1.1.json');
+$objGenerate->Generate_Checksum_File('3.1.2.json');
