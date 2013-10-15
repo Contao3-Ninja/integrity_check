@@ -1,4 +1,4 @@
-<?php if (!defined('TL_ROOT')) die('You can not access this file directly!');
+<?php
 
 /**
  * Contao Open Source CMS
@@ -20,7 +20,8 @@
 $GLOBALS['TL_LANG']['tl_integrity_check']['ok']           = 'Integritäts-Status für Datei %s ist: OK';
 $GLOBALS['TL_LANG']['tl_integrity_check']['corrupt']      = 'Integritäts-Status für Datei %s ist: beschädigt';
 $GLOBALS['TL_LANG']['tl_integrity_check']['finished']     = 'Integritäts-Überprüfung der Dateien abgeschlossen.';
-$GLOBALS['TL_LANG']['tl_integrity_check']['mail_blocked'] = 'Die Mail für die Datei %s wird nicht versendet.(blockiert)';
+$GLOBALS['TL_LANG']['tl_integrity_check']['mail_blocked'] = 'Die Mail für die Datei %s wurde nicht versendet.(blockiert)';
+$GLOBALS['TL_LANG']['tl_integrity_check']['log_blocked']  = 'Der System-Log Eintrag für die Datei %s wurde nicht durchgeführt.(blockiert)';
 $GLOBALS['TL_LANG']['tl_integrity_check']['md5_blocked']  = 'Integritäts-Überprüfung für die Datei %s wurde nicht durchgeführt.(keine Prüfsummen vorhanden. Update notwendig!)';
 
 /**
@@ -54,14 +55,18 @@ $GLOBALS['TL_LANG']['tl_integrity_check']['cp_files']        = array('Dateien','
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_interval']     = array('Zeitpunkt','Zeitpunkt der Überprüfung');
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_type_of_test'] = array('Erkennung','Art der Erkennung');
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_action']       = array('Aktion','Art der Reaktion');
+$GLOBALS['TL_LANG']['tl_integrity_check']['check_plans_expert'] = array('Überprüfungsplan','Planung der Überprüfungen und Aktionen. Bei Neuauswahl bitte Zeitstempel aktualisieren.');
+$GLOBALS['TL_LANG']['tl_integrity_check']['expert_legend']  = 'Experten-Tests';
+$GLOBALS['TL_LANG']['tl_integrity_check']['publish_legend'] = 'Veröffentlichung';
 
 /**
  * Reference
  */
-$GLOBALS['TL_LANG']['tl_integrity_check']['hourly']  = 'stündlich';
-$GLOBALS['TL_LANG']['tl_integrity_check']['daily']   = 'täglich';
-$GLOBALS['TL_LANG']['tl_integrity_check']['weekly']  = 'wöchentlich';
-$GLOBALS['TL_LANG']['tl_integrity_check']['monthly'] = 'monatlich';
+$GLOBALS['TL_LANG']['tl_integrity_check']['minutely'] = 'minütlich';
+$GLOBALS['TL_LANG']['tl_integrity_check']['hourly']   = 'stündlich';
+$GLOBALS['TL_LANG']['tl_integrity_check']['daily']    = 'täglich';
+$GLOBALS['TL_LANG']['tl_integrity_check']['weekly']   = 'wöchentlich';
+$GLOBALS['TL_LANG']['tl_integrity_check']['monthly']  = 'monatlich';
 
 $GLOBALS['TL_LANG']['tl_integrity_check']['md5']       = 'MD5';
 $GLOBALS['TL_LANG']['tl_integrity_check']['timestamp'] = 'Zeitstempel';
@@ -76,5 +81,3 @@ $GLOBALS['TL_LANG']['tl_integrity_check']['refresh_confirm_message'] = 'Die Zeit
 
 $GLOBALS['TL_LANG']['tl_integrity_check']['initConfirm']          = 'Neue Standard Integritäts-Überprüfung anlegen mit allen 4 Dateien?';
 $GLOBALS['TL_LANG']['tl_integrity_check']['init_confirm_message'] = 'Es wurde ein Integritäts-Check angelegt. Diesen bitte nun editieren und/oder aktivieren.';
-
-?>

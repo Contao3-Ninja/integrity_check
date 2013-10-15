@@ -1,30 +1,29 @@
-<?php if (!defined('TL_ROOT')) die('You can not access this file directly!');
+<?php
 
 /**
- * Contao Open Source CMS
- * Copyright (C) 2005-2012 Leo Feyer
+ * Contao Open Source CMS, Copyright (C) 2005-2013 Leo Feyer
  *
- * Formerly known as TYPOlight Open Source CMS.
+ * Contao Module "Integrity Check"
  *
- * PHP version 5
- * @copyright  Glen Langer 2012 
- * @author     Glen Langer 
+ * @copyright  Glen Langer 2012..2013 <http://www.contao.glen-langer.de>
+ * @author     Glen Langer (BugBuster)
  * @package    Integrity_Check 
  * @license    LGPL 
  * @filesource
+ * @see	       https://github.com/BugBuster1701/integrity_check
  */
 
 $GLOBALS['BE_MOD']['system']['integrity_check'] = array
 (
         'tables'     => array('tl_integrity_check'),
-        'icon'       => 'system/modules/integrity_check/html/integrity_check.png',
-        'stylesheet' => 'system/modules/integrity_check/html/mod_integrity_check_be.css',
+        'icon'       => 'system/modules/integrity_check/assets/integrity_check.png',
+        'stylesheet' => 'system/modules/integrity_check/assets/mod_integrity_check_be.css',
 );
 
 /**
  * Hooks
  */
-$GLOBALS['TL_HOOKS']['parseBackendTemplate'][] = array('IntegrityCheckHelper', 'checkExtensions');
+$GLOBALS['TL_HOOKS']['parseBackendTemplate'][] = array('IntegrityCheck\IntegrityCheckHelper', 'checkExtensions');
 
 /**
  * -------------------------------------------------------------------------
@@ -33,11 +32,11 @@ $GLOBALS['TL_HOOKS']['parseBackendTemplate'][] = array('IntegrityCheckHelper', '
  *
  * Register methods to be executed at certain intervals.
  */
-$GLOBALS['TL_CRON']['monthly'][] = array('Integrity_Check', 'checkFilesMonthly');
-$GLOBALS['TL_CRON']['weekly'][]  = array('Integrity_Check', 'checkFilesWeekly');
-$GLOBALS['TL_CRON']['daily'][]   = array('Integrity_Check', 'checkFilesDaily');
+$GLOBALS['TL_CRON']['monthly'][] = array('IntegrityCheck\Integrity_Check', 'checkFilesMonthly');
+$GLOBALS['TL_CRON']['weekly'][]  = array('IntegrityCheck\Integrity_Check', 'checkFilesWeekly');
+$GLOBALS['TL_CRON']['daily'][]   = array('IntegrityCheck\Integrity_Check', 'checkFilesDaily');
 //from contao 2.11, hourly is possible.
-$GLOBALS['TL_CRON']['hourly'][]  = array('Integrity_Check', 'checkFilesHourly');
-
-
-?>
+$GLOBALS['TL_CRON']['hourly'][]  = array('IntegrityCheck\Integrity_Check', 'checkFilesHourly');
+//from contao 3.0, minutely is possible.
+//You want it? Then activate it.
+//$GLOBALS['TL_CRON']['minutely'][]  = array('IntegrityCheck\Integrity_Check', 'checkFilesMinutely');
