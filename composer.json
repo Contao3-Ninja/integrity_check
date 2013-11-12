@@ -1,6 +1,6 @@
 {
 	"name":"bugbuster/integrity_check",
-	"description":"Contao CMS integrity-check for some files",
+	"description":"Contao CMS integrity check for some files",
 	"keywords":["integrity","check","security","contao"],
 	"type":"contao-module",
 	"homepage":"http://www.contao.glen-langer.de",
