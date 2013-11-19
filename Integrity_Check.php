@@ -37,7 +37,7 @@ class Integrity_Check extends Frontend
     
     protected $cron_interval = '';
     
-    const latest_version = '2.11.12';
+    const latest_version = '2.11.13';
     
     /**
      * Filelist with checksums
