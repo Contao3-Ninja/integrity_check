@@ -108,6 +108,7 @@ class Integrity_Check extends \Frontend
 	    $this->getCheckPlan();
 	    $this->getFileList();
 	    $checkSummary = false; //false=kein check erfolgt, keine Mail, keine completed Meldung
+	    $checkSummary_expert = false;
 
 	    //Zeilenweise den Plan durchgehen
 	    foreach ($this->check_plans as $check_plan_step)
@@ -131,27 +132,30 @@ class Integrity_Check extends \Frontend
 	        } //moment
 	    } //foreach plan step
 	    
-	    //Zeilenweise den Expert Plan durchgehen
-	    foreach ($this->check_plans_expert as $check_plan_step)
+	    if ( count( (array)$this->check_plans_expert ) > 0 ) 
 	    {
-	        if ($this->cron_interval == $check_plan_step['cp_interval_expert'])
-	        {
-	            $resMD5 = false;
-	            $resTS  = false;
-	            //diese Datei muss jetzt geprüft werden.
-	            switch ($check_plan_step['cp_type_of_test_expert'])
-	            {
-	                case 'md5' :
-	                    $resMD5 = $this->checkFileMD5($check_plan_step['cp_files_expert'], $check_plan_step['cp_action_expert']);
-	                    break;
-	                case 'timestamp' :
-	                    $resTS = $this->checkFileTimestamp($check_plan_step['cp_files_expert'], $check_plan_step['cp_action_expert']);
-	                    break;
-	            }
-	            //einmal false immer true
-	            $checkSummary_expert = ($resMD5 == false || $resTS == false) ? true : $checkSummary_expert;
-	        } //moment
-	    } //foreach plan step
+    	    //Zeilenweise den Expert Plan durchgehen
+    	    foreach ($this->check_plans_expert as $check_plan_step)
+    	    {
+    	        if ($this->cron_interval == $check_plan_step['cp_interval_expert'])
+    	        {
+    	            $resMD5 = false;
+    	            $resTS  = false;
+    	            //diese Datei muss jetzt geprüft werden.
+    	            switch ($check_plan_step['cp_type_of_test_expert'])
+    	            {
+    	                case 'md5' :
+    	                    $resMD5 = $this->checkFileMD5($check_plan_step['cp_files_expert'], $check_plan_step['cp_action_expert']);
+    	                    break;
+    	                case 'timestamp' :
+    	                    $resTS = $this->checkFileTimestamp($check_plan_step['cp_files_expert'], $check_plan_step['cp_action_expert']);
+    	                    break;
+    	            }
+    	            //einmal false immer true
+    	            $checkSummary_expert = ($resMD5 == false || $resTS == false) ? true : $checkSummary_expert;
+                } //moment
+            } //foreach plan step
+        }
 	    
 	    //Log / Mail wenn notwendig
 	    if ($checkSummary || $checkSummary_expert) 
