@@ -70,24 +70,6 @@ $GLOBALS['TL_DCA']['tl_integrity_check'] = array
 			)
 			
 		),
-		'global_operations' => array
-		(
-    		'init'                    => array
-    		(
-    		    'label'               => &$GLOBALS['TL_LANG']['tl_integrity_check']['init'],
-    		    'href'                => '&amp;init=true',
-    		    'class'               => 'header_new',
-    		    'attributes'          => 'onclick="if(!confirm(\'' . $GLOBALS['TL_LANG']['tl_integrity_check']['initConfirm'] . '\'))return false;Backend.getScrollOffset()"'
-    		),
-			'refresh'                 => array
-			(
-			    'label'               => &$GLOBALS['TL_LANG']['tl_integrity_check']['refresh'],
-			    'href'                => '&amp;refresh=true',
-			    'class'               => 'tl_integrity_check_star',
-    			'attributes'          => 'onclick="if(!confirm(\'' . $GLOBALS['TL_LANG']['tl_integrity_check']['refreshConfirm'] . '\'))return false;Backend.getScrollOffset()"'
-			)
-			
-		),
 		'operations' => array
 		(
 			'edit' => array

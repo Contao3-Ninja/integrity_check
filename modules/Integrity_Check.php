@@ -34,6 +34,7 @@ class Integrity_Check extends \Frontend
     protected $fileLogStatus   = array();
     
     protected $check_debug        = false;
+    protected $check_plan_id      = 0;
     protected $check_plans        = array();
     protected $check_plans_expert = array();
     protected $check_title = '';
@@ -179,6 +180,8 @@ class Integrity_Check extends \Frontend
 	 */
 	protected function checkFileMD5($cp_file, $cp_action)
 	{
+	    $file_not_found = false;
+	    
 	    if ($cp_file == '') 
 	    {
 	        return false; // kein check
@@ -229,6 +232,10 @@ class Integrity_Check extends \Frontend
             //$this->log('Summen '.$cp_file.':'.md5($buffer).'-'.md5(preg_replace('@/\*.*\*/@Us', '', $buffer)), 'Integrity_Check MD5()', TL_ERROR);
             unset($buffer);
         }
+        else
+        {
+            $file_not_found = true;
+        }
 	    
         //Ergebniss verarbeiten
         if ($status === false) 
@@ -248,10 +255,21 @@ class Integrity_Check extends \Frontend
                     break;
             }
         }
-        elseif ($this->check_debug == true)
+        elseif ($this->check_debug == true && $file_not_found === false)
         {
             $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['ok'], $cp_file) . ' ['.$GLOBALS['TL_LANG']['tl_integrity_check']['md5'].']', 'Integrity_Check checkFileMD5()', TL_CRON);
         }
+        //nur wenn getestet werden konnte
+        if ($file_not_found === false) 
+        {
+            $this->setCheckStatus($cp_file, $status);
+        }
+        else
+        {
+            $this->setCheckStatus($cp_file, 0); //nicht pruefbar
+            $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['file_not_found'], $cp_file), 'Integrity_Check checkFileMD5()', TL_CRON);
+        }
+        
         return $status;
 	}
 	
@@ -265,6 +283,7 @@ class Integrity_Check extends \Frontend
 	protected function checkFileTimestamp($cp_file, $cp_action)
 	{
 	    $cp_file_ts = 0;
+    
 	    if ($cp_file == '')
 	    {
 	        return false; // kein check
@@ -273,19 +292,36 @@ class Integrity_Check extends \Frontend
 	                                             ->execute(1);
 	    if ($objTimestamps->numRows < 1)
 	    {
+	        $this->setCheckStatus($cp_file, 0);// nicht pruefbar
+	        $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['timestamp_not_found'], $cp_file), 'Integrity_Check checkFileTimestamp()', TL_ERROR);
 	        return false; // kein check möglich
 	    }
+	    
 	    $status = true;
 	    $arrTimestamps = deserialize($objTimestamps->check_timestamps);
+	    
+	    if ( !isset($arrTimestamps[$cp_file]) )
+	    {
+	        $this->setCheckStatus($cp_file, 0);// nicht pruefbar
+	        $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['timestamp_not_found'], $cp_file), 'Integrity_Check checkFileTimestamp()', TL_ERROR);
+	        return false; // kein check möglich
+	    }
+	    
 	    if (is_file(TL_ROOT . '/' . $cp_file))
 	    {
 	        $objFile = new \File($cp_file);
 	        $cp_file_ts = $objFile->mtime;
 	        $objFile->close();
+	    }
+	    else 
+	    {
+	        $this->setCheckStatus($cp_file, 0);// nicht pruefbar
+	        $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['file_not_found'], $cp_file), 'Integrity_Check checkFileTimestamp()', TL_ERROR);
+	        return false; // kein check möglich
 	    }	    
 	    
-	    //Ergebniss verarbeiten
-	    if ($cp_file_ts != $arrTimestamps[$cp_file])
+	    //Ergebniss verarbeiten, Datei und Zeitstempel vorhanden
+	    if ( $cp_file_ts != $arrTimestamps[$cp_file])
 	    {
 	    	$status = false;
 	        //File corrupt
@@ -303,11 +339,12 @@ class Integrity_Check extends \Frontend
 	                break;
 	        }
 	    }
-	    elseif ($this->check_debug == true)
+        elseif ($this->check_debug == true)
 	    {
 	        $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['ok'], $cp_file) . ' ['.$GLOBALS['TL_LANG']['tl_integrity_check']['timestamp'].']', 'Integrity_Check checkFileTimestamp()', TL_CRON);
 	    }
 	    
+        $this->setCheckStatus($cp_file, $status);
 	    return $status;
 	}
 	
@@ -316,13 +353,24 @@ class Integrity_Check extends \Frontend
 	 */
 	private function getCheckPlan()
 	{
-	    $objCheckPlan = \Database::getInstance()->prepare("SELECT `check_debug`, `check_plans`, `check_plans_expert`, `check_title` 
-                                                           FROM `tl_integrity_check` WHERE published=?")
-	                                            ->execute(1);
+	    $objCheckPlan = \Database::getInstance()
+                            ->prepare("SELECT 
+                                            `id`, 
+                                            `check_debug`, 
+                                            `check_plans`, 
+                                            `check_plans_expert`, 
+                                            `check_title` 
+                                        FROM 
+                                            `tl_integrity_check` 
+                                        WHERE 
+                                            `published`=?"
+                                    )
+                            ->execute(1);
 	    if ($objCheckPlan->numRows < 1) 
 	    {
 	        return ;
 	    }
+	    $this->check_plan_id      = $objCheckPlan->id;
 	    $this->check_debug        = ($objCheckPlan->check_debug) ? 1 : 0;
 	    $this->check_plans        = deserialize($objCheckPlan->check_plans);
 	    $this->check_plans_expert = deserialize($objCheckPlan->check_plans_expert);
@@ -554,5 +602,54 @@ class Integrity_Check extends \Frontend
 	    return ;
 	}//sendCheckEmailMD5Block
 
+	/**
+	 * Set check status for file
+	 * @param string $cp_file
+	 * @param integer $status
+	 */
+	private function setCheckStatus($cp_file, $status)
+	{
+	    //0=not tested, true=ok, false=not ok
+	    if ($status === true) 
+	    {
+	        $status = 1;
+	    }
+	    elseif ($status === false)
+	    {
+	        $status = 2;
+	    }    
+	    
+
+        $arrSet = array
+        (
+            'pid'                 => $this->check_plan_id,
+            'tstamp'              => time(),
+            'check_object'        => $cp_file,
+            'check_object_status' => $status
+        );
+	    // Insert Ignore trick over unique key "pid,check_object"
+        $objInsert = \Database::getInstance()
+                	        ->prepare("INSERT IGNORE INTO `tl_integrity_check_status` %s")
+                	        ->set($arrSet)
+                	        ->executeUncached();
+        if ($objInsert->insertId == 0)
+        {
+	        // Update
+	        \Database::getInstance()
+	                    ->prepare("UPDATE 
+                                        `tl_integrity_check_status` 
+                                    SET 
+                                        `check_object_status`=? ,
+                                        `tstamp`=?
+                                    WHERE 
+                                        `pid`=?
+                                    AND
+                                        `check_object`=?"
+	                            )
+                        ->executeUncached($status, time(), $this->check_plan_id, $cp_file);
+        }   
+	    
+	    return ;
+	}//setCheckStatus
 }
 

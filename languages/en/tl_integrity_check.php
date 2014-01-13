@@ -23,6 +23,8 @@ $GLOBALS['TL_LANG']['tl_integrity_check']['finished']     = 'Checking files for 
 $GLOBALS['TL_LANG']['tl_integrity_check']['mail_blocked'] = 'The mail for the file %s was not sent. (blocked)';
 $GLOBALS['TL_LANG']['tl_integrity_check']['log_blocked']  = 'The system log entry for the file %s was not performed.(blocked)';
 $GLOBALS['TL_LANG']['tl_integrity_check']['md5_blocked']  = 'Checking file %s for integrity was not performed.(No checksums available. Update is necessary!)';
+$GLOBALS['TL_LANG']['tl_integrity_check']['file_not_found']      = 'Integrity status for file %s is: File not found.';
+$GLOBALS['TL_LANG']['tl_integrity_check']['timestamp_not_found'] = 'Integrity status for file %s is: Timestamp not found for this file.';
 
 /**
  * Mail to admin
@@ -58,6 +60,10 @@ $GLOBALS['TL_LANG']['tl_integrity_check']['cp_action']       = array('Action','K
 $GLOBALS['TL_LANG']['tl_integrity_check']['check_plans_expert'] = array('Check plan','Planning of the checks and actions. When reselecting please update the timestamps.');
 $GLOBALS['TL_LANG']['tl_integrity_check']['expert_legend']  = 'Expert checks';
 $GLOBALS['TL_LANG']['tl_integrity_check']['publish_legend'] = 'Publish settings';
+$GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status'] = 'Status';
+$GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_0'] = 'unchecked';
+$GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_1'] = 'OK';
+$GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_2'] = 'corrupt';
 
 /**
  * Reference
