@@ -23,6 +23,8 @@ $GLOBALS['TL_LANG']['tl_integrity_check']['finished']     = 'Integritäts-Überp
 $GLOBALS['TL_LANG']['tl_integrity_check']['mail_blocked'] = 'Die Mail für die Datei %s wurde nicht versendet.(blockiert)';
 $GLOBALS['TL_LANG']['tl_integrity_check']['log_blocked']  = 'Der System-Log Eintrag für die Datei %s wurde nicht durchgeführt.(blockiert)';
 $GLOBALS['TL_LANG']['tl_integrity_check']['md5_blocked']  = 'Integritäts-Überprüfung für die Datei %s wurde nicht durchgeführt.(keine Prüfsummen vorhanden. Update notwendig!)';
+$GLOBALS['TL_LANG']['tl_integrity_check']['file_not_found']      = 'Integritäts-Status für Datei %s ist: Datei nicht gefunden.';
+$GLOBALS['TL_LANG']['tl_integrity_check']['timestamp_not_found'] = 'Integritäts-Status für Datei %s ist: Zeitstempel nicht vorhanden für diese Datei.';
 
 /**
  * Mail to admin
@@ -58,6 +60,10 @@ $GLOBALS['TL_LANG']['tl_integrity_check']['cp_action']       = array('Aktion','A
 $GLOBALS['TL_LANG']['tl_integrity_check']['check_plans_expert'] = array('Überprüfungsplan','Planung der Überprüfungen und Aktionen. Bei Neuauswahl bitte Zeitstempel aktualisieren.');
 $GLOBALS['TL_LANG']['tl_integrity_check']['expert_legend']  = 'Experten-Tests';
 $GLOBALS['TL_LANG']['tl_integrity_check']['publish_legend'] = 'Veröffentlichung';
+$GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status'] = 'Status';
+$GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_0'] = 'ungetested';
+$GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_1'] = 'OK';
+$GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_2'] = 'beschädigt';
 
 /**
  * Reference

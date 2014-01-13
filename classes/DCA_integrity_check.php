@@ -129,7 +129,12 @@ class DCA_integrity_check extends \Backend
     public function listChecks($arrRow)
     {
         $lineCount = 0;
-        $check_plans = deserialize($arrRow[check_plans]);
+        $check_plans        = deserialize($arrRow[check_plans]       ,true);
+        $check_plans_expert = deserialize($arrRow[check_plans_expert],true);
+        //Status Liste säubern
+        $this->cleanCheckStatus($arrRow[id], $check_plans, $check_plans_expert);
+        //Status Liste auslesen
+        $check_status = $this->getCheckStatus($arrRow[id]);
         $title ='
   <table class="tl_listing_checks">
   <tr>
@@ -137,6 +142,7 @@ class DCA_integrity_check extends \Backend
     <td class="tl_folder_tlist">'.$GLOBALS['TL_LANG']['tl_integrity_check']['cp_interval'][0].'</td>
     <td class="tl_folder_tlist">'.$GLOBALS['TL_LANG']['tl_integrity_check']['cp_type_of_test'][0].'</td>
     <td class="tl_folder_tlist">'.$GLOBALS['TL_LANG']['tl_integrity_check']['cp_action'][0].'</td>
+    <td class="tl_folder_tlist">'.$GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status'].'</td>
   </tr>
   ';
         if (count($check_plans) > 0)
@@ -146,17 +152,18 @@ class DCA_integrity_check extends \Backend
             {
                 $class = (($lineCount % 2) == 0) ? ' even' : ' odd';
                 $title .= '<tr class='.$class.'>
-    <td class="tl_file_list" style="width: 32%;"><span class="cp_files">'. $step['cp_files'].'</span></td>
-    <td class="tl_file_list" style="width: 22%;"><span class="cp_interval">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_interval']].'</span></td>
-    <td class="tl_file_list" style="width: 22%;"><span class="cp_type_of_test">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_type_of_test']].'</span></td>
-    <td class="tl_file_list" style="width: 24%;"><span class="cp_action">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_action']].'</span></td>
+    <td class="tl_file_list" style="width: 30%;"><span class="cp_files">'. $step['cp_files'].'</span></td>
+    <td class="tl_file_list" style="width: 20%;"><span class="cp_interval">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_interval']].'</span></td>
+    <td class="tl_file_list" style="width: 20%;"><span class="cp_type_of_test">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_type_of_test']].'</span></td>
+    <td class="tl_file_list" style="width: 20%;"><span class="cp_action">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_action']].'</span></td>
+    <td class="tl_file_list" style="width: 10%;text-align: center;"><span class="cp_file_status">'. $check_status[$step['cp_files']].'</span></td>
   </tr>
   ';
                 $lineCount++;
             }
         }
         //Expert Tests
-        $check_plans_expert = deserialize($arrRow[check_plans_expert]);
+        
         if (count($check_plans_expert) > 0)
         {
             //Zeilenweise den Plan durchgehen
@@ -166,10 +173,11 @@ class DCA_integrity_check extends \Backend
                 {
                     $class = (($lineCount % 2) == 0) ? ' even' : ' odd';
                     $title .= '<tr class='.$class.'>
-        <td class="tl_file_list" style="width: 32%;"><span class="cp_files">'. $step['cp_files_expert'].'</span></td>
-        <td class="tl_file_list" style="width: 22%;"><span class="cp_interval">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_interval_expert']].'</span></td>
-        <td class="tl_file_list" style="width: 22%;"><span class="cp_type_of_test">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_type_of_test_expert']].'</span></td>
-        <td class="tl_file_list" style="width: 24%;"><span class="cp_action">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_action_expert']].'</span></td>
+        <td class="tl_file_list" style="width: 30%;"><span class="cp_files">'. $step['cp_files_expert'].'</span></td>
+        <td class="tl_file_list" style="width: 20%;"><span class="cp_interval">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_interval_expert']].'</span></td>
+        <td class="tl_file_list" style="width: 20%;"><span class="cp_type_of_test">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_type_of_test_expert']].'</span></td>
+        <td class="tl_file_list" style="width: 20%;"><span class="cp_action">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_action_expert']].'</span></td>
+        <td class="tl_file_list" style="width: 10%;text-align: center;"><span class="cp_file_status">'. $check_status[$step['cp_files_expert']].'</span></td>
       </tr>
       ';
                     $lineCount++;
@@ -428,5 +436,122 @@ class DCA_integrity_check extends \Backend
         return $results;
     }
 
+    /**
+     * Get Check Status for Plan-ID
+     * 
+     * @param integer   $CheckPlanId
+     * @return array    $arrFiles with HTML image tags
+     */
+    protected function getCheckStatus($CheckPlanId)
+    {
+        // 0=not tested, 1=ok, 2=not ok
+        $icon_0 = \Image::getHtml('invisible.gif', $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_0'], 'title="' .specialchars($GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_0']).'"');
+        $icon_1 = \Image::getHtml('ok.gif'       , $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_1'], 'title="' .specialchars($GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_1']).' (%s)"');
+        $icon_2 = \Image::getHtml('error.gif'    , $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_2'], 'title="' .specialchars($GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_2']).' (%s)"');
+
+        $arrFiles = array
+        (
+            'index.php'               => $icon_0,
+            'system/cron/cron.php'    => $icon_0,
+            'contao/index.php'        => $icon_0,
+            'contao/main.php'         => $icon_0,
+            '.htaccess'               => $icon_0
+        );
+        
+        $objCheckStatus = \Database::getInstance()
+                                ->prepare("SELECT 
+                                                `tstamp` ,
+                                                `check_object` ,
+                                                `check_object_status`
+                                            FROM 
+                                                `tl_integrity_check_status`
+                                            WHERE 
+                                                `pid` =?"
+                                        )
+                                ->execute($CheckPlanId);
+        if ($objCheckStatus->numRows > 0)
+        {
+            while ($objCheckStatus->next())
+            {
+                $check_datetime = \Date::parse($GLOBALS['TL_CONFIG']['datimFormat'], $objCheckStatus->tstamp);
+                switch ($objCheckStatus->check_object_status)
+                {
+                    case 1 :
+                        $arrFiles[$objCheckStatus->check_object] = sprintf($icon_1, $check_datetime);
+                        break;
+                    case 2 :
+                        $arrFiles[$objCheckStatus->check_object] = sprintf($icon_2, $check_datetime);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        return $arrFiles;
+    }
+    
+    /**
+     * Clean Check Status Table
+     * 
+     * @param integer $CheckPlanId
+     * @param array $check_plans
+     * @param array $check_plans_expert
+     */
+    protected function cleanCheckStatus($CheckPlanId, $check_plans, $check_plans_expert)
+    {
+        $objCheckStatus = \Database::getInstance()
+                                ->prepare("SELECT
+                                                `id` , 
+                                                `check_object` 
+                                            FROM
+                                                `tl_integrity_check_status`
+                                            WHERE
+                                                `pid` =?"
+                                            )
+                                ->execute($CheckPlanId);
+        if ($objCheckStatus->numRows > 0)
+        {
+            while ($objCheckStatus->next())
+            {
+                $found = false;
+                if (count($check_plans) > 0)
+                {
+                    foreach ($check_plans as $step)
+                    {
+                        if ($step['cp_files'] == $objCheckStatus->check_object) 
+                        {
+                            $found = true;
+                        }
+                    }
+                }
+                
+                if (count($check_plans_expert) > 0)
+                {
+                    foreach ($check_plans_expert as $step)
+                    {
+                        if ($step['cp_files_expert'] == $objCheckStatus->check_object)
+                        {
+                            $found = true;
+                        }
+                    }
+                }
+                
+                if ($found === false)
+                {
+                    //Status Eintrag löschen, da nicht mehr in beiden Plänen
+                    \Database::getInstance()
+                            ->prepare("DELETE FROM
+                                            `tl_integrity_check_status`
+                                        WHERE
+                                            `id`=?
+                                      ")
+                            ->execute($objCheckStatus->id);
+                
+                }
+                
+            }//while
+        }//$objCheckStatus->numRows > 0
+        return ;
+    }//cleanCheckStatus
 
 }
