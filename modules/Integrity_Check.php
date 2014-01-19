@@ -38,6 +38,7 @@ class Integrity_Check extends \Frontend
     protected $check_plans        = array();
     protected $check_plans_expert = array();
     protected $check_title = '';
+    protected $check_alternate_email = false;
     protected $last_mail   = array();
     protected $md5_block   = false;
     
@@ -359,7 +360,8 @@ class Integrity_Check extends \Frontend
                                             `check_debug`, 
                                             `check_plans`, 
                                             `check_plans_expert`, 
-                                            `check_title` 
+                                            `check_title` ,
+                                            `alternate_email`
                                         FROM 
                                             `tl_integrity_check` 
                                         WHERE 
@@ -370,11 +372,12 @@ class Integrity_Check extends \Frontend
 	    {
 	        return ;
 	    }
-	    $this->check_plan_id      = $objCheckPlan->id;
-	    $this->check_debug        = ($objCheckPlan->check_debug) ? 1 : 0;
-	    $this->check_plans        = deserialize($objCheckPlan->check_plans);
-	    $this->check_plans_expert = deserialize($objCheckPlan->check_plans_expert);
-	    $this->check_title        = $objCheckPlan->check_title;
+	    $this->check_plan_id         = $objCheckPlan->id;
+	    $this->check_debug           = ($objCheckPlan->check_debug) ? 1 : 0;
+	    $this->check_plans           = deserialize($objCheckPlan->check_plans);
+	    $this->check_plans_expert    = deserialize($objCheckPlan->check_plans_expert);
+	    $this->check_title           = $objCheckPlan->check_title;
+	    $this->check_alternate_email = ($objCheckPlan->alternate_email) ? $objCheckPlan->alternate_email : false; 
 	    return ;
 	}
 	
@@ -400,7 +403,7 @@ class Integrity_Check extends \Frontend
 	{
 	    if (!isset($GLOBALS['TL_CONFIG']['adminEmail'])) 
 	    {
-	        return; //admin email not set
+	        return; //admin email not set, needed for sender and recipient
 	    }
 	    $bolLastMail = false;	    
 	    $arrFiles = array('index.php'=>0,'system/cron/cron.php'=>0,'contao/index.php'=> 0,'contao/main.php'=> 0,'.htaccess'=> 0);
@@ -416,10 +419,10 @@ class Integrity_Check extends \Frontend
 	    //////////////// MAIL OUT \\\\\\\\\\\\\\\\
 	    $sendmail = false;
 	    // Notification
-	    list($GLOBALS['TL_ADMIN_NAME'], $GLOBALS['TL_ADMIN_EMAIL']) = $this->splitFriendlyName($GLOBALS['TL_CONFIG']['adminEmail']); //from index.php
+	    list($ADMIN_NAME, $ADMIN_EMAIL) = \String::splitFriendlyEmail($GLOBALS['TL_CONFIG']['adminEmail']); //from index.php
 	    $objEmail = new \Email();
-	    $objEmail->from     = $GLOBALS['TL_ADMIN_EMAIL'];
-	    $objEmail->fromName = $GLOBALS['TL_ADMIN_NAME'];
+	    $objEmail->from     = $ADMIN_EMAIL;
+	    $objEmail->fromName = $ADMIN_NAME;
 	    
 	    $objEmail->subject  = sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['subject']  , $this->Environment->host);
 	    $objEmail->text     = sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['message_1'], $this->Environment->host);
@@ -452,7 +455,16 @@ class Integrity_Check extends \Frontend
 	    {
     	    $objEmail->text .= "\n\n".$GLOBALS['TL_LANG']['tl_integrity_check']['message_2'];
     	    $objEmail->text .= "\n[".date($GLOBALS['TL_CONFIG']['datimFormat'])."]";
-    	    $objEmail->sendTo($GLOBALS['TL_CONFIG']['adminEmail']);
+    	    
+    	    //Admin eMail or alternative eMail
+    	    if ($this->check_alternate_email !== false)
+    	    {
+    	        $objEmail->sendTo($this->check_alternate_email);
+    	    }
+    	    else
+    	    {
+    	        $objEmail->sendTo($GLOBALS['TL_CONFIG']['adminEmail']);
+    	    }
 
     	    if ($bolLastMail) 
     	    {
@@ -550,7 +562,7 @@ class Integrity_Check extends \Frontend
 	{
 	    if (!isset($GLOBALS['TL_CONFIG']['adminEmail']))
 	    {
-	        return; //admin email not set
+	        return; //admin email not set, needed for sender and recipient
 	    }
 	    if ($this->md5_block === true) 
 	    {
@@ -574,16 +586,25 @@ class Integrity_Check extends \Frontend
 	    //////////////// MAIL OUT \\\\\\\\\\\\\\\\
 	    $sendmail = false;
 	    // Notification
-	    list($GLOBALS['TL_ADMIN_NAME'], $GLOBALS['TL_ADMIN_EMAIL']) = $this->splitFriendlyName($GLOBALS['TL_CONFIG']['adminEmail']); //from index.php
+	    list($ADMIN_NAME, $ADMIN_EMAIL) = \String::splitFriendlyEmail($GLOBALS['TL_CONFIG']['adminEmail']); //from index.php
 	    $objEmail = new \Email();
-	    $objEmail->from     = $GLOBALS['TL_ADMIN_EMAIL'];
-	    $objEmail->fromName = $GLOBALS['TL_ADMIN_NAME'];
+	    $objEmail->from     = $ADMIN_EMAIL;
+	    $objEmail->fromName = $ADMIN_NAME;
 	     
 	    $objEmail->subject  = sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['subject']  , $this->Environment->host);
 	    $objEmail->text     = sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['message_3'], $this->Environment->host);
 
 	    $objEmail->text .= "\n[".date($GLOBALS['TL_CONFIG']['datimFormat'])."]";
-	    $objEmail->sendTo($GLOBALS['TL_CONFIG']['adminEmail']);
+
+	    //Admin eMail or alternative eMail
+	    if ($this->check_alternate_email !== false)
+	    {
+	        $objEmail->sendTo($this->check_alternate_email);
+	    }
+	    else
+	    {
+	        $objEmail->sendTo($GLOBALS['TL_CONFIG']['adminEmail']);
+	    }
 	    
 	    if ($bolLastMail)
 	    {
@@ -651,5 +672,6 @@ class Integrity_Check extends \Frontend
 	    
 	    return ;
 	}//setCheckStatus
+	
 }
 

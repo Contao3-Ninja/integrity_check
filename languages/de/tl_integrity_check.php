@@ -52,6 +52,7 @@ $GLOBALS['TL_LANG']['tl_integrity_check']['check_title'] = array('Titel','Titel 
 $GLOBALS['TL_LANG']['tl_integrity_check']['check_debug'] = array('Debug','Debug Modus aktivieren, zusätzliche Ausgaben in System-Log');
 $GLOBALS['TL_LANG']['tl_integrity_check']['check_plans'] = array('Überprüfungsplan','Planung der Überprüfungen und Aktionen');
 $GLOBALS['TL_LANG']['tl_integrity_check']['published']   = array('Integritäts-Überprüfung aktivieren', 'Diese Integritäts-Überprüfung aktivieren.');
+$GLOBALS['TL_LANG']['tl_integrity_check']['alternateemail'] = array('Alternative Empfänger E-Mail-Adresse','Bitte geben Sie eine gültige alternative E-Mail-Adresse ein für die Aktion E-Mails.');
 
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_files']        = array('Dateien','Dateien auswählen zur Überprüfung');
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_interval']     = array('Zeitpunkt','Zeitpunkt der Überprüfung');
@@ -60,6 +61,7 @@ $GLOBALS['TL_LANG']['tl_integrity_check']['cp_action']       = array('Aktion','A
 $GLOBALS['TL_LANG']['tl_integrity_check']['check_plans_expert'] = array('Überprüfungsplan','Planung der Überprüfungen und Aktionen. Bei Neuauswahl bitte Zeitstempel aktualisieren.');
 $GLOBALS['TL_LANG']['tl_integrity_check']['expert_legend']  = 'Experten-Tests';
 $GLOBALS['TL_LANG']['tl_integrity_check']['publish_legend'] = 'Veröffentlichung';
+$GLOBALS['TL_LANG']['tl_integrity_check']['alternateemail_legend'] = 'Alternative E-Mail (optional)';
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status'] = 'Status';
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_0'] = 'ungetested';
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_1'] = 'OK';
