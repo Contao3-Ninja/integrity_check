@@ -99,7 +99,7 @@ $GLOBALS['TL_DCA']['tl_integrity_check'] = array
 	'palettes' => array
 	(
 	      //'__selector__'                => array(),
-		  'default'                     => 'check_title;check_plans;{expert_legend:hide},check_plans_expert;;{publish_legend},published,check_debug'
+		  'default'                     => 'check_title;check_plans;{expert_legend:hide},check_plans_expert;{alternateemail_legend:hide},alternate_email;{publish_legend},published,check_debug'
 	),
     // Subpalettes
     /*
@@ -195,14 +195,14 @@ $GLOBALS['TL_DCA']['tl_integrity_check'] = array
                 (
                     'cp_files_expert' => array
                     (
-                            'label'                 => &$GLOBALS['TL_LANG']['tl_integrity_check']['cp_files'],
-                            'exclude'               => true,
-                            'inputType'             => 'select',
-                            'options'            	=> array
+                            'label'             => &$GLOBALS['TL_LANG']['tl_integrity_check']['cp_files'],
+                            'exclude'           => true,
+                            'inputType'         => 'select',
+                            'options'         	=> array
                             (
-                                '.htaccess'         => '.htaccess',
+                                '.htaccess'     => '.htaccess',
                             ),
-                            'eval' 			        => array('style' => 'width:180px', 'includeBlankOption'=>true, 'chosen'=>true)
+                            'eval' 	            => array('style' => 'width:180px', 'includeBlankOption'=>true, 'chosen'=>true)
                     ),
             		'cp_interval_expert' => array
 		            (
@@ -234,6 +234,14 @@ $GLOBALS['TL_DCA']['tl_integrity_check'] = array
             	)//columnFields
             )//eval of check_plans_expert
         ),//check_plans_expert
+        'alternate_email' => array
+        (
+            'label'               => &$GLOBALS['TL_LANG']['tl_integrity_check']['alternateemail'],
+            'exclude'             => true,
+			'inputType'           => 'text',
+			'eval'                => array('mandatory'=>false, 'rgxp'=>'email', 'maxlength'=>255, 'unique'=>false, 'decodeEntities'=>true, 'tl_class'=>'w50'),
+			'sql'                 => "varchar(255) NOT NULL default ''"
+        ),
 		'published' => array
 		(
 	        'exclude'             => true,
@@ -248,11 +256,11 @@ $GLOBALS['TL_DCA']['tl_integrity_check'] = array
 		),
 		'check_debug' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_integrity_check']['check_debug'],
-			'exclude'                 => true,
-			'inputType'               => 'checkbox',
-			'eval'                    => array('tl_class' => 'w50'),
-			'sql'                     => "char(1) NOT NULL default ''"
+			'label'               => &$GLOBALS['TL_LANG']['tl_integrity_check']['check_debug'],
+			'exclude'             => true,
+			'inputType'           => 'checkbox',
+			'eval'                => array('tl_class' => 'w50'),
+			'sql'                 => "char(1) NOT NULL default ''"
 		)
 	)//fields
 );
