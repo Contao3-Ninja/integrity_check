@@ -37,7 +37,7 @@
 				"":"system/modules/integrity_check"
 			},
 			"runonce":[
-				"system/modules/integrity_check/config/runonce.php"
+				"system/modules/integrity_check/runonce/runonce.php"
 			]
 		}
 	}

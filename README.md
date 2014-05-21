@@ -1,5 +1,6 @@
 Contao Module Integrity Check
 =============================
+[![Latest Stable Version](https://poser.pugx.org/bugbuster/integrity_check/v/stable.png)](https://packagist.org/packages/bugbuster/integrity_check) [![Total Downloads](https://poser.pugx.org/bugbuster/integrity_check/downloads.png)](https://packagist.org/packages/bugbuster/integrity_check) [![Latest Unstable Version](https://poser.pugx.org/bugbuster/integrity_check/v/unstable.png)](https://packagist.org/packages/bugbuster/integrity_check) [![License](https://poser.pugx.org/bugbuster/integrity_check/license.png)](https://packagist.org/packages/bugbuster/integrity_check)
 
 ## About
 
