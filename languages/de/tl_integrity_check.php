@@ -63,7 +63,7 @@ $GLOBALS['TL_LANG']['tl_integrity_check']['expert_legend']  = 'Experten-Tests';
 $GLOBALS['TL_LANG']['tl_integrity_check']['publish_legend'] = 'Veröffentlichung';
 $GLOBALS['TL_LANG']['tl_integrity_check']['alternateemail_legend'] = 'Alternative E-Mail (optional)';
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status'] = 'Status';
-$GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_0'] = 'ungetested';
+$GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_0'] = 'ungetestet';
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_1'] = 'OK';
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_2'] = 'beschädigt';
 
