@@ -15,6 +15,13 @@ Special optional test over timestamp:
 
 Test for Contao versions from 3.0.0
 
+## For Translators
+Translations are managed using Transifex. To create a new translation or to help to maintain an existing one, please register at transifex.com.
+
+Project Link: [https://www.transifex.com/projects/p/contao-integrity_check/](https://www.transifex.com/projects/p/contao-integrity_check/)
+
+Howto: [http://help.transifex.com/intro/translating.html](http://help.transifex.com/intro/translating.html)
+
 ## Branches
 
 **master** This is the current stable branch for Contao 3

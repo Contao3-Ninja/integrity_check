@@ -37,8 +37,10 @@ class Integrity_Check extends \Frontend
     protected $check_plan_id      = 0;
     protected $check_plans        = array();
     protected $check_plans_expert = array();
-    protected $check_title = '';
+    protected $check_title        = '';
     protected $check_alternate_email = false;
+    protected $check_update          = false;
+    protected $check_install_count   = false;
     protected $last_mail   = array();
     protected $md5_block   = false;
     
@@ -46,6 +48,8 @@ class Integrity_Check extends \Frontend
     
     
     const latest_version = '3.3.3';
+    const message_contao_update = 4;
+    const message_install_count = 5;
     
     /**
      * Filelist with checksums
@@ -60,7 +64,7 @@ class Integrity_Check extends \Frontend
     {
     	$this->cron_interval = 'minutely';
     	//$this->log('Start: '.$this->cron_interval, 'Integrity_Check checkFilesMinutely()', TL_CRON);
-    	$this->checkFiles();
+    	$this->run();
     }
     
     /**
@@ -70,7 +74,7 @@ class Integrity_Check extends \Frontend
     {
         $this->cron_interval = 'hourly';
         //$this->log('Start: '.$this->cron_interval, 'Integrity_Check checkFilesHourly()', TL_CRON);
-        $this->checkFiles();
+        $this->run();
     }
     /**
      *  CRON Daily Call
@@ -79,7 +83,7 @@ class Integrity_Check extends \Frontend
     {
         $this->cron_interval = 'daily';
         //$this->log('Start: '.$this->cron_interval, 'Integrity_Check checkFilesDaily()', TL_CRON);
-        $this->checkFiles();
+        $this->run();
     }
     /**
      *  CRON Weekly Call
@@ -88,7 +92,7 @@ class Integrity_Check extends \Frontend
     {
         $this->cron_interval = 'weekly';
         //$this->log('Start: '.$this->cron_interval, 'Integrity_Check checkFilesWeekly()', TL_CRON);
-        $this->checkFiles();
+        $this->run();
     }
     /**
      *  CRON Monthly Call
@@ -97,17 +101,64 @@ class Integrity_Check extends \Frontend
     {
         $this->cron_interval = 'monthly';
         //$this->log('Start: '.$this->cron_interval, 'Integrity_Check checkFilesMonthly()', TL_CRON);
-        $this->checkFiles();
+        $this->run();
     }
     
+    protected function run()
+    {
+        $this->loadLanguageFile('tl_integrity_check');
+        $this->getCheckPlan();
+        $this->checkFiles();
+
+        //Contao Update Check
+        $retUpCh = $this->checkContaoUpdate();
+        if ($retUpCh && $this->getWarningMailBlock($retUpCh) === false) //not blocked
+        {
+            $this->sendWarningMail($this::message_contao_update, $retUpCh, VERSION . '.' . BUILD);
+            $this->setWarningMailBlock($retUpCh);
+        }
+        
+        if ($this->check_debug == true)
+        {
+            $this->log('installCount: '.print_r($GLOBALS['TL_CONFIG']['installCount'],true), 'Integrity_Check run()', TL_CRON);
+        }
+        //Contao Install Count Check
+        //1. prüfe ob install_count_check=3 aus warning Tabelle
+        if ( $this->getWarningMailBlock('',3) === true ) 
+        {
+            // - ja   -> Warnmail bereits erfolgt
+            //        -> $GLOBALS['TL_CONFIG']['installCount'] <3 ? dann install_count_check auf Wert setzen, raus
+            if ( $GLOBALS['TL_CONFIG']['installCount'] < 3 ) 
+            {
+                $this->setWarningMailBlock('',$GLOBALS['TL_CONFIG']['installCount']);
+                $this->setCheckStatus('install_count_check', true);
+            }
+        }
+        else
+        {
+            // - nein -> $GLOBALS['TL_CONFIG']['installCount'] <3 ? dann install_count_check auf Wert setzen, raus
+            if ( $GLOBALS['TL_CONFIG']['installCount'] < 3 )
+            {
+                $this->setWarningMailBlock('',$GLOBALS['TL_CONFIG']['installCount']);
+                $this->setCheckStatus('install_count_check', true);
+            }
+            else
+            {
+                //-> $GLOBALS['TL_CONFIG']['installCount'] =3 ? dann mail und dann install_count_check auf 3 setzen, raus
+                $this->sendWarningMail($this::message_install_count);
+                $this->setWarningMailBlock('',$GLOBALS['TL_CONFIG']['installCount']);
+                $this->setCheckStatus('install_count_check', 3);
+            }
+        }
+
+
+    }
     
 	/**
 	 * Check files for integrity
 	 */
 	protected function checkFiles()
 	{
-	    $this->loadLanguageFile('tl_integrity_check');
-	    $this->getCheckPlan();
 	    $this->getFileList();
 	    $checkSummary = false; //false=kein check erfolgt, keine Mail, keine completed Meldung
 	    $checkSummary_expert = false;
@@ -361,7 +412,9 @@ class Integrity_Check extends \Frontend
                                             `check_plans`, 
                                             `check_plans_expert`, 
                                             `check_title` ,
-                                            `alternate_email`
+                                            `alternate_email`,
+                                            `update_check`,
+                                            `install_count_check`
                                         FROM 
                                             `tl_integrity_check` 
                                         WHERE 
@@ -377,7 +430,9 @@ class Integrity_Check extends \Frontend
 	    $this->check_plans           = deserialize($objCheckPlan->check_plans);
 	    $this->check_plans_expert    = deserialize($objCheckPlan->check_plans_expert);
 	    $this->check_title           = $objCheckPlan->check_title;
-	    $this->check_alternate_email = ($objCheckPlan->alternate_email) ? $objCheckPlan->alternate_email : false; 
+	    $this->check_alternate_email = ($objCheckPlan->alternate_email) ? $objCheckPlan->alternate_email : false;
+	    $this->check_update          = ($objCheckPlan->update_check) ? 1 : 0;
+	    $this->check_install_count   = ($objCheckPlan->install_count_check) ? 1 : 0;
 	    return ;
 	}
 	
@@ -591,8 +646,8 @@ class Integrity_Check extends \Frontend
 	    $objEmail->from     = $ADMIN_EMAIL;
 	    $objEmail->fromName = $ADMIN_NAME;
 	     
-	    $objEmail->subject  = sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['subject']  , $this->Environment->host);
-	    $objEmail->text     = sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['message_3'], $this->Environment->host);
+	    $objEmail->subject  = sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['subject']  , $this->Environment->host . $this->Environment->path);
+	    $objEmail->text     = sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['message_3'], $this->Environment->host . $this->Environment->path);
 
 	    $objEmail->text .= "\n[".date($GLOBALS['TL_CONFIG']['datimFormat'])."]";
 
@@ -630,7 +685,7 @@ class Integrity_Check extends \Frontend
 	 */
 	private function setCheckStatus($cp_file, $status)
 	{
-	    //0=not tested, true=ok, false=not ok
+	    //0=not tested, true=ok, false=not ok, 3=warning
 	    if ($status === true) 
 	    {
 	        $status = 1;
@@ -673,5 +728,267 @@ class Integrity_Check extends \Frontend
 	    return ;
 	}//setCheckStatus
 	
-}
+	/**
+	 * 
+	 * @return mixed    false(bool)=Update not possible, string=latest Contao version
+	 */
+	protected function checkContaoUpdate()
+	{
+	    //http://www.inetrobots.com/liveupdate/version.txt
+	    //http://www.inetrobots.com/liveupdate/lts-version.txt
+	    if ($this->check_update == 0) 
+	    {
+	        if ($this->check_debug == true)
+	        {
+	            $this->log($GLOBALS['TL_LANG']['tl_integrity_check']['update_check_deactivated'], 'Integrity_Check '.__FUNCTION__, TL_CRON);
+	        }
+	        $this->setCheckStatus('contao_update_check', 0);
+	        return false; //test not necessary
+	    }
+	    //offline
+	    if (isset($GLOBALS['TL_CONFIG']['latestVersion'])) 
+	    {
+	        $contao_version_live   = explode('.',VERSION . '.' . BUILD);
+	        $contao_version_latest = explode('.',$GLOBALS['TL_CONFIG']['latestVersion']);
+	        if ($this->check_debug == true)
+	        {
+	            $this->log($GLOBALS['TL_LANG']['tl_integrity_check']['update_check_contao_installed'] .': '.VERSION . '.' . BUILD, 'Integrity_Check checkContaoUpdate()', TL_CRON);
+	            $this->log($GLOBALS['TL_LANG']['tl_integrity_check']['update_check_contao_latest'] .': '.$GLOBALS['TL_CONFIG']['latestVersion'], 'Integrity_Check checkContaoUpdate()', TL_CRON);
+	        }
+	        if ($contao_version_live[0] < $contao_version_latest[0]) 
+	        {
+	            $this->setCheckStatus('contao_update_check', true);
+	            return false; //major update possible, but not of interest.
+	        }
+	        if ($contao_version_live[0] > $contao_version_latest[0]) 
+	        {
+                $this->setCheckStatus('contao_update_check', true);
+                return false; //can not be, not of interest.
+	        }
+	        //major ist equal, minor check
+	        if ($contao_version_live[1] < $contao_version_latest[1]) 
+	        {
+	            $this->setCheckStatus('contao_update_check', 3);
+	            return $GLOBALS['TL_CONFIG']['latestVersion'];
+	        }
+	        //bugfix check
+	        if ($contao_version_live[2] < $contao_version_latest[2])
+	        {
+	            $this->setCheckStatus('contao_update_check', 3);
+	            return $GLOBALS['TL_CONFIG']['latestVersion'];
+	        }
+	        $this->setCheckStatus('contao_update_check', true);
+	        return false; //equal
+	    }
+	    if ($this->check_debug == true)
+	    {
+	        $this->log($GLOBALS['TL_LANG']['tl_integrity_check']['update_check_contao_latest_not_detected'], 'Integrity_Check '.__FUNCTION__, TL_CRON);
+	    }
+	    $this->setCheckStatus('contao_update_check', 0);
+	    return false; //test not possible
+	    /*
+	    else
+	    {
+	        //online test
+	    }
+	    */
+	}
+	
+	protected function sendWarningMail($message_number, $note1='', $note2='')
+	{
+	    $message = '';
+	    $text    = '';
+	    if (!isset($GLOBALS['TL_CONFIG']['adminEmail']))
+	    {
+	        return; //admin email not set, needed for sender and recipient
+	    }
+	    switch ($message_number)
+	    {
+	        case $this::message_contao_update:
+	            $message = 'message_'.$this::message_contao_update;
+	            $text = sprintf($GLOBALS['TL_LANG']['tl_integrity_check'][$message]   , $this->Environment->host . $this->Environment->path, $note1, $note2);
+	            break;
+	        case $this::message_install_count:
+	            $message = 'message_'.$this::message_install_count;
+	            $text = sprintf($GLOBALS['TL_LANG']['tl_integrity_check'][$message]   , $this->Environment->host . $this->Environment->path);
+	            break;
+	        default:
+	            return ; //wrong
+	            break;
+	    }
+	    
+	    list($ADMIN_NAME, $ADMIN_EMAIL) = \String::splitFriendlyEmail($GLOBALS['TL_CONFIG']['adminEmail']); //from index.php
+	    $objEmail = new \Email();
+	    $objEmail->from     = $ADMIN_EMAIL;
+	    $objEmail->fromName = $ADMIN_NAME;
+	     
+	    $objEmail->subject  = sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['subject']  , $this->Environment->host);
+	    $objEmail->text     = $text;
+	    $objEmail->text    .= "\n[".date($GLOBALS['TL_CONFIG']['datimFormat'])."]";
+	    
+	    //Admin eMail or alternative eMail
+	    if ($this->check_alternate_email !== false)
+	    {
+	        $objEmail->sendTo($this->check_alternate_email);
+	    }
+	    else
+	    {
+	        $objEmail->sendTo($GLOBALS['TL_CONFIG']['adminEmail']);
+	    }
+	    
+	    if ($this->check_debug == true)
+	    {
+	        $this->log('Send warning e-mail', 'Integrity_Check sendWarningMail()', TL_CRON);
+	    }
+	    
+	    unset($objEmail);
+	    return ;
+	}
+	
+	/**
+	 * Set status for blocking warning mail
+	 * 
+	 * @param string $version     Latest Contao Version
+	 */
+	protected function setWarningMailBlock($version='',$check='')
+	{
+	    if ($version !='') 
+	    {
+            \Database::getInstance()->prepare("INSERT IGNORE INTO `tl_integrity_warnings` 
+                                                    ( `tstamp` , `latest_contao_version` )
+                                               VALUES (?, ?)"
+                                             )
+                                    ->execute(time(), $version);
+            return true;
+	    }
+	    
+	    if ($check !=='')
+	    {
+	        //delete old value before insert
+	        \Database::getInstance()->prepare("DELETE FROM 
+                                                    `tl_integrity_warnings`
+                                               WHERE 
+                                                    `latest_contao_version`=? 
+                                               AND 
+                                                    `install_count_check`!=?
+                                              ")
+                        	        ->execute('', '');
+	        if ($this->check_debug == true)
+	        {
+	            $this->log('Version Check, Delete', 'Integrity_Check setWarningMailBlock()', TL_CRON);
+	        }
+	        
+	        \Database::getInstance()->prepare("INSERT INTO `tl_integrity_warnings`
+                                                    ( `tstamp` , `install_count_check` )
+                                               VALUES (?, ?)"
+                                             )
+                                    ->execute(time(), $check);
+	        if ($this->check_debug == true)
+	        {
+	            $this->log('Version Check, Insert', 'Integrity_Check setWarningMailBlock()', TL_CRON);
+	        }
+	        return true;
+	    }
+	    if ($this->check_debug == true)
+	    {
+	        $this->log("Parameter Error! 1version:{$version} 2check:{$check}", 'Integrity_Check setWarningMailBlock()', TL_CRON);
+	    }
+	    return false;
+	}
+	
+	/**
+	 * Get status of blocking warning mail
+	 * 
+	 * @param string $version     Latest Contao Version
+	 * @return boolean            true = Email has been sent.
+	 */
+	protected function getWarningMailBlock($version='',$check='')
+	{
+	    if ($version !='')
+	    {
+            $objCheckBlock = \Database::getInstance()->prepare("SELECT 
+                                                                    `id` 
+                                                                FROM 
+                                                                    `tl_integrity_warnings`
+                                                                WHERE
+                                                                    `latest_contao_version`=?
+                                                               ")
+                                                    ->execute($version);
+    	    if ($objCheckBlock->numRows < 1)
+    	    {
+    	        if ($this->check_debug == true)
+    	        {
+    	            $this->log('Version Check, Blocking: No', 'Integrity_Check getWarningMailBlock()', TL_CRON);
+    	            //$this->log('Version Check SQL: '.print_r($objCheckBlock->query,true), 'Integrity_Check getWarningMailBlock()', TL_ERROR);
+    	        }
+    	        return false; //Blocking: No
+    	    }
+    	    
+    	    if ($this->check_debug == true)
+    	    {
+    	        $this->log('Version Check, Blocking: Yes', 'Integrity_Check getWarningMailBlock()', TL_CRON);
+    	        //$this->log('Version Check SQL: '.print_r($objCheckBlock->query,true), 'Integrity_Check getWarningMailBlock()', TL_ERROR);
+    	    }
+    	    return true; //Blocking: Yes
+	    }
+	    
+	    if ($check !='')
+	    {
+	        $objCheckBlock = \Database::getInstance()->prepare("SELECT
+                                                                    `id`
+                                                                FROM
+                                                                    `tl_integrity_warnings`
+                                                                WHERE
+                                                                    `install_count_check`=?
+                                                               ")
+                                                     ->execute($check);
+	        if ($objCheckBlock->numRows < 1)
+	        {
+	            if ($this->check_debug == true)
+	            {
+	                $this->log('Install Count Check, Blocking: No', 'Integrity_Check getWarningMailBlock()', TL_CRON);
+	                //$this->log('Install Count Check SQL: '.print_r($objCheckBlock->query,true), 'Integrity_Check getWarningMailBlock()', TL_ERROR);
+	            }
+	            return false; //Blocking: No
+	        }
+	        
+	        if ($this->check_debug == true)
+	        {
+	            $this->log('Install Count Check, Blocking: Yes', 'Integrity_Check getWarningMailBlock()', TL_CRON);
+	            //$this->log('Install Count Check SQL: '.print_r($objCheckBlock->query,true), 'Integrity_Check getWarningMailBlock()', TL_ERROR);
+	        }
+	        return true; //Blocking: Yes
+	    }
+	    
+	    return -1;
+	}
+	
+}//class
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

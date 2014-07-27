@@ -33,6 +33,8 @@ $GLOBALS['TL_LANG']['tl_integrity_check']['subject']   = 'Contao :: Integritäts
 $GLOBALS['TL_LANG']['tl_integrity_check']['message_1'] = 'Die Integritäts-Überprüfung auf %s hat beschädigte Dateien gefunden:';
 $GLOBALS['TL_LANG']['tl_integrity_check']['message_2'] = 'Diese Information ist auch im System-Log zu finden.';
 $GLOBALS['TL_LANG']['tl_integrity_check']['message_3'] = 'Die Integritäts-Überprüfung auf %s hat keine passenden MD5 Prüfsummen. Ein Update ist nötig.';
+$GLOBALS['TL_LANG']['tl_integrity_check']['message_4'] = 'Die Integritäts-Überprüfung auf %s hat festgestellt, dass ein neues Contao Update verfügbar ist: Version %s, installierte Version: %s';
+$GLOBALS['TL_LANG']['tl_integrity_check']['message_5'] = 'Die Integritäts-Überprüfung auf %s hat festgestellt, dass das Installtool gesperrt wurde, nachdem dreimal hintereinander ein falsches Passwort eingegeben wurde.';
 
 /**
  * Buttons
@@ -66,6 +68,17 @@ $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status'] = 'Status';
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_0'] = 'ungetestet';
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_1'] = 'OK';
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_2'] = 'beschädigt';
+$GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_3'] = 'Warnung';
+
+$GLOBALS['TL_LANG']['tl_integrity_check']['update_check'][0] = 'Contao Update Prüfung';
+$GLOBALS['TL_LANG']['tl_integrity_check']['update_check'][1] = 'Wenn ein neues Contao Update verfügbar ist (Minor/Bugfix), erfolgt eine E-Mail an den Admin.'; 
+$GLOBALS['TL_LANG']['tl_integrity_check']['update_check_deactivated'] = 'Contao Update Prüfung ist deaktiviert.';
+$GLOBALS['TL_LANG']['tl_integrity_check']['update_check_contao_latest'] = 'Neuste Contao Version';
+$GLOBALS['TL_LANG']['tl_integrity_check']['update_check_contao_installed'] = 'Installierte Contao Version';
+$GLOBALS['TL_LANG']['tl_integrity_check']['update_check_contao_latest_not_detected'] = 'Neuste Contao Version nicht ermittelt.';
+
+$GLOBALS['TL_LANG']['tl_integrity_check']['install_count_check'][0] = 'Prüfung auf Installtool Login-Sperre';
+$GLOBALS['TL_LANG']['tl_integrity_check']['install_count_check'][1] = 'Wenn das Installtool gesperrt wurde, nachdem dreimal hintereinander ein falsches Passwort eingegeben wurde, erfolgt eine E-Mail an den Admin.';
 
 /**
  * Reference

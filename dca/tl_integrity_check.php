@@ -99,7 +99,7 @@ $GLOBALS['TL_DCA']['tl_integrity_check'] = array
 	'palettes' => array
 	(
 	      //'__selector__'                => array(),
-		  'default'                     => 'check_title;check_plans;{expert_legend:hide},check_plans_expert;{alternateemail_legend:hide},alternate_email;{publish_legend},published,check_debug'
+		  'default'                     => 'check_title;check_plans;{expert_legend:hide},check_plans_expert,update_check,install_count_check;{alternateemail_legend:hide},alternate_email;{publish_legend},published,check_debug'
 	),
     // Subpalettes
     /*
@@ -234,6 +234,22 @@ $GLOBALS['TL_DCA']['tl_integrity_check'] = array
             	)//columnFields
             )//eval of check_plans_expert
         ),//check_plans_expert
+        'update_check' => array
+        (
+            'label'               => &$GLOBALS['TL_LANG']['tl_integrity_check']['update_check'],
+            'exclude'             => true,
+            'inputType'           => 'checkbox',
+            'eval'                => array('mandatory'=>false, 'helpwizard'=>false),
+            'sql'                 => "char(1) NOT NULL default ''"
+        ),
+        'install_count_check' => array
+        (
+                'label'               => &$GLOBALS['TL_LANG']['tl_integrity_check']['install_count_check'],
+                'exclude'             => true,
+                'inputType'           => 'checkbox',
+                'eval'                => array('mandatory'=>false, 'helpwizard'=>false),
+                'sql'                 => "char(1) NOT NULL default ''"
+        ),
         'alternate_email' => array
         (
             'label'               => &$GLOBALS['TL_LANG']['tl_integrity_check']['alternateemail'],

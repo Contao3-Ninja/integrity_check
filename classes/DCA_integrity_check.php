@@ -187,6 +187,39 @@ class DCA_integrity_check extends \Backend
         
         $title .= '</table>
 ';
+        //Vorsorgetests
+        if ($arrRow[update_check] || $arrRow[install_count_check]) 
+        {
+            $title .='
+<table class="tl_listing_checks">
+    <tr>
+         <td class="tl_folder_tlist">'.$GLOBALS['TL_LANG']['tl_integrity_check']['expert_legend'].'</td>
+         <td class="tl_folder_tlist">'.$GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status'].'</td>
+    </tr>
+';
+            if ($arrRow[update_check])
+            {
+                $title .='
+    <tr>
+        <td class="tl_file_list">'.$GLOBALS['TL_LANG']['tl_integrity_check']['update_check'][0].'</td>
+        <td class="tl_file_list" style="width: 10%;text-align: center;"><span class="cp_file_status">'. $check_status['contao_update_check'].'</span></td>
+    </tr>
+';
+            }
+            if ($arrRow[install_count_check])
+            {
+            $title .='
+    <tr>
+        <td class="tl_file_list">'.$GLOBALS['TL_LANG']['tl_integrity_check']['install_count_check'][0].'</td>
+        <td class="tl_file_list" style="width: 10%;text-align: center;"><span class="cp_file_status">'. $check_status['install_count_check'].'</span></td>
+    </tr>
+';
+            }
+            $title .='
+</table>
+';
+        } // if ($arrRow[update_check] || $arrRow[install_count_check]) 
+                
         return $title;
     }
 
@@ -448,6 +481,7 @@ class DCA_integrity_check extends \Backend
         $icon_0 = \Image::getHtml('invisible.gif', $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_0'], 'title="' .specialchars($GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_0']).'"');
         $icon_1 = \Image::getHtml('ok.gif'       , $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_1'], 'title="' .specialchars($GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_1']).' (%s)"');
         $icon_2 = \Image::getHtml('error.gif'    , $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_2'], 'title="' .specialchars($GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_2']).' (%s)"');
+        $icon_3 = \Image::getHtml('about.gif'    , $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_3'], 'title="' .specialchars($GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_3']).' (%s)"');
 
         $arrFiles = array
         (
@@ -455,7 +489,9 @@ class DCA_integrity_check extends \Backend
             'system/cron/cron.php'    => $icon_0,
             'contao/index.php'        => $icon_0,
             'contao/main.php'         => $icon_0,
-            '.htaccess'               => $icon_0
+            '.htaccess'               => $icon_0,
+            'contao_update_check'     => $icon_0,
+            'install_count_check'     => $icon_0
         );
         
         $objCheckStatus = \Database::getInstance()
@@ -481,6 +517,9 @@ class DCA_integrity_check extends \Backend
                         break;
                     case 2 :
                         $arrFiles[$objCheckStatus->check_object] = sprintf($icon_2, $check_datetime);
+                        break;
+                    case 3 :
+                        $arrFiles[$objCheckStatus->check_object] = sprintf($icon_3, $check_datetime);
                         break;
                     default:
                         break;
@@ -534,6 +573,12 @@ class DCA_integrity_check extends \Backend
                             $found = true;
                         }
                     }
+                }
+                if ($objCheckStatus->check_object == 'contao_update_check' ||
+                    $objCheckStatus->check_object == 'install_count_check'
+                   ) 
+                {
+                    $found = true;
                 }
                 
                 if ($found === false)

@@ -3,7 +3,7 @@
 /**
  * Contao Open Source CMS, Copyright (C) 2005-2014 Leo Feyer
  *
- * Contao Module "Integrity Check" - Backend DCA tl_integrity_timestamps
+ * Contao Module "Integrity Check" - Backend DCA tl_integrity_warnings
  *
  * @copyright  Glen Langer 2012..2014 <http://www.contao.glen-langer.de>
  * @author     Glen Langer (BugBuster)
@@ -17,7 +17,7 @@
 /**
  * Table tl_integrity_check
  */
-$GLOBALS['TL_DCA']['tl_integrity_timestamps'] = array
+$GLOBALS['TL_DCA']['tl_integrity_warnings'] = array
 (
 
 	// Config
@@ -28,7 +28,8 @@ $GLOBALS['TL_DCA']['tl_integrity_timestamps'] = array
         (
             'keys' => array
             (
-                'id'    => 'primary'
+                'id'                    => 'primary',
+                'latest_contao_version' => 'unique'
             )
         ) 
 	),
@@ -43,25 +44,13 @@ $GLOBALS['TL_DCA']['tl_integrity_timestamps'] = array
             (
                     'sql'           => "int(10) unsigned NOT NULL default '0'"
             ),
-            'check_timestamps' => array
-            (
-                    'sql'           => "varchar(255) NOT NULL default ''"
-            ),
-            'last_mail_tstamps' => array
-            (
-                    'sql'           => "varchar(255) NOT NULL default ''"
-            ),
-            'last_minutely_log'     => array
-            (
-                    'sql'           => "varchar(255) NOT NULL default ''"
-            ),
-            'last_mail_md5_block'   => array
-            (
-                    'sql'           => "int(10) unsigned NOT NULL default '0'"
-            ),
             'latest_contao_version' => array
             (
                     'sql'           => "varchar(12) NOT NULL default ''"
+            ),
+            'install_count_check' => array
+            (
+                    'sql'           => "char(1) NOT NULL default ''"
             )
     )
 );

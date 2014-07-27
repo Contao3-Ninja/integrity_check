@@ -33,6 +33,8 @@ $GLOBALS['TL_LANG']['tl_integrity_check']['subject']   = 'Contao :: Integrity Ch
 $GLOBALS['TL_LANG']['tl_integrity_check']['message_1'] = 'The integrity check for %s has found corrupt files:';
 $GLOBALS['TL_LANG']['tl_integrity_check']['message_2'] = 'This information can also be found in the system log.';
 $GLOBALS['TL_LANG']['tl_integrity_check']['message_3'] = 'The integrity check for %s has found no matching MD5 checksums. An update is necessary.';
+$GLOBALS['TL_LANG']['tl_integrity_check']['message_4'] = 'The integrity check for %s has found that a new Contao update is available: Version %s, Version installed: %s';
+$GLOBALS['TL_LANG']['tl_integrity_check']['message_5'] = 'The integrity check for %s has found that the install tool has been locked after a wrong password had been entered more than three times in a row.';
 
 /**
  * Buttons
@@ -66,6 +68,17 @@ $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status'] = 'Status';
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_0'] = 'unchecked';
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_1'] = 'OK';
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_2'] = 'corrupt';
+$GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_3'] = 'Warning';
+
+$GLOBALS['TL_LANG']['tl_integrity_check']['update_check'][0] = 'Check for new Contao versions';
+$GLOBALS['TL_LANG']['tl_integrity_check']['update_check'][1] = 'If a new Contao update is available (Minor/Bugfix), an e-mail goes to the admin.';
+$GLOBALS['TL_LANG']['tl_integrity_check']['update_check_deactivated']      = 'Check for new Contao versions is deactivated.';
+$GLOBALS['TL_LANG']['tl_integrity_check']['update_check_contao_latest']    = 'Latest Contao version';
+$GLOBALS['TL_LANG']['tl_integrity_check']['update_check_contao_installed'] = 'Installed Contao version';
+$GLOBALS['TL_LANG']['tl_integrity_check']['update_check_contao_latest_not_detected'] = 'Latest Contao version not detected.';
+
+$GLOBALS['TL_LANG']['tl_integrity_check']['install_count_check'][0] = 'Check for install tool locking';
+$GLOBALS['TL_LANG']['tl_integrity_check']['install_count_check'][1] = 'If the install tool has been locked after a wrong password has been entered more than three times in a row, an e-mail goes to the admin.';
 
 /**
  * Reference

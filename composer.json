@@ -36,6 +36,12 @@
 			"sources":{
 				"":"system/modules/integrity_check"
 			},
+			"transifex": {
+				"project": "contao-integrity_check",
+				"prefix": "master-",
+				"languages_cto": "languages",
+				"languages_tx": ".tx"
+			},
 			"runonce":[
 				"runonce/runonce.php"
 			]
