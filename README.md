@@ -5,22 +5,29 @@ Contao Module Integrity Check
 ## About
 
 Cron job for integrity check for this files over checksums:
+
 * index.php
 * system/cron/cron.php
 * contao/index.php
 * contao/main.php
 
 Special optional test over timestamp:
+
 * .htaccess
 
-Test for Contao versions from 3.0.0
+Special Warning tests:
+
+* Check for new Contao versions
+* Check for install tool locking
+
+Test for Contao versions from 3.1.0
 
 ## For Translators
 Translations are managed using Transifex. To create a new translation or to help to maintain an existing one, please register at transifex.com.
 
 Project Link: [https://www.transifex.com/projects/p/contao-integrity_check/](https://www.transifex.com/projects/p/contao-integrity_check/)
 
-Howto: [http://help.transifex.com/intro/translating.html](http://help.transifex.com/intro/translating.html)
+Howto: [http://docs.transifex.com/faq/#translating](http://docs.transifex.com/faq/#translating)
 
 ## Branches
 
