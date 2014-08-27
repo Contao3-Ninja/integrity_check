@@ -65,6 +65,7 @@ $GLOBALS['TL_LANG']['tl_integrity_check']['message_1']                          
 $GLOBALS['TL_LANG']['tl_integrity_check']['message_2']                               = 'Эту информацию также можно найти в системном журнале.';
 $GLOBALS['TL_LANG']['tl_integrity_check']['message_3']                               = 'Проверка целостности для %s не найдены MD5 контрольные суммы. Необходимо обновление.';
 $GLOBALS['TL_LANG']['tl_integrity_check']['message_4']                               = 'Доступно обновление Contao %s. Новая версия: %s, Установленая версия: %s';
+$GLOBALS['TL_LANG']['tl_integrity_check']['message_5']                               = 'Проверка целостности %s обнаружила, что мастер установки был заблокирован после того, как был введен неверный пароль, более чем три раза подряд.';
 $GLOBALS['TL_LANG']['tl_integrity_check']['minutely']                                = 'ежеминутно';
 $GLOBALS['TL_LANG']['tl_integrity_check']['monthly']                                 = 'ежемесячно';
 $GLOBALS['TL_LANG']['tl_integrity_check']['new']['0']                                = 'Новая проверка целостности';
