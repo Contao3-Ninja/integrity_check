@@ -29,7 +29,7 @@
 		"classmap":[""]
 	},
 	"replace":{
-		"contao-legacy/integrity_check":"*"
+		"contao-legacy/integrity_check":"self.version"
 	},
 	"extra":{
 		"contao":{
