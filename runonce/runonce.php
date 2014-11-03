@@ -41,7 +41,8 @@ class IntegrityCheckRunonce extends Controller
                                       `check_timestamps` varchar(255) NOT NULL DEFAULT '',
                                       `last_mail_tstamps` varchar(255) NOT NULL DEFAULT '',
                                       `last_minutely_log` varchar(255) NOT NULL DEFAULT '',
-                                      `last_mail_md5_block` int(10) unsigned NOT NULL default '0'
+                                      `last_mail_md5_block` int(10) unsigned NOT NULL default '0',
+                                      `latest_contao_version` varchar(12) NOT NULL DEFAULT ''
                                       PRIMARY KEY (`id`)
                                     ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1");
             //Timestamps füllen
