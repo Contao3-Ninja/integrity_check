@@ -142,7 +142,7 @@ class DCA_integrity_check extends \Backend
     <td class="tl_folder_tlist">'.$GLOBALS['TL_LANG']['tl_integrity_check']['cp_interval'][0].'</td>
     <td class="tl_folder_tlist">'.$GLOBALS['TL_LANG']['tl_integrity_check']['cp_type_of_test'][0].'</td>
     <td class="tl_folder_tlist">'.$GLOBALS['TL_LANG']['tl_integrity_check']['cp_action'][0].'</td>
-    <td class="tl_folder_tlist">'.$GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status'].'</td>
+    <td class="tl_folder_tlist" style="text-align: center;">'.$GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status'].'</td>
   </tr>
   ';
         if (count($check_plans) > 0)
@@ -194,7 +194,7 @@ class DCA_integrity_check extends \Backend
 <table class="tl_listing_checks">
     <tr>
          <td class="tl_folder_tlist">'.$GLOBALS['TL_LANG']['tl_integrity_check']['expert_legend'].'</td>
-         <td class="tl_folder_tlist">'.$GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status'].'</td>
+         <td class="tl_folder_tlist" style="text-align: center;">'.$GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status'].'</td>
     </tr>
 ';
             if ($arrRow[update_check])
