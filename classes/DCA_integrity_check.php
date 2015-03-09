@@ -142,7 +142,6 @@ class DCA_integrity_check extends \Backend
     <td class="tl_folder_tlist">'.$GLOBALS['TL_LANG']['tl_integrity_check']['cp_interval'][0].'</td>
     <td class="tl_folder_tlist">'.$GLOBALS['TL_LANG']['tl_integrity_check']['cp_type_of_test'][0].'</td>
     <td class="tl_folder_tlist">'.$GLOBALS['TL_LANG']['tl_integrity_check']['cp_action'][0].'</td>
-    <td class="tl_folder_tlist" style="text-align: center;">Check now</td>
     <td class="tl_folder_tlist" style="text-align: center;">'.$GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status'].'</td>
   </tr>
   ';
@@ -157,7 +156,6 @@ class DCA_integrity_check extends \Backend
     <td class="tl_file_list" style=""><span class="cp_interval">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_interval']].'</span></td>
     <td class="tl_file_list" style=""><span class="cp_type_of_test">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_type_of_test']].'</span></td>
     <td class="tl_file_list" style=""><span class="cp_action">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_action']].'</span></td>
-    <td class="tl_file_list" style="text-align: center;"><span class="cp_step_start"><img width="16" height="16" title="Start Check Now"" alt="Start Check Now" src="system/modules/integrity_check/assets/start_icon.png"></span></td>
     <td class="tl_file_list" style="width: 10%;text-align: center;"><span class="cp_file_status">'. $check_status[$step['cp_files']].'</span></td>
   </tr>
   ';
@@ -179,7 +177,6 @@ class DCA_integrity_check extends \Backend
         <td class="tl_file_list" style=""><span class="cp_interval">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_interval_expert']].'</span></td>
         <td class="tl_file_list" style=""><span class="cp_type_of_test">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_type_of_test_expert']].'</span></td>
         <td class="tl_file_list" style=""><span class="cp_action">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_action_expert']].'</span></td>
-        <td class="tl_file_list" style="text-align: center;"><span class="cp_step_start"><img width="16" height="16" title="Start Check Now"" alt="Start Check Now" src="system/modules/integrity_check/assets/start_icon.png"></span></td>
         <td class="tl_file_list" style="width: 10%;text-align: center;"><span class="cp_file_status">'. $check_status[$step['cp_files_expert']].'</span></td>
       </tr>
       ';
@@ -197,7 +194,6 @@ class DCA_integrity_check extends \Backend
 <table class="tl_listing_checks">
     <tr>
          <td class="tl_folder_tlist">'.$GLOBALS['TL_LANG']['tl_integrity_check']['expert_legend'].'</td>
-         <td class="tl_folder_tlist" style="text-align: center;">Check now</td>
          <td class="tl_folder_tlist" style="text-align: center;">'.$GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status'].'</td>
     </tr>
 ';
@@ -206,7 +202,6 @@ class DCA_integrity_check extends \Backend
                 $title .='
     <tr>
         <td class="tl_file_list">'.$GLOBALS['TL_LANG']['tl_integrity_check']['update_check'][0].'</td>
-        <td class="tl_file_list" style="width: 20%;text-align: center;"><span class="cp_step_start"><img width="16" height="16" title="Start Check Now"" alt="Start Check Now" src="system/modules/integrity_check/assets/start_icon.png"></span></td>
         <td class="tl_file_list" style="width: 10%;text-align: center;"><span class="cp_file_status">'. $check_status['contao_update_check'].'</span></td>
     </tr>
 ';
@@ -216,7 +211,6 @@ class DCA_integrity_check extends \Backend
             $title .='
     <tr>
         <td class="tl_file_list">'.$GLOBALS['TL_LANG']['tl_integrity_check']['install_count_check'][0].'</td>
-        <td class="tl_file_list" style="width: 20%;text-align: center;"><span class="cp_step_start"><img width="16" height="16" title="Start Check Now"" alt="Start Check Now" src="system/modules/integrity_check/assets/start_icon.png"></span></td>
         <td class="tl_file_list" style="width: 10%;text-align: center;"><span class="cp_file_status">'. $check_status['install_count_check'].'</span></td>
     </tr>
 ';
@@ -489,6 +483,12 @@ class DCA_integrity_check extends \Backend
         $icon_2 = \Image::getHtml('error.gif'    , $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_2'], 'title="' .specialchars($GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_2']).' (%s)"');
         $icon_3 = \Image::getHtml('about.gif'    , $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_3'], 'title="' .specialchars($GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_3']).' (%s)"');
 
+        $icon_start  = '<span class="cp_step_start">';
+        $icon_start .= \Image::getHtml('system/modules/integrity_check/assets/start_icon.png', $GLOBALS['TL_LANG']['tl_integrity_check']['cp_step_start_now'], 'title="' .specialchars($GLOBALS['TL_LANG']['tl_integrity_check']['cp_step_start_now']).'"');
+        $icon_start .= '</span>';
+        
+        $icon_0 .= $icon_start;
+        
         $arrFiles = array
         (
             'index.php'               => $icon_0,
@@ -522,7 +522,7 @@ class DCA_integrity_check extends \Backend
                         $arrFiles[$objCheckStatus->check_object] = sprintf($icon_1, $check_datetime);
                         break;
                     case 2 :
-                        $arrFiles[$objCheckStatus->check_object] = sprintf($icon_2, $check_datetime);
+                        $arrFiles[$objCheckStatus->check_object] = sprintf($icon_2, $check_datetime) . $icon_start;
                         break;
                     case 3 :
                         $arrFiles[$objCheckStatus->check_object] = sprintf($icon_3, $check_datetime);
@@ -532,6 +532,7 @@ class DCA_integrity_check extends \Backend
                 }
             }
         }
+        
         return $arrFiles;
     }
     
@@ -604,5 +605,28 @@ class DCA_integrity_check extends \Backend
         }//$objCheckStatus->numRows > 0
         return ;
     }//cleanCheckStatus
+    
+    /**
+     * Return the "startChecks" button
+     * @param array
+     * @param string
+     * @param string
+     * @param string
+     * @param string
+     * @param string
+     * @return string
+     */
+    public function startChecks($row, $href, $label, $title, $icon, $attributes)
+    {
+        if (strlen(\Input::get('checkid')))
+        {
+            //TODO Checken
+            $this->redirect($this->getReferer());
+        }
+    
+        $href .= '&amp;checkid='.$row['id'].'';
+    
+        return '<a href="'.$this->addToUrl($href).'" title="'.specialchars($title).'"'.$attributes.'>'.$this->generateImage($icon, $label).'</a> ';
+    }
 
 }

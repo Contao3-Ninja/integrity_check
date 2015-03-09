@@ -91,6 +91,13 @@ $GLOBALS['TL_DCA']['tl_integrity_check'] = array
 				'icon'                => 'visible.gif',
 				//'attributes'          => 'onclick="Backend.getScrollOffset();return AjaxRequest.toggleVisibility(this,%s)"',
 				'button_callback'     => array('BugBuster\IntegrityCheck\DCA_integrity_check', 'toggleIcon')
+			),
+			'check' => array
+			(
+				'label'               => &$GLOBALS['TL_LANG']['tl_integrity_check']['cp_start_now_all'],
+				'icon'                => 'system/modules/integrity_check/assets/start_icon.png',
+				//'attributes'          => 'onclick="Backend.getScrollOffset();return AjaxRequest.toggleVisibility(this,%s)"',
+				'button_callback'     => array('BugBuster\IntegrityCheck\DCA_integrity_check', 'startChecks')
 			)
 		)
 		

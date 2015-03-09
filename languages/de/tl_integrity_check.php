@@ -69,6 +69,8 @@ $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_0'] = 'ungetestet';
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_1'] = 'OK';
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_2'] = 'beschädigt';
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_3'] = 'Warnung';
+$GLOBALS['TL_LANG']['tl_integrity_check']['cp_step_start_now'] = 'Diesen Test jetzt starten';
+$GLOBALS['TL_LANG']['tl_integrity_check']['cp_start_now_all']  = array('Alle Tests jetzt starten','Alle Tests jetzt starten');
 
 $GLOBALS['TL_LANG']['tl_integrity_check']['update_check'][0] = 'Contao Update Prüfung';
 $GLOBALS['TL_LANG']['tl_integrity_check']['update_check'][1] = 'Wenn ein neues Contao Update verfügbar ist (Minor/Bugfix), erfolgt eine E-Mail an den Admin.'; 
