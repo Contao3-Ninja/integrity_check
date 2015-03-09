@@ -142,6 +142,7 @@ class DCA_integrity_check extends \Backend
     <td class="tl_folder_tlist">'.$GLOBALS['TL_LANG']['tl_integrity_check']['cp_interval'][0].'</td>
     <td class="tl_folder_tlist">'.$GLOBALS['TL_LANG']['tl_integrity_check']['cp_type_of_test'][0].'</td>
     <td class="tl_folder_tlist">'.$GLOBALS['TL_LANG']['tl_integrity_check']['cp_action'][0].'</td>
+    <td class="tl_folder_tlist" style="text-align: center;">Check now</td>
     <td class="tl_folder_tlist" style="text-align: center;">'.$GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status'].'</td>
   </tr>
   ';
@@ -152,10 +153,11 @@ class DCA_integrity_check extends \Backend
             {
                 $class = (($lineCount % 2) == 0) ? ' even' : ' odd';
                 $title .= '<tr class='.$class.'>
-    <td class="tl_file_list" style="width: 30%;"><span class="cp_files">'. $step['cp_files'].'</span></td>
-    <td class="tl_file_list" style="width: 20%;"><span class="cp_interval">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_interval']].'</span></td>
-    <td class="tl_file_list" style="width: 20%;"><span class="cp_type_of_test">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_type_of_test']].'</span></td>
-    <td class="tl_file_list" style="width: 20%;"><span class="cp_action">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_action']].'</span></td>
+    <td class="tl_file_list" style=""><span class="cp_files">'. $step['cp_files'].'</span></td>
+    <td class="tl_file_list" style=""><span class="cp_interval">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_interval']].'</span></td>
+    <td class="tl_file_list" style=""><span class="cp_type_of_test">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_type_of_test']].'</span></td>
+    <td class="tl_file_list" style=""><span class="cp_action">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_action']].'</span></td>
+    <td class="tl_file_list" style="text-align: center;"><span class="cp_step_start"><img width="16" height="16" title="Start Check Now"" alt="Start Check Now" src="system/modules/integrity_check/assets/start_icon.png"></span></td>
     <td class="tl_file_list" style="width: 10%;text-align: center;"><span class="cp_file_status">'. $check_status[$step['cp_files']].'</span></td>
   </tr>
   ';
@@ -173,10 +175,11 @@ class DCA_integrity_check extends \Backend
                 {
                     $class = (($lineCount % 2) == 0) ? ' even' : ' odd';
                     $title .= '<tr class='.$class.'>
-        <td class="tl_file_list" style="width: 30%;"><span class="cp_files">'. $step['cp_files_expert'].'</span></td>
-        <td class="tl_file_list" style="width: 20%;"><span class="cp_interval">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_interval_expert']].'</span></td>
-        <td class="tl_file_list" style="width: 20%;"><span class="cp_type_of_test">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_type_of_test_expert']].'</span></td>
-        <td class="tl_file_list" style="width: 20%;"><span class="cp_action">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_action_expert']].'</span></td>
+        <td class="tl_file_list" style=""><span class="cp_files">'. $step['cp_files_expert'].'</span></td>
+        <td class="tl_file_list" style=""><span class="cp_interval">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_interval_expert']].'</span></td>
+        <td class="tl_file_list" style=""><span class="cp_type_of_test">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_type_of_test_expert']].'</span></td>
+        <td class="tl_file_list" style=""><span class="cp_action">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_action_expert']].'</span></td>
+        <td class="tl_file_list" style="text-align: center;"><span class="cp_step_start"><img width="16" height="16" title="Start Check Now"" alt="Start Check Now" src="system/modules/integrity_check/assets/start_icon.png"></span></td>
         <td class="tl_file_list" style="width: 10%;text-align: center;"><span class="cp_file_status">'. $check_status[$step['cp_files_expert']].'</span></td>
       </tr>
       ';
@@ -194,6 +197,7 @@ class DCA_integrity_check extends \Backend
 <table class="tl_listing_checks">
     <tr>
          <td class="tl_folder_tlist">'.$GLOBALS['TL_LANG']['tl_integrity_check']['expert_legend'].'</td>
+         <td class="tl_folder_tlist" style="text-align: center;">Check now</td>
          <td class="tl_folder_tlist" style="text-align: center;">'.$GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status'].'</td>
     </tr>
 ';
@@ -202,6 +206,7 @@ class DCA_integrity_check extends \Backend
                 $title .='
     <tr>
         <td class="tl_file_list">'.$GLOBALS['TL_LANG']['tl_integrity_check']['update_check'][0].'</td>
+        <td class="tl_file_list" style="width: 20%;text-align: center;"><span class="cp_step_start"><img width="16" height="16" title="Start Check Now"" alt="Start Check Now" src="system/modules/integrity_check/assets/start_icon.png"></span></td>
         <td class="tl_file_list" style="width: 10%;text-align: center;"><span class="cp_file_status">'. $check_status['contao_update_check'].'</span></td>
     </tr>
 ';
@@ -211,6 +216,7 @@ class DCA_integrity_check extends \Backend
             $title .='
     <tr>
         <td class="tl_file_list">'.$GLOBALS['TL_LANG']['tl_integrity_check']['install_count_check'][0].'</td>
+        <td class="tl_file_list" style="width: 20%;text-align: center;"><span class="cp_step_start"><img width="16" height="16" title="Start Check Now"" alt="Start Check Now" src="system/modules/integrity_check/assets/start_icon.png"></span></td>
         <td class="tl_file_list" style="width: 10%;text-align: center;"><span class="cp_file_status">'. $check_status['install_count_check'].'</span></td>
     </tr>
 ';
