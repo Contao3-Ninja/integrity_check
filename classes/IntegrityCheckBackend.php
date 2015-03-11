@@ -37,18 +37,22 @@ class IntegrityCheckBackend extends \Backend
      */
     protected static $check_plan = array();
     
+    /**
+     * Static objects
+     * @var string
+     */
+    protected static $file_list = '';
+    
     protected static function checkPreparation()
     {
-        \System::log('Start '.__FUNCTION__, __FUNCTION__, TL_CRON);
         if (0 == count(static::$check_plan))
         {
             static::$check_plan = static::getCheckPlan();
         }
     }
+    
     public static function checkAll()
     {
-        \System::log('Start '.__FUNCTION__, __FUNCTION__, TL_CRON);
-        
         $ret = static::checkFiles();
         \System::log('checkFiles Status '.(int)$ret, __FUNCTION__, TL_CRON);
         
@@ -63,6 +67,26 @@ class IntegrityCheckBackend extends \Backend
     {
         \System::log('Start '.__FUNCTION__, __FUNCTION__, TL_CRON);
         static::checkPreparation();
+        static::$file_list = static::getFileList();
+        
+        if (false === static::$check_plan || 
+            false === static::$file_list)
+        {
+        	return false;
+        }
+        
+        foreach (static::$check_plan as $check_plan_step)
+        {
+            switch ($check_plan_step['cp_type_of_test'])
+            {
+            	case 'md5' :
+            	    static::checkFileMD5($check_plan_step['cp_files']);
+            	    break;
+            	case 'timestamp' :
+            	    static::checkFileTimestamp($check_plan_step['cp_files']);
+            	    break;
+            }
+        }
 
         return true;
     }
@@ -75,11 +99,10 @@ class IntegrityCheckBackend extends \Backend
         return true;
     }
     
-    public static function checkContaoUpdate($id = 0)
+    public static function checkContaoUpdate()
     {
         //http://www.inetrobots.com/liveupdate/version.txt
         //http://www.inetrobots.com/liveupdate/lts-version.txt
-        \System::log('Start '.__FUNCTION__, __FUNCTION__, TL_CRON);
         static::checkPreparation();
         
         //offline
@@ -124,7 +147,6 @@ class IntegrityCheckBackend extends \Backend
     
     public static function checkInstallCount()
     {
-        \System::log('Start '.__FUNCTION__, __FUNCTION__, TL_CRON);
         static::checkPreparation();
         
         if ( $GLOBALS['TL_CONFIG']['installCount'] < 3 )
@@ -140,7 +162,6 @@ class IntegrityCheckBackend extends \Backend
     
     protected static function getCheckPlan()
     {
-        \System::log('Start '.__FUNCTION__, __FUNCTION__, TL_CRON);
         $check_plan = array();
         $objCheckPlan = \Database::getInstance()
                             ->prepare("SELECT
@@ -170,12 +191,12 @@ class IntegrityCheckBackend extends \Backend
         $check_plan['alternate_email'] = ($objCheckPlan->alternate_email) ? $objCheckPlan->alternate_email : false;
         $check_plan['update']          = ($objCheckPlan->update_check) ? 1 : 0;
         $check_plan['install_count']   = ($objCheckPlan->install_count_check) ? 1 : 0;
+
         return $check_plan;
     }
     
     protected static function setCheckStatus($cp_file, $status, $check_plan_id)
 	{
-	    \System::log('Start '.__FUNCTION__.'-'.$cp_file.'-'.(int)$status, __FUNCTION__, TL_CRON);
 	    //0=not tested, true=ok, false=not ok, 3=warning
 	    if ($status === true) 
 	    {
@@ -217,5 +238,126 @@ class IntegrityCheckBackend extends \Backend
         }   
 	    return ;
 	}//setCheckStatus
+	
+	/**
+	 * Filelist with checksums
+	 * @return    array    file,checksum_file,checksum_code,contao_version
+	 */
+	protected static function getFileList()
+	{
+	    $contao_version_live = VERSION . '.' . BUILD;
+	    if (file_exists(TL_ROOT . '/system/modules/integrity_check/config/file_list_'.$contao_version_live.'.json'))
+	    {
+	        //require(TL_ROOT . '/system/modules/integrity_check/config/file_list_'.$contao_version_live.'.php');
+	        return json_decode(file_get_contents(TL_ROOT . '/system/modules/integrity_check/config/file_list_'.$contao_version_live.'.json'));
+	    }
+	    return false;
+	}//getFileList
 
+	/**
+	 * Check files via MD5
+	 *
+	 * @param string $cp_file
+	 * @return bool	 true = file is corrupt, false = file is not corrupt or no check
+	 */
+	protected function checkFileMD5($cp_file)
+	{
+	    if ($cp_file == '')
+	    {
+	        return false; // kein check
+	    }
+	    
+	    foreach (static::$file_list as $files)
+	    {
+	        if (count($files)==2)
+	        {
+	            //new variant
+	            list($file, $md5_file) = $files;
+	        }
+	        else
+	        {
+	            //old variant
+	            list($file, $md5_file, $md5_code) = $files;
+	        }
+	        if ($file == $cp_file)
+	        {
+	            break; // gefunden
+	        }
+	    }
+	    
+	    $status = true;
+	    if (is_file(TL_ROOT . '/' . $cp_file))
+	    {
+	        $buffer = str_replace("\r", '', file_get_contents(TL_ROOT . '/' . $cp_file));
+	        $status = true;
+	        //Check the content
+	        if (strncmp(md5($buffer), $md5_file, 10) !== 0)
+	        {
+	            static::setCheckStatus($cp_file, false);
+	            return true;
+	        }
+	        unset($buffer);
+	    }
+	    else
+	    {
+	        static::setCheckStatus($cp_file, 0); //nicht pruefbar
+	        return false;
+	    }
+	    
+	    return false;
+	}
+	
+	/**
+	 * Check files via timestamp
+	 *
+	 * @param string $cp_file
+	 * @return bool	 true = file is corrupt, false = file is not corrupt or no check
+	 */
+	protected function checkFileTimestamp($cp_file)
+	{
+	    $cp_file_ts = 0;
+	
+	    if ($cp_file == '')
+	    {
+	        return false; // kein check
+	    }
+	    
+	    $objTimestamps = \Database::getInstance()
+                            ->prepare("SELECT `check_timestamps` FROM `tl_integrity_timestamps` WHERE `id`=?")
+                            ->execute(1);
+	    if ($objTimestamps->numRows < 1)
+	    {
+	        static::setCheckStatus($cp_file, 0);// nicht pruefbar
+	        return false; // kein check möglich
+	    }
+	    
+	    $arrTimestamps = deserialize($objTimestamps->check_timestamps);
+	    
+	    if ( !isset($arrTimestamps[$cp_file]) )
+	    {
+	        static::setCheckStatus($cp_file, 0);// nicht pruefbar
+	        return false; // kein check möglich
+	    }
+	    
+	    if (is_file(TL_ROOT . '/' . $cp_file))
+	    {
+	        $objFile = new \File($cp_file);
+	        $cp_file_ts = $objFile->mtime;
+	        $objFile->close();
+	    }
+	    else
+	    {
+	        static::setCheckStatus($cp_file, 0);// nicht pruefbar
+	        return false; // kein check möglich
+	    }
+	    
+	    if ( $cp_file_ts != $arrTimestamps[$cp_file])
+	    {
+	        static::setCheckStatus($cp_file, false);
+	        return true;
+	    }
+	    
+	    static::setCheckStatus($cp_file, true);
+	    return false;
+	}
 }
