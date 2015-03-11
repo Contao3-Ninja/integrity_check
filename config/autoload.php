@@ -2,12 +2,10 @@
 
 /**
  * Contao Open Source CMS
- * 
- * Copyright (C) 2005-2014 Leo Feyer
- * 
- * @package Integrity_check
- * @link    http://contao.org
- * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
+ *
+ * Copyright (c) 2005-2015 Leo Feyer
+ *
+ * @license LGPL-3.0+
  */
 
 
@@ -25,10 +23,11 @@ ClassLoader::addNamespaces(array
  */
 ClassLoader::addClasses(array
 (
-	// Modules
-	'BugBuster\IntegrityCheck\Integrity_Check'      => 'system/modules/integrity_check/modules/Integrity_Check.php',
-
 	// Classes
-    'BugBuster\IntegrityCheck\DCA_integrity_check'  => 'system/modules/integrity_check/classes/DCA_integrity_check.php',
-	'BugBuster\IntegrityCheck\IntegrityCheckHelper' => 'system/modules/integrity_check/classes/IntegrityCheckHelper.php',
+	'BugBuster\IntegrityCheck\DCA_integrity_check'   => 'system/modules/integrity_check/classes/DCA_integrity_check.php',
+	'BugBuster\IntegrityCheck\IntegrityCheckBackend' => 'system/modules/integrity_check/classes/IntegrityCheckBackend.php',
+	'BugBuster\IntegrityCheck\IntegrityCheckHelper'  => 'system/modules/integrity_check/classes/IntegrityCheckHelper.php',
+
+	// Modules
+	'BugBuster\IntegrityCheck\Integrity_Check'       => 'system/modules/integrity_check/modules/Integrity_Check.php',
 ));

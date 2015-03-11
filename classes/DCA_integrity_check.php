@@ -477,7 +477,7 @@ class DCA_integrity_check extends \Backend
      */
     protected function getCheckStatus($CheckPlanId)
     {
-        // 0=not tested, 1=ok, 2=not ok
+        // 0=not tested, 1=ok, 2=not ok, 3=warning
         $icon_0 = \Image::getHtml('invisible.gif', $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_0'], 'title="' .specialchars($GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_0']).'"');
         $icon_1 = \Image::getHtml('ok.gif'       , $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_1'], 'title="' .specialchars($GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_1']).' (%s)"');
         $icon_2 = \Image::getHtml('error.gif'    , $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_2'], 'title="' .specialchars($GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_2']).' (%s)"');
@@ -525,7 +525,7 @@ class DCA_integrity_check extends \Backend
                         $arrFiles[$objCheckStatus->check_object] = sprintf($icon_2, $check_datetime) . $icon_start;
                         break;
                     case 3 :
-                        $arrFiles[$objCheckStatus->check_object] = sprintf($icon_3, $check_datetime);
+                        $arrFiles[$objCheckStatus->check_object] = sprintf($icon_3, $check_datetime) . $icon_start;
                         break;
                     default:
                         break;
@@ -620,7 +620,7 @@ class DCA_integrity_check extends \Backend
     {
         if (strlen(\Input::get('checkid')))
         {
-            //TODO Checken
+            \IntegrityCheck\IntegrityCheckBackend::checkAll();
             $this->redirect($this->getReferer());
         }
     
