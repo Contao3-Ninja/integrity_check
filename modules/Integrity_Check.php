@@ -340,6 +340,20 @@ class Integrity_Check extends \Frontend
 	    {
 	        return false; // kein check
 	    }
+	    
+	    if (is_file(TL_ROOT . '/' . $cp_file))
+	    {
+	        $objFile = new \File($cp_file);
+	        $cp_file_ts = $objFile->mtime;
+	        $objFile->close();
+	    }
+	    else
+	    {
+	        $this->setCheckStatus($cp_file, 0);// nicht pruefbar
+	        $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['file_not_found'], $cp_file), 'Integrity_Check checkFileTimestamp()', TL_ERROR);
+	        return false; // kein check möglich
+	    }
+	    
 	    $objTimestamps = \Database::getInstance()->prepare("SELECT `check_timestamps` FROM `tl_integrity_timestamps` WHERE `id`=?")
 	                                             ->execute(1);
 	    if ($objTimestamps->numRows < 1)
@@ -359,19 +373,7 @@ class Integrity_Check extends \Frontend
 	        return false; // kein check möglich
 	    }
 	    
-	    if (is_file(TL_ROOT . '/' . $cp_file))
-	    {
-	        $objFile = new \File($cp_file);
-	        $cp_file_ts = $objFile->mtime;
-	        $objFile->close();
-	    }
-	    else 
-	    {
-	        $this->setCheckStatus($cp_file, 0);// nicht pruefbar
-	        $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['file_not_found'], $cp_file), 'Integrity_Check checkFileTimestamp()', TL_ERROR);
-	        return false; // kein check möglich
-	    }	    
-	    
+    
 	    //Ergebniss verarbeiten, Datei und Zeitstempel vorhanden
 	    if ( $cp_file_ts != $arrTimestamps[$cp_file])
 	    {

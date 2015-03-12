@@ -75,8 +75,9 @@ class IntegrityCheckBackend extends \Backend
         	return false;
         }
         
-        foreach (static::$check_plan as $check_plan_step)
+        foreach (static::$check_plan['plans'] as $check_plan_step)
         {
+            //echo "<html><pre>Step Type ".$check_plan_step['cp_type_of_test']."</pre><html>";exit;
             switch ($check_plan_step['cp_type_of_test'])
             {
             	case 'md5' :
@@ -88,6 +89,25 @@ class IntegrityCheckBackend extends \Backend
             }
         }
 
+        if ( count( (array)static::$check_plan['plans_expert'] ) > 0 )
+        {
+            //Zeilenweise den Expert Plan durchgehen
+            foreach (static::$check_plan['plans_expert'] as $check_plan_step)
+            {
+                switch ($check_plan_step['cp_type_of_test_expert'])
+                {
+                    case 'md5' :
+                        static::checkFileMD5($check_plan_step['cp_files_expert']);
+                        break;
+                    case 'timestamp' :
+                        static::checkFileTimestamp($check_plan_step['cp_files_expert']);
+                        break;
+                }
+            }
+        }
+        
+        
+        
         return true;
     }
     
@@ -197,6 +217,7 @@ class IntegrityCheckBackend extends \Backend
     
     protected static function setCheckStatus($cp_file, $status, $check_plan_id)
 	{
+	    //if ($cp_file == '.htaccess') { echo "<html><pre>".$cp_file.'-'.(int)$status.'-'.$check_plan_id."</pre><html>";exit;}
 	    //0=not tested, true=ok, false=not ok, 3=warning
 	    if ($status === true) 
 	    {
@@ -266,7 +287,7 @@ class IntegrityCheckBackend extends \Backend
 	    {
 	        return false; // kein check
 	    }
-	    
+	    //echo "<html><pre>".print_r(static::$file_list,true)."</pre></html>";exit;
 	    foreach (static::$file_list as $files)
 	    {
 	        if (count($files)==2)
@@ -284,7 +305,7 @@ class IntegrityCheckBackend extends \Backend
 	            break; // gefunden
 	        }
 	    }
-	    
+	    //echo "<html><pre>".print_r($cp_file,true)."</pre></html>";exit;
 	    $status = true;
 	    if (is_file(TL_ROOT . '/' . $cp_file))
 	    {
@@ -293,17 +314,20 @@ class IntegrityCheckBackend extends \Backend
 	        //Check the content
 	        if (strncmp(md5($buffer), $md5_file, 10) !== 0)
 	        {
-	            static::setCheckStatus($cp_file, false);
+	            //echo "<html><pre> ungleich ".print_r($cp_file,true)."</pre></html>";exit;
+	            static::setCheckStatus($cp_file, false, static::$check_plan['id']);
 	            return true;
 	        }
 	        unset($buffer);
 	    }
 	    else
 	    {
-	        static::setCheckStatus($cp_file, 0); //nicht pruefbar
+	        //echo "<html><pre> nicht prüfbar ".print_r($cp_file,true)."</pre></html>";exit;
+	        static::setCheckStatus($cp_file, 0, static::$check_plan['id']); //nicht pruefbar
 	        return false;
 	    }
-	    
+	    //echo "<html><pre> gleich ".print_r($cp_file,true)."</pre></html>";exit;
+	    static::setCheckStatus($cp_file, true, static::$check_plan['id']);
 	    return false;
 	}
 	
@@ -321,24 +345,9 @@ class IntegrityCheckBackend extends \Backend
 	    {
 	        return false; // kein check
 	    }
+	    \System::loadLanguageFile('tl_integrity_check');
 	    
-	    $objTimestamps = \Database::getInstance()
-                            ->prepare("SELECT `check_timestamps` FROM `tl_integrity_timestamps` WHERE `id`=?")
-                            ->execute(1);
-	    if ($objTimestamps->numRows < 1)
-	    {
-	        static::setCheckStatus($cp_file, 0);// nicht pruefbar
-	        return false; // kein check möglich
-	    }
-	    
-	    $arrTimestamps = deserialize($objTimestamps->check_timestamps);
-	    
-	    if ( !isset($arrTimestamps[$cp_file]) )
-	    {
-	        static::setCheckStatus($cp_file, 0);// nicht pruefbar
-	        return false; // kein check möglich
-	    }
-	    
+	    //Datei vorhanden? Zeitstempel holen
 	    if (is_file(TL_ROOT . '/' . $cp_file))
 	    {
 	        $objFile = new \File($cp_file);
@@ -347,17 +356,39 @@ class IntegrityCheckBackend extends \Backend
 	    }
 	    else
 	    {
-	        static::setCheckStatus($cp_file, 0);// nicht pruefbar
+	        static::setCheckStatus($cp_file, 0, static::$check_plan['id']);// nicht pruefbar
+	        \System::log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['file_not_found'], $cp_file), 'IntegrityCheckBackend checkFileTimestamp()', TL_ERROR);
 	        return false; // kein check möglich
 	    }
 	    
+	    //Zeitstempel aus DB holen
+	    $objTimestamps = \Database::getInstance()
+                            ->prepare("SELECT `check_timestamps` FROM `tl_integrity_timestamps` WHERE `id`=?")
+                            ->execute(1);
+	    if ($objTimestamps->numRows < 1)
+	    {
+	        static::setCheckStatus($cp_file, 0, static::$check_plan['id']);// nicht pruefbar
+	        \System::log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['timestamp_not_found'], $cp_file), 'IntegrityCheckBackend checkFileTimestamp()', TL_ERROR);
+	        return false; // kein check möglich
+	    }
+	    
+	    $arrTimestamps = deserialize($objTimestamps->check_timestamps);
+	    
+	    if ( !isset($arrTimestamps[$cp_file]) )
+	    {
+	        static::setCheckStatus($cp_file, 0, static::$check_plan['id']);// nicht pruefbar
+	        \System::log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['timestamp_not_found'], $cp_file), 'IntegrityCheckBackend checkFileTimestamp()', TL_ERROR);
+	        return false; // kein check möglich
+	    }
+	    
+        //Zeitstempel vergleichen
 	    if ( $cp_file_ts != $arrTimestamps[$cp_file])
 	    {
-	        static::setCheckStatus($cp_file, false);
+	        static::setCheckStatus($cp_file, false, static::$check_plan['id']);
 	        return true;
 	    }
 	    
-	    static::setCheckStatus($cp_file, true);
+	    static::setCheckStatus($cp_file, true, static::$check_plan['id']);
 	    return false;
 	}
 }
