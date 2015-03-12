@@ -69,6 +69,7 @@ $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_0'] = 'unchecked';
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_1'] = 'OK';
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_2'] = 'corrupt';
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_3'] = 'Warning';
+$GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_4'] = 'File not found';
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_step_start_now'] = 'Start this test now';
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_start_now_all']  = array('Start all tests now','Start all tests now');
 

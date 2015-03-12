@@ -318,7 +318,7 @@ class Integrity_Check extends \Frontend
         }
         else
         {
-            $this->setCheckStatus($cp_file, 0); //nicht pruefbar
+            $this->setCheckStatus($cp_file, 4); //nicht pruefbar
             $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['file_not_found'], $cp_file), 'Integrity_Check checkFileMD5()', TL_CRON);
         }
         
@@ -349,7 +349,7 @@ class Integrity_Check extends \Frontend
 	    }
 	    else
 	    {
-	        $this->setCheckStatus($cp_file, 0);// nicht pruefbar
+	        $this->setCheckStatus($cp_file, 4);// nicht pruefbar
 	        $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['file_not_found'], $cp_file), 'Integrity_Check checkFileTimestamp()', TL_ERROR);
 	        return false; // kein check möglich
 	    }
@@ -966,31 +966,3 @@ class Integrity_Check extends \Frontend
 	}
 	
 }//class
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -39,6 +39,9 @@ $GLOBALS['TL_LANG']['tl_integrity_check']['cp_files']['0']                      
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_files']['1']                           = 'Выберите файлы для проверки';
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_interval']['0']                        = 'Время';
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_interval']['1']                        = 'Время проверки';
+$GLOBALS['TL_LANG']['tl_integrity_check']['cp_start_now_all']['0']                   = 'Запустить тест';
+$GLOBALS['TL_LANG']['tl_integrity_check']['cp_start_now_all']['1']                   = 'Запустить тест';
+$GLOBALS['TL_LANG']['tl_integrity_check']['cp_step_start_now']                       = 'Запустить тест';
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_type_of_test']['0']                    = 'Идентификация';
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_type_of_test']['1']                    = 'Вид идентификации';
 $GLOBALS['TL_LANG']['tl_integrity_check']['daily']                                   = 'ежедневно';

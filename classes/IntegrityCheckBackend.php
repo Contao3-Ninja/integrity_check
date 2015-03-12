@@ -54,13 +54,10 @@ class IntegrityCheckBackend extends \Backend
     public static function checkAll()
     {
         $ret = static::checkFiles();
-        //\System::log('checkFiles Status '.(int)$ret, __FUNCTION__, TL_CRON);
         
         $ret = static::checkContaoUpdate();
-        //\System::log('checkContaoUpdate Status '.(int)$ret, __FUNCTION__, TL_CRON);
         
         $ret = static::checkInstallCount();
-        //\System::log('checkInstallCount Status '.(int)$ret, __FUNCTION__, TL_CRON);
     }
 
     public static function checkSingle($singletest)
@@ -98,7 +95,6 @@ class IntegrityCheckBackend extends \Backend
     
     public static function checkFiles()
     {
-        //\System::log('Start '.__FUNCTION__, __FUNCTION__, TL_CRON);
         static::checkPreparation();
         static::$file_list = static::getFileList();
         
@@ -110,7 +106,6 @@ class IntegrityCheckBackend extends \Backend
         
         foreach (static::$check_plan['plans'] as $check_plan_step)
         {
-            //echo "<html><pre>Step Type ".$check_plan_step['cp_type_of_test']."</pre><html>";exit;
             switch ($check_plan_step['cp_type_of_test'])
             {
             	case 'md5' :
@@ -146,9 +141,32 @@ class IntegrityCheckBackend extends \Backend
     
     public static function checkFile($file)
     {
-        //\System::log('Start '.__FUNCTION__, __FUNCTION__, TL_CRON);
         static::checkPreparation();
-        
+        static::$file_list = static::getFileList();
+        if ('.htaccess' == $file) 
+        {
+        	static::checkFileTimestamp($file);
+        }
+        else 
+        {
+            //Zeilenweise den Plan durchgehen und die Daten für Datei finden
+            foreach (static::$check_plan['plans'] as $check_plan_step)
+            {
+                if ($file == $check_plan_step['cp_files'])
+                {
+                    switch ($check_plan_step['cp_type_of_test'])
+                    {
+                    	case 'md5' :
+                    	    static::checkFileMD5($check_plan_step['cp_files']);
+                    	    break;
+                    	case 'timestamp' :
+                    	    static::checkFileTimestamp($check_plan_step['cp_files']);
+                    	    break;
+                    }
+                    return true;
+                }
+            }
+        }
         return true;
     }
     
@@ -251,7 +269,7 @@ class IntegrityCheckBackend extends \Backend
     protected static function setCheckStatus($cp_file, $status, $check_plan_id)
 	{
 	    //if ($cp_file == '.htaccess') { echo "<html><pre>".$cp_file.'-'.(int)$status.'-'.$check_plan_id."</pre><html>";exit;}
-	    //0=not tested, true=ok, false=not ok, 3=warning
+	    //0=not tested, true=ok, false=not ok, 3=warning, 4=file not found
 	    if ($status === true) 
 	    {
 	        $status = 1;
@@ -356,7 +374,7 @@ class IntegrityCheckBackend extends \Backend
 	    else
 	    {
 	        //echo "<html><pre> nicht prüfbar ".print_r($cp_file,true)."</pre></html>";exit;
-	        static::setCheckStatus($cp_file, 0, static::$check_plan['id']); //nicht pruefbar
+	        static::setCheckStatus($cp_file, 4, static::$check_plan['id']); //nicht pruefbar
 	        return false;
 	    }
 	    //echo "<html><pre> gleich ".print_r($cp_file,true)."</pre></html>";exit;
@@ -389,7 +407,7 @@ class IntegrityCheckBackend extends \Backend
 	    }
 	    else
 	    {
-	        static::setCheckStatus($cp_file, 0, static::$check_plan['id']);// nicht pruefbar
+	        static::setCheckStatus($cp_file, 4, static::$check_plan['id']);// nicht pruefbar
 	        \System::log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['file_not_found'], $cp_file), 'IntegrityCheckBackend checkFileTimestamp()', TL_ERROR);
 	        return false; // kein check möglich
 	    }
