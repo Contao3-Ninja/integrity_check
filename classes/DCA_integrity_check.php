@@ -44,6 +44,12 @@ class DCA_integrity_check extends \Backend
         {
             $this->importCheckPlan();
         }
+        
+        if (strlen(\Input::get('singletest'))  ) 
+        {
+            IntegrityCheckBackend::checkSingle(\Input::get('singletest'));
+            $this->redirect($this->getReferer());
+        }
     }
 
     /**
@@ -483,12 +489,12 @@ class DCA_integrity_check extends \Backend
         $icon_2 = \Image::getHtml('error.gif'    , $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_2'], 'title="' .specialchars($GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_2']).' (%s)"');
         $icon_3 = \Image::getHtml('about.gif'    , $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_3'], 'title="' .specialchars($GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_3']).' (%s)"');
 
-        $icon_start  = '<span class="cp_step_start">';
+        $href = '&amp;cpid='.$CheckPlanId.'&amp;singletest=%s';
+        $icon_start  = '<span class="cp_step_start"><a href="'.$this->addToUrl($href).'" title="'.specialchars($GLOBALS['TL_LANG']['tl_integrity_check']['cp_step_start_now']).'">';
         $icon_start .= \Image::getHtml('system/modules/integrity_check/assets/start_icon.png', $GLOBALS['TL_LANG']['tl_integrity_check']['cp_step_start_now'], 'title="' .specialchars($GLOBALS['TL_LANG']['tl_integrity_check']['cp_step_start_now']).'"');
-        $icon_start .= '</span>';
+        $icon_start .= '</a></span>';
         
-        $icon_0 .= $icon_start;
-        
+       
         $arrFiles = array
         (
             'index.php'               => $icon_0,
@@ -501,7 +507,8 @@ class DCA_integrity_check extends \Backend
         );
         
         $objCheckStatus = \Database::getInstance()
-                                ->prepare("SELECT 
+                                ->prepare("SELECT
+                                                `id`,
                                                 `tstamp` ,
                                                 `check_object` ,
                                                 `check_object_status`
@@ -522,10 +529,10 @@ class DCA_integrity_check extends \Backend
                         $arrFiles[$objCheckStatus->check_object] = sprintf($icon_1, $check_datetime);
                         break;
                     case 2 :
-                        $arrFiles[$objCheckStatus->check_object] = sprintf($icon_2, $check_datetime) . $icon_start;
+                        $arrFiles[$objCheckStatus->check_object] = sprintf($icon_2, $check_datetime) . sprintf($icon_start, $objCheckStatus->id);
                         break;
                     case 3 :
-                        $arrFiles[$objCheckStatus->check_object] = sprintf($icon_3, $check_datetime) . $icon_start;
+                        $arrFiles[$objCheckStatus->check_object] = sprintf($icon_3, $check_datetime) . sprintf($icon_start, $objCheckStatus->id);
                         break;
                     default:
                         break;

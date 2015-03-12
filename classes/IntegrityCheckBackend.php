@@ -54,18 +54,51 @@ class IntegrityCheckBackend extends \Backend
     public static function checkAll()
     {
         $ret = static::checkFiles();
-        \System::log('checkFiles Status '.(int)$ret, __FUNCTION__, TL_CRON);
+        //\System::log('checkFiles Status '.(int)$ret, __FUNCTION__, TL_CRON);
         
         $ret = static::checkContaoUpdate();
-        \System::log('checkContaoUpdate Status '.(int)$ret, __FUNCTION__, TL_CRON);
+        //\System::log('checkContaoUpdate Status '.(int)$ret, __FUNCTION__, TL_CRON);
         
         $ret = static::checkInstallCount();
-        \System::log('checkInstallCount Status '.(int)$ret, __FUNCTION__, TL_CRON);
+        //\System::log('checkInstallCount Status '.(int)$ret, __FUNCTION__, TL_CRON);
     }
 
+    public static function checkSingle($singletest)
+    {
+        $objSingleTest = \Database::getInstance()
+                            ->prepare("SELECT
+                                        `check_object`
+                                        FROM
+                                        `tl_integrity_check_status`
+                                        WHERE
+                                        `id`=?"
+                                )
+                            ->execute($singletest);
+        if ($objSingleTest->numRows < 1)
+        {
+            return false;
+        }
+        switch ($objSingleTest->check_object) 
+        {
+            case 'contao_update_check':
+                static::checkContaoUpdate();
+                break;
+            case 'install_count_check':
+                static::checkInstallCount();
+                break;
+            default:
+                static::checkFile($objSingleTest->check_object);
+            break;
+        }
+        
+        return ;
+    
+    }
+    
+    
     public static function checkFiles()
     {
-        \System::log('Start '.__FUNCTION__, __FUNCTION__, TL_CRON);
+        //\System::log('Start '.__FUNCTION__, __FUNCTION__, TL_CRON);
         static::checkPreparation();
         static::$file_list = static::getFileList();
         
@@ -113,7 +146,7 @@ class IntegrityCheckBackend extends \Backend
     
     public static function checkFile($file)
     {
-        \System::log('Start '.__FUNCTION__, __FUNCTION__, TL_CRON);
+        //\System::log('Start '.__FUNCTION__, __FUNCTION__, TL_CRON);
         static::checkPreparation();
         
         return true;
