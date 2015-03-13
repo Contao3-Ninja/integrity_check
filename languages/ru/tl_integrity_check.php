@@ -35,6 +35,7 @@ $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_0']                   
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_1']                        = 'в порядке';
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_2']                        = 'поврежден';
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_3']                        = 'Предупреждение';
+$GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_4']                        = 'Файл не найден';
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_files']['0']                           = 'Файлы';
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_files']['1']                           = 'Выберите файлы для проверки';
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_interval']['0']                        = 'Время';

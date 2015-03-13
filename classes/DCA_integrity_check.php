@@ -488,7 +488,7 @@ class DCA_integrity_check extends \Backend
         $icon_1 = \Image::getHtml('ok.gif'       , $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_1'], 'title="' .specialchars($GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_1']).' (%s)"');
         $icon_2 = \Image::getHtml('error.gif'    , $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_2'], 'title="' .specialchars($GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_2']).' (%s)"');
         $icon_3 = \Image::getHtml('about.gif'    , $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_3'], 'title="' .specialchars($GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_3']).' (%s)"');
-        $icon_4 = \Image::getHtml('error_404.gif', $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_4'], 'title="' .specialchars($GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_4']).' (%s)"');
+        $icon_4 = \Image::getHtml('error.gif'    , $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_4'], 'title="' .specialchars($GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_4']).' (%s)"');
         
         $href = '&amp;cpid='.$CheckPlanId.'&amp;singletest=%s';
         $icon_start  = '<span class="cp_step_start"><a href="'.$this->addToUrl($href).'" title="'.specialchars($GLOBALS['TL_LANG']['tl_integrity_check']['cp_step_start_now']).'">';
