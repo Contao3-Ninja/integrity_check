@@ -63,7 +63,6 @@ class Integrity_Check extends \Frontend
     public function checkFilesMinutely()
     {
     	$this->cron_interval = 'minutely';
-    	//$this->log('Start: '.$this->cron_interval, 'Integrity_Check checkFilesMinutely()', TL_CRON);
     	$this->run();
     }
     
@@ -73,7 +72,6 @@ class Integrity_Check extends \Frontend
     public function checkFilesHourly()
     {
         $this->cron_interval = 'hourly';
-        //$this->log('Start: '.$this->cron_interval, 'Integrity_Check checkFilesHourly()', TL_CRON);
         $this->run();
     }
     /**
@@ -82,7 +80,6 @@ class Integrity_Check extends \Frontend
     public function checkFilesDaily()
     {
         $this->cron_interval = 'daily';
-        //$this->log('Start: '.$this->cron_interval, 'Integrity_Check checkFilesDaily()', TL_CRON);
         $this->run();
     }
     /**
@@ -91,7 +88,6 @@ class Integrity_Check extends \Frontend
     public function checkFilesWeekly()
     {
         $this->cron_interval = 'weekly';
-        //$this->log('Start: '.$this->cron_interval, 'Integrity_Check checkFilesWeekly()', TL_CRON);
         $this->run();
     }
     /**
@@ -100,7 +96,6 @@ class Integrity_Check extends \Frontend
     public function checkFilesMonthly()
     {
         $this->cron_interval = 'monthly';
-        //$this->log('Start: '.$this->cron_interval, 'Integrity_Check checkFilesMonthly()', TL_CRON);
         $this->run();
     }
     
@@ -280,8 +275,6 @@ class Integrity_Check extends \Frontend
             {
             	$status = false;
             }
-            //DEV
-            //$this->log('Summen '.$cp_file.':'.md5($buffer).'-'.md5(preg_replace('@/\*.*\*/@Us', '', $buffer)), 'Integrity_Check MD5()', TL_ERROR);
             unset($buffer);
         }
         else
@@ -299,11 +292,9 @@ class Integrity_Check extends \Frontend
                     $this->fileEmailStatus[$cp_file] = true; // true = mail 
                     //wenn mail dann auch log
                     $this->fileLogStatus[$cp_file] = 'md5'; // true = log 
-                    //$this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['corrupt'], $cp_file) . ' ['.$GLOBALS['TL_LANG']['tl_integrity_check']['md5'].']', 'Integrity_Check checkFileMD5()', TL_ERROR);
                     break;
                 case 'only_logging':
                 	$this->fileLogStatus[$cp_file] = 'md5'; // true = log
-                    //$this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['corrupt'], $cp_file) . ' ['.$GLOBALS['TL_LANG']['tl_integrity_check']['md5'].']', 'Integrity_Check checkFileMD5()', TL_ERROR);
                     break;
             }
         }
@@ -385,11 +376,9 @@ class Integrity_Check extends \Frontend
 	                $this->fileEmailStatus[$cp_file] = true; // true = mail
 	                //wenn mail dann auch log
 	                $this->fileLogStatus[$cp_file] = 'timestamp'; // true = log
-	                //$this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['corrupt'], $cp_file) . ' ['.$GLOBALS['TL_LANG']['tl_integrity_check']['timestamp'].']', 'Integrity_Check checkFileTimestamp()', TL_ERROR);
 	                break;
 	            case 'only_logging':
 	            	$this->fileLogStatus[$cp_file] = 'timestamp'; // true = log
-	                //$this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['corrupt'], $cp_file) . ' ['.$GLOBALS['TL_LANG']['tl_integrity_check']['timestamp'].']', 'Integrity_Check checkFileTimestamp()', TL_ERROR);
 	                break;
 	        }
 	    }
@@ -447,7 +436,6 @@ class Integrity_Check extends \Frontend
 	    $contao_version_live = VERSION . '.' . BUILD;
 	    if (file_exists(TL_ROOT . '/system/modules/integrity_check/config/file_list_'.$contao_version_live.'.json')) 
 	    {
-	        //require(TL_ROOT . '/system/modules/integrity_check/config/file_list_'.$contao_version_live.'.php');
 	        $this->file_list = json_decode(file_get_contents(TL_ROOT . '/system/modules/integrity_check/config/file_list_'.$contao_version_live.'.json'));
 	    }
 	    return;
@@ -788,12 +776,6 @@ class Integrity_Check extends \Frontend
 	    }
 	    $this->setCheckStatus('contao_update_check', 0);
 	    return false; //test not possible
-	    /*
-	    else
-	    {
-	        //online test
-	    }
-	    */
 	}
 	
 	protected function sendWarningMail($message_number, $note1='', $note2='')
@@ -921,7 +903,6 @@ class Integrity_Check extends \Frontend
     	        if (true === (bool) $this->check_debug)
     	        {
     	            $this->log('Version Check, Blocking: No', 'Integrity_Check getWarningMailBlock()', TL_CRON);
-    	            //$this->log('Version Check SQL: '.print_r($objCheckBlock->query,true), 'Integrity_Check getWarningMailBlock()', TL_ERROR);
     	        }
     	        return false; //Blocking: No
     	    }
@@ -929,7 +910,6 @@ class Integrity_Check extends \Frontend
     	    if (true === (bool) $this->check_debug)
     	    {
     	        $this->log('Version Check, Blocking: Yes', 'Integrity_Check getWarningMailBlock()', TL_CRON);
-    	        //$this->log('Version Check SQL: '.print_r($objCheckBlock->query,true), 'Integrity_Check getWarningMailBlock()', TL_ERROR);
     	    }
     	    return true; //Blocking: Yes
 	    }
@@ -949,7 +929,6 @@ class Integrity_Check extends \Frontend
 	            if (true === (bool) $this->check_debug)
 	            {
 	                $this->log('Install Count Check, Blocking: No', 'Integrity_Check getWarningMailBlock()', TL_CRON);
-	                //$this->log('Install Count Check SQL: '.print_r($objCheckBlock->query,true), 'Integrity_Check getWarningMailBlock()', TL_ERROR);
 	            }
 	            return false; //Blocking: No
 	        }
@@ -957,7 +936,6 @@ class Integrity_Check extends \Frontend
 	        if (true === (bool) $this->check_debug)
 	        {
 	            $this->log('Install Count Check, Blocking: Yes', 'Integrity_Check getWarningMailBlock()', TL_CRON);
-	            //$this->log('Install Count Check SQL: '.print_r($objCheckBlock->query,true), 'Integrity_Check getWarningMailBlock()', TL_ERROR);
 	        }
 	        return true; //Blocking: Yes
 	    }

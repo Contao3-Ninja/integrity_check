@@ -268,7 +268,6 @@ class IntegrityCheckBackend extends \Backend
     
     protected static function setCheckStatus($cp_file, $status, $check_plan_id)
 	{
-	    //if ($cp_file == '.htaccess') { echo "<html><pre>".$cp_file.'-'.(int)$status.'-'.$check_plan_id."</pre><html>";exit;}
 	    //0=not tested, true=ok, false=not ok, 3=warning, 4=file not found
 	    if ($status === true) 
 	    {
@@ -320,7 +319,6 @@ class IntegrityCheckBackend extends \Backend
 	    $contao_version_live = VERSION . '.' . BUILD;
 	    if (file_exists(TL_ROOT . '/system/modules/integrity_check/config/file_list_'.$contao_version_live.'.json'))
 	    {
-	        //require(TL_ROOT . '/system/modules/integrity_check/config/file_list_'.$contao_version_live.'.php');
 	        return json_decode(file_get_contents(TL_ROOT . '/system/modules/integrity_check/config/file_list_'.$contao_version_live.'.json'));
 	    }
 	    return false;
@@ -338,7 +336,7 @@ class IntegrityCheckBackend extends \Backend
 	    {
 	        return false; // kein check
 	    }
-	    //echo "<html><pre>".print_r(static::$file_list,true)."</pre></html>";exit;
+
 	    foreach (static::$file_list as $files)
 	    {
 	        if (count($files)==2)
@@ -356,7 +354,7 @@ class IntegrityCheckBackend extends \Backend
 	            break; // gefunden
 	        }
 	    }
-	    //echo "<html><pre>".print_r($cp_file,true)."</pre></html>";exit;
+
 	    $status = true;
 	    if (is_file(TL_ROOT . '/' . $cp_file))
 	    {
@@ -365,7 +363,6 @@ class IntegrityCheckBackend extends \Backend
 	        //Check the content
 	        if (strncmp(md5($buffer), $md5_file, 10) !== 0)
 	        {
-	            //echo "<html><pre> ungleich ".print_r($cp_file,true)."</pre></html>";exit;
 	            static::setCheckStatus($cp_file, false, static::$check_plan['id']);
 	            return true;
 	        }
@@ -373,11 +370,9 @@ class IntegrityCheckBackend extends \Backend
 	    }
 	    else
 	    {
-	        //echo "<html><pre> nicht prüfbar ".print_r($cp_file,true)."</pre></html>";exit;
 	        static::setCheckStatus($cp_file, 4, static::$check_plan['id']); //nicht pruefbar
 	        return false;
 	    }
-	    //echo "<html><pre> gleich ".print_r($cp_file,true)."</pre></html>";exit;
 	    static::setCheckStatus($cp_file, true, static::$check_plan['id']);
 	    return false;
 	}
