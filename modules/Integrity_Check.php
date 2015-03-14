@@ -259,7 +259,7 @@ class Integrity_Check extends \Frontend
 	        {
 	            //old variant
 	            list($file, $md5_file, $md5_code) = $files;
-	            $md5_code=0;
+	            unset($md5_code);
 	        }
 	        if ($file == $cp_file) 
 	        {
