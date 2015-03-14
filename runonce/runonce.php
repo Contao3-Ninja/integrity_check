@@ -84,5 +84,3 @@ class IntegrityCheckRunonce extends Controller
 
 $objIntegrityCheckRunonce = new IntegrityCheckRunonce();
 $objIntegrityCheckRunonce->run();
-
-?>
