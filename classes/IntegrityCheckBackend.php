@@ -181,7 +181,7 @@ class IntegrityCheckBackend extends \Backend
         {
             $contao_version_live   = explode('.',VERSION . '.' . BUILD);
             $contao_version_latest = explode('.',$GLOBALS['TL_CONFIG']['latestVersion']);
-            if (static::$check_plan['debug'] == true)
+            if (true === (bool) static::$check_plan['debug'])
             {
                 \System::loadLanguageFile('tl_integrity_check');
                 \System::log($GLOBALS['TL_LANG']['tl_integrity_check']['update_check_contao_installed'] .': '.VERSION . '.' . BUILD, 'IntegrityCheckBackend checkContaoUpdate()', TL_CRON);
