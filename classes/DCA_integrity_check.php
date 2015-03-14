@@ -274,7 +274,6 @@ class DCA_integrity_check extends \Backend
      */
     public function refreshTimestamps($redirect = true)
     {
-        $insertId = 0;
         $arrFiles = array
         (
                 'index.php',
@@ -324,7 +323,6 @@ class DCA_integrity_check extends \Backend
      */
     public function refreshTimestampOnlyHtaccess()
     {
-        $insertId = 0;
         $status   = false;
         $arrTimestamps = array();
 
@@ -425,11 +423,11 @@ class DCA_integrity_check extends \Backend
                 'published'   => 0
         );
 
-        $objInsert = \Database::getInstance()->prepare("INSERT INTO 
-                                                            `tl_integrity_check` 
-                                                            %s")
-                                             ->set($arrSet)
-                                             ->execute();
+        \Database::getInstance()->prepare("INSERT INTO 
+                                            `tl_integrity_check` 
+                                            %s")
+                                 ->set($arrSet)
+                                 ->execute();
         $this->addConfirmationMessage($GLOBALS['TL_LANG']['tl_integrity_check']['init_confirm_message']);
         $this->redirect($this->getReferer());
          

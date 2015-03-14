@@ -259,6 +259,7 @@ class Integrity_Check extends \Frontend
 	        {
 	            //old variant
 	            list($file, $md5_file, $md5_code) = $files;
+	            $md5_code=0;
 	        }
 	        if ($file == $cp_file) 
 	        {
@@ -629,7 +630,6 @@ class Integrity_Check extends \Frontend
 	    $this->md5_block = true; //nicht noch ein MD5 Check
 	    
 	    //////////////// MAIL OUT \\\\\\\\\\\\\\\\
-	    $sendmail = false;
 	    // Notification
 	    list($ADMIN_NAME, $ADMIN_EMAIL) = \String::splitFriendlyEmail($GLOBALS['TL_CONFIG']['adminEmail']); //from index.php
 	    $objEmail = new \Email();

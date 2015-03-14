@@ -78,11 +78,6 @@ class IntegrityCheckHelper extends \System
                 $_SESSION["TL_INFO"] = array();
             }
     
-            // required extensions
-            $arrRequiredExtensions = array(
-                    'MultiColumnWizard' => 'multicolumnwizard'
-            );
-    
             // check for required extensions
             foreach ($arrRequiredExtensions as $key => $val)
             {

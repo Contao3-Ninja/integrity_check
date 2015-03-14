@@ -65,9 +65,9 @@ class IntegrityCheckRunonce extends Controller
 	    	    }
 	    	}
 	    	// Insert
-	    	$objInsert = $this->Database->prepare("INSERT INTO `tl_integrity_timestamps` ( `id` , `tstamp` , `check_timestamps` )
-	    	                                       VALUES (?, ?, ?)")
-	    	                            ->execute(1, time(), serialize($arrTimestamps));
+	    	$this->Database->prepare("INSERT INTO `tl_integrity_timestamps` ( `id` , `tstamp` , `check_timestamps` )
+                                       VALUES (?, ?, ?)")
+                            ->execute(1, time(), serialize($arrTimestamps));
 		} // if !tableExists('tl_integrity_timestamps')
 		
 		//From Integrity Check 3.1

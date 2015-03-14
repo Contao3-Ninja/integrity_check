@@ -53,11 +53,11 @@ class IntegrityCheckBackend extends \Backend
     
     public static function checkAll()
     {
-        $ret = static::checkFiles();
+        static::checkFiles();
         
-        $ret = static::checkContaoUpdate();
+        static::checkContaoUpdate();
         
-        $ret = static::checkInstallCount();
+        static::checkInstallCount();
     }
 
     public static function checkSingle($singletest)
@@ -348,6 +348,7 @@ class IntegrityCheckBackend extends \Backend
 	        {
 	            //old variant
 	            list($file, $md5_file, $md5_code) = $files;
+	            $md5_code = 0;
 	        }
 	        if ($file == $cp_file)
 	        {
@@ -355,11 +356,9 @@ class IntegrityCheckBackend extends \Backend
 	        }
 	    }
 
-	    $status = true;
 	    if (is_file(TL_ROOT . '/' . $cp_file))
 	    {
 	        $buffer = str_replace("\r", '', file_get_contents(TL_ROOT . '/' . $cp_file));
-	        $status = true;
 	        //Check the content
 	        if (strncmp(md5($buffer), $md5_file, 10) !== 0)
 	        {
