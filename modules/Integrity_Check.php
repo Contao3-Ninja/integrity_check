@@ -47,9 +47,9 @@ class Integrity_Check extends \Frontend
     protected $cron_interval = '';
     
     
-    const latest_version = '3.4.4';
-    const message_contao_update = 4;
-    const message_install_count = 5;
+    const LATEST_VERSION = '3.4.4';
+    const MESSAGE_CONTAO_UPDATE = 4;
+    const MESSAGE_INSTALL_COUNT = 5;
     
     /**
      * Filelist with checksums
@@ -109,7 +109,7 @@ class Integrity_Check extends \Frontend
         $retUpCh = $this->checkContaoUpdate();
         if ($retUpCh && $this->getWarningMailBlock($retUpCh) === false) //not blocked
         {
-            $this->sendWarningMail($this::message_contao_update, $retUpCh, VERSION . '.' . BUILD);
+            $this->sendWarningMail($this::MESSAGE_CONTAO_UPDATE, $retUpCh, VERSION . '.' . BUILD);
             $this->setWarningMailBlock($retUpCh);
         }
         
@@ -140,7 +140,7 @@ class Integrity_Check extends \Frontend
             else
             {
                 //-> $GLOBALS['TL_CONFIG']['installCount'] =3 ? dann mail und dann install_count_check auf 3 setzen, raus
-                $this->sendWarningMail($this::message_install_count);
+                $this->sendWarningMail($this::MESSAGE_INSTALL_COUNT);
                 $this->setWarningMailBlock('',$GLOBALS['TL_CONFIG']['installCount']);
                 $this->setCheckStatus('install_count_check', 3);
             }
@@ -234,7 +234,7 @@ class Integrity_Check extends \Frontend
 	        return false; // kein check
 	    }
 
-	    if ( version_compare(VERSION.'.'.BUILD, $this::latest_version, '>') )
+	    if ( version_compare(VERSION.'.'.BUILD, $this::LATEST_VERSION, '>') )
 	    {
 	        if (true === (bool) $this->check_debug)
 	        {
@@ -788,12 +788,12 @@ class Integrity_Check extends \Frontend
 	    }
 	    switch ($message_number)
 	    {
-	        case $this::message_contao_update:
-	            $message = 'message_'.$this::message_contao_update;
+	        case $this::MESSAGE_CONTAO_UPDATE:
+	            $message = 'message_'.$this::MESSAGE_CONTAO_UPDATE;
 	            $text = sprintf($GLOBALS['TL_LANG']['tl_integrity_check'][$message]   , $this->Environment->host . $this->Environment->path, $note1, $note2);
 	            break;
-	        case $this::message_install_count:
-	            $message = 'message_'.$this::message_install_count;
+	        case $this::MESSAGE_INSTALL_COUNT:
+	            $message = 'message_'.$this::MESSAGE_INSTALL_COUNT;
 	            $text = sprintf($GLOBALS['TL_LANG']['tl_integrity_check'][$message]   , $this->Environment->host . $this->Environment->path);
 	            break;
 	        default:

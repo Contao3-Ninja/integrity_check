@@ -24,7 +24,7 @@ ClassLoader::addNamespaces(array
 ClassLoader::addClasses(array
 (
 	// Classes
-	'BugBuster\IntegrityCheck\DCA_integrity_check'   => 'system/modules/integrity_check/classes/DCA_integrity_check.php',
+	'BugBuster\IntegrityCheck\DcaIntegrityCheck'     => 'system/modules/integrity_check/classes/DcaIntegrityCheck.php',
 	'BugBuster\IntegrityCheck\IntegrityCheckBackend' => 'system/modules/integrity_check/classes/IntegrityCheckBackend.php',
 	'BugBuster\IntegrityCheck\IntegrityCheckHelper'  => 'system/modules/integrity_check/classes/IntegrityCheckHelper.php',
 

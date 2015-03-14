@@ -3,7 +3,7 @@
 /**
  * Contao Open Source CMS, Copyright (C) 2005-2014 Leo Feyer
  *
- * Contao Module "Integrity Check" - DCA Helper Class DCA_integrity_check
+ * Contao Module "Integrity Check" - DCA Helper Class DcaIntegrityCheck
  *
  * @copyright  Glen Langer 2012..2014 <http://www.contao.glen-langer.de>
  * @author     Glen Langer (BugBuster)
@@ -19,14 +19,14 @@
 namespace BugBuster\IntegrityCheck;
 
 /**
- * DCA Helper Class DCA_integrity_check
+ * DCA Helper Class DcaIntegrityCheck
  * 
  * @copyright  Glen Langer 2012..2014 <http://www.contao.glen-langer.de>
  * @author     Glen Langer (BugBuster)
  * @package    Integrity_Check
  *
  */
-class DCA_integrity_check extends \Backend
+class DcaIntegrityCheck extends \Backend
 {
 
     /**
