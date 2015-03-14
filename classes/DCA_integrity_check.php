@@ -110,20 +110,20 @@ class DCA_integrity_check extends \Backend
         \Database::getInstance()->prepare("UPDATE 
                                                 tl_integrity_check 
                                             SET 
-                                                tstamp=". time() ."
+                                                tstamp=?
                                                 , published='" . ($blnVisible ? 1 : '') . "' 
                                             WHERE 
                                                 id=?")
-                                ->execute($intId);
+                                ->execute(time(),$intId);
         // There can be only one.
         \Database::getInstance()->prepare("UPDATE 
                                                 tl_integrity_check 
                                             SET 
-                                                tstamp=". time() ."
+                                                tstamp=?
                                                 , published='' 
                                             WHERE 
                                                 id!=?")
-                                ->execute($intId);
+                                ->execute(time(),$intId);
 
     }
 
@@ -243,11 +243,11 @@ class DCA_integrity_check extends \Backend
             \Database::getInstance()->prepare("UPDATE 
                                                     tl_integrity_check 
                                                 SET 
-                                                    tstamp=". time() ."
+                                                    tstamp=?
                                                     , published='' 
                                                 WHERE 
                                                     id!=?")
-                                    ->execute($dc->id);
+                                    ->execute(time(),$dc->id);
         }
         return $varValue;
     }
