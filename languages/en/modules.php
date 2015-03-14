@@ -7,7 +7,7 @@
  * Formerly known as TYPOlight Open Source CMS.
  *
  * PHP version 5
- * @copyright  Glen Langer 2012..2014 
+ * @copyright  Glen Langer 2012..2015 
  * @author     Glen Langer 
  * @package    Integrity_Check 
  * @license    LGPL 

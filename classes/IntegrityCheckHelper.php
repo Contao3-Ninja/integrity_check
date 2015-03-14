@@ -9,7 +9,7 @@
  * Modul Integrity Check - Helper 
  * 
  * PHP version 5
- * @copyright  Glen Langer 2012..2014
+ * @copyright  Glen Langer 2012..2015
  * @author     Glen Langer
  * @package    Integrity_Check
  * @license    LGPL
@@ -23,7 +23,7 @@ namespace BugBuster\IntegrityCheck;
 /**
  * Class IntegrityCheckHelper
  *
- * @copyright  Glen Langer 2012..2014
+ * @copyright  Glen Langer 2012..2015
  * @author     Glen Langer
  * @package    Integrity_Check
  */

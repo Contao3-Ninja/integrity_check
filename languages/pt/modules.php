@@ -2,12 +2,11 @@
 /**
  * TL_ROOT/system/modules/integrity_check/languages/pt/modules.php 
  * 
- * Contao extension: integrity_check 0.2.0 rc1 
  * Portugiesisch translation file 
  * 
- * Copyright : &copy; 2012 Glen Langer 
+ * Copyright : &copy; 2012..2015 Glen Langer 
  * License   : LGPL 
- * Author    : Glen Langer (BugBuster), http://www.contao.glen-langer.de 
+ * Author    : Glen Langer (BugBuster), http://contao.ninja 
  * Translator: Luciano Sportelli (ciaobello), https://www.contao-community.de/member.php?4042-ciaobello 
  * 
  * This file was created automatically be the Contao extension repository translation module.

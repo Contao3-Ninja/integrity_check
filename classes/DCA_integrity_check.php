@@ -5,7 +5,7 @@
  *
  * Contao Module "Integrity Check" - DCA Helper Class DcaIntegrityCheck
  *
- * @copyright  Glen Langer 2012..2014 <http://www.contao.glen-langer.de>
+ * @copyright  Glen Langer 2012..2015 <http://contao.ninja>
  * @author     Glen Langer (BugBuster)
  * @package    Integrity_Check
  * @license    LGPL
@@ -21,7 +21,7 @@ namespace BugBuster\IntegrityCheck;
 /**
  * DCA Helper Class DcaIntegrityCheck
  * 
- * @copyright  Glen Langer 2012..2014 <http://www.contao.glen-langer.de>
+ * @copyright  Glen Langer 2012..2015 <http://contao.ninja>
  * @author     Glen Langer (BugBuster)
  * @package    Integrity_Check
  *

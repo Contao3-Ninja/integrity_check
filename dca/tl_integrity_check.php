@@ -5,7 +5,7 @@
  *
  * Contao Module "Integrity Check" - Backend DCA tl_integrity_check
  *
- * @copyright  Glen Langer 2012..2014 <http://www.contao.glen-langer.de>
+ * @copyright  Glen Langer 2012..2015 <http://contao.ninja>
  * @author     Glen Langer (BugBuster)
  * @package    Integrity_Check
  * @license    LGPL
