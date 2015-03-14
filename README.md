@@ -2,7 +2,7 @@ Contao Module Integrity Check
 =============================
 [![Latest Stable Version](https://poser.pugx.org/bugbuster/integrity_check/v/stable.png)](https://packagist.org/packages/bugbuster/integrity_check) [![Total Downloads](https://poser.pugx.org/bugbuster/integrity_check/downloads.png)](https://packagist.org/packages/bugbuster/integrity_check) [![Latest Unstable Version](https://poser.pugx.org/bugbuster/integrity_check/v/unstable.png)](https://packagist.org/packages/bugbuster/integrity_check) [![License](https://poser.pugx.org/bugbuster/integrity_check/license.png)](https://packagist.org/packages/bugbuster/integrity_check)
 
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/8e8b52ca-378b-470c-aee8-adc6de07fde6/big.png)](https://insight.sensiolabs.com/projects/8e8b52ca-378b-470c-aee8-adc6de07fde6)
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/8e8b52ca-378b-470c-aee8-adc6de07fde6/small.png)](https://insight.sensiolabs.com/projects/8e8b52ca-378b-470c-aee8-adc6de07fde6)
 
 ## About
 
