@@ -103,4 +103,19 @@ class IntegrityCheckHelper extends \System
         return $strContent;
     } // checkExtension
     
+    /**
+    * Filelist with checksums
+    * @return    array    file,checksum_file,checksum_code,contao_version
+    */
+    public function getFileList() 
+	{
+	    $file_list = array();
+	    $contao_version_live = VERSION . '.' . BUILD;
+	    if (file_exists(TL_ROOT . '/system/modules/integrity_check/config/file_list_'.$contao_version_live.'.json')) 
+	    {
+	        $file_list = json_decode(file_get_contents(TL_ROOT . '/system/modules/integrity_check/config/file_list_'.$contao_version_live.'.json'));
+	    }
+	    return $file_list;
+	}//getFileList
+    
 } // class

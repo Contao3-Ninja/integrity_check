@@ -154,7 +154,7 @@ class Integrity_Check extends \Frontend
 	 */
 	protected function checkFiles()
 	{
-	    $this->getFileList();
+	    $this->file_list = \IntegrityCheck\IntegrityCheckHelper::getInstance()->getFileList();
 	    $checkSummary = false; //false=kein check erfolgt, keine Mail, keine completed Meldung
 	    $checkSummary_expert = false;
 
@@ -427,20 +427,6 @@ class Integrity_Check extends \Frontend
 	    $this->check_install_count   = ($objCheckPlan->install_count_check) ? 1 : 0;
 	    return ;
 	}
-	
-	/**
-	 * Filelist with checksums
-	 * @return    array    file,checksum_file,checksum_code,contao_version
-	 */
-	private function getFileList() 
-	{
-	    $contao_version_live = VERSION . '.' . BUILD;
-	    if (file_exists(TL_ROOT . '/system/modules/integrity_check/config/file_list_'.$contao_version_live.'.json')) 
-	    {
-	        $this->file_list = json_decode(file_get_contents(TL_ROOT . '/system/modules/integrity_check/config/file_list_'.$contao_version_live.'.json'));
-	    }
-	    return;
-	}//getFileList
 	
 	/**
 	 * Send eMail to Admin
