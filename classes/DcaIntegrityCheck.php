@@ -261,7 +261,7 @@ class DcaIntegrityCheck extends \Backend
         $arrCronMoments = array('hourly','daily','weekly','monthly');
 
         if ( isset($GLOBALS['TL_CRON']['minutely']) &&
-                count($this->searchCron($GLOBALS['TL_CRON']['minutely'], 0, 'IntegrityCheck\Integrity_Check')) > 0 )
+                count($this->searchCron($GLOBALS['TL_CRON']['minutely'], 0, 'IntegrityCheck\IntegrityCheck')) > 0 )
         {
             $arrCronMoments = array('minutely','hourly','daily','weekly','monthly');
         }

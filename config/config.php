@@ -32,11 +32,11 @@ $GLOBALS['TL_HOOKS']['parseBackendTemplate'][] = array('IntegrityCheck\Integrity
  *
  * Register methods to be executed at certain intervals.
  */
-$GLOBALS['TL_CRON']['monthly'][] = array('IntegrityCheck\Integrity_Check', 'checkFilesMonthly');
-$GLOBALS['TL_CRON']['weekly'][]  = array('IntegrityCheck\Integrity_Check', 'checkFilesWeekly');
-$GLOBALS['TL_CRON']['daily'][]   = array('IntegrityCheck\Integrity_Check', 'checkFilesDaily');
+$GLOBALS['TL_CRON']['monthly'][] = array('IntegrityCheck\IntegrityCheck', 'checkFilesMonthly');
+$GLOBALS['TL_CRON']['weekly'][]  = array('IntegrityCheck\IntegrityCheck', 'checkFilesWeekly');
+$GLOBALS['TL_CRON']['daily'][]   = array('IntegrityCheck\IntegrityCheck', 'checkFilesDaily');
 //from contao 2.11, hourly is possible.
-$GLOBALS['TL_CRON']['hourly'][]  = array('IntegrityCheck\Integrity_Check', 'checkFilesHourly');
+$GLOBALS['TL_CRON']['hourly'][]  = array('IntegrityCheck\IntegrityCheck', 'checkFilesHourly');
 //from contao 3.0, minutely is possible.
 //You want it? Then activate it.
-//$GLOBALS['TL_CRON']['minutely'][]  = array('IntegrityCheck\Integrity_Check', 'checkFilesMinutely');
+//$GLOBALS['TL_CRON']['minutely'][]  = array('IntegrityCheck\IntegrityCheck', 'checkFilesMinutely');

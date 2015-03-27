@@ -29,5 +29,5 @@ ClassLoader::addClasses(array
 	'BugBuster\IntegrityCheck\IntegrityCheckHelper'  => 'system/modules/integrity_check/classes/IntegrityCheckHelper.php',
 
 	// Modules
-	'BugBuster\IntegrityCheck\Integrity_Check'       => 'system/modules/integrity_check/modules/Integrity_Check.php',
+	'BugBuster\IntegrityCheck\IntegrityCheck'        => 'system/modules/integrity_check/modules/IntegrityCheck.php',
 ));
