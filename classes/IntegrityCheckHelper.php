@@ -9,7 +9,7 @@
  * Modul Integrity Check - Helper 
  * 
  * PHP version 5
- * @copyright  Glen Langer 2012..2014
+ * @copyright  Glen Langer 2012..2015
  * @author     Glen Langer
  * @package    Integrity_Check
  * @license    LGPL
@@ -23,7 +23,7 @@ namespace BugBuster\IntegrityCheck;
 /**
  * Class IntegrityCheckHelper
  *
- * @copyright  Glen Langer 2012..2014
+ * @copyright  Glen Langer 2012..2015
  * @author     Glen Langer
  * @package    Integrity_Check
  */
@@ -54,7 +54,7 @@ class IntegrityCheckHelper extends \System
      */
     public static function getInstance()
     {
-        if (self::$instance == null)
+        if (self::$instance === null)
         {
             self::$instance = new IntegrityCheckHelper();
         }
@@ -80,14 +80,9 @@ class IntegrityCheckHelper extends \System
     
             // required extensions
             $arrRequiredExtensions = array(
-                    'MultiColumnWizard' => 'multicolumnwizard'
+                'MultiColumnWizard' => 'multicolumnwizard'
             );
-    
-            // required files
-            $arrRequiredFiles = array(
-                    'Modulname' => 'plugins/.....'
-            );
-    
+            
             // check for required extensions
             foreach ($arrRequiredExtensions as $key => $val)
             {
@@ -103,26 +98,24 @@ class IntegrityCheckHelper extends \System
                     }
                 }
             }
-    
-            // check for required files
-            /*
-            foreach ($arrRequiredFiles as $key => $val)
-            {
-                if (!file_exists(TL_ROOT . '/' . $val))
-                {
-                    $_SESSION["TL_INFO"] = array_merge($_SESSION["TL_INFO"], array($val => 'Please install the required file/extension <strong>' . $key . '</strong>'));
-                }
-                else
-                {
-                    if (is_array($_SESSION["TL_INFO"]) && key_exists($val, $_SESSION["TL_INFO"]))
-                    {
-                        unset($_SESSION["TL_INFO"][$val]);
-                    }
-                }
-            }*/
         }
     
         return $strContent;
     } // checkExtension
+    
+    /**
+    * Filelist with checksums
+    * @return    array    file,checksum_file,checksum_code,contao_version
+    */
+    public function getFileList() 
+	{
+	    $file_list = array();
+	    $contao_version_live = VERSION . '.' . BUILD;
+	    if (file_exists(TL_ROOT . '/system/modules/integrity_check/config/file_list_'.$contao_version_live.'.json')) 
+	    {
+	        $file_list = json_decode(file_get_contents(TL_ROOT . '/system/modules/integrity_check/config/file_list_'.$contao_version_live.'.json'));
+	    }
+	    return $file_list;
+	}//getFileList
     
 } // class

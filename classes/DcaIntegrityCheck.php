@@ -3,9 +3,9 @@
 /**
  * Contao Open Source CMS, Copyright (C) 2005-2014 Leo Feyer
  *
- * Contao Module "Integrity Check" - DCA Helper Class DCA_integrity_check
+ * Contao Module "Integrity Check" - DCA Helper Class DcaIntegrityCheck
  *
- * @copyright  Glen Langer 2012..2014 <http://www.contao.glen-langer.de>
+ * @copyright  Glen Langer 2012..2015 <http://contao.ninja>
  * @author     Glen Langer (BugBuster)
  * @package    Integrity_Check
  * @license    LGPL
@@ -19,14 +19,14 @@
 namespace BugBuster\IntegrityCheck;
 
 /**
- * DCA Helper Class DCA_integrity_check
+ * DCA Helper Class DcaIntegrityCheck
  * 
- * @copyright  Glen Langer 2012..2014 <http://www.contao.glen-langer.de>
+ * @copyright  Glen Langer 2012..2015 <http://contao.ninja>
  * @author     Glen Langer (BugBuster)
  * @package    Integrity_Check
  *
  */
-class DCA_integrity_check extends \Backend
+class DcaIntegrityCheck extends \Backend
 {
 
     /**
@@ -43,6 +43,12 @@ class DCA_integrity_check extends \Backend
         if (strlen(\Input::get('init')))
         {
             $this->importCheckPlan();
+        }
+        
+        if (strlen(\Input::get('singletest'))  ) 
+        {
+            IntegrityCheckBackend::checkSingle(\Input::get('singletest'));
+            $this->redirect($this->getReferer());
         }
     }
 
@@ -104,20 +110,20 @@ class DCA_integrity_check extends \Backend
         \Database::getInstance()->prepare("UPDATE 
                                                 tl_integrity_check 
                                             SET 
-                                                tstamp=". time() ."
+                                                tstamp=?
                                                 , published='" . ($blnVisible ? 1 : '') . "' 
                                             WHERE 
                                                 id=?")
-                                ->execute($intId);
+                                ->execute(time(),$intId);
         // There can be only one.
         \Database::getInstance()->prepare("UPDATE 
                                                 tl_integrity_check 
                                             SET 
-                                                tstamp=". time() ."
+                                                tstamp=?
                                                 , published='' 
                                             WHERE 
                                                 id!=?")
-                                ->execute($intId);
+                                ->execute(time(),$intId);
 
     }
 
@@ -142,7 +148,7 @@ class DCA_integrity_check extends \Backend
     <td class="tl_folder_tlist">'.$GLOBALS['TL_LANG']['tl_integrity_check']['cp_interval'][0].'</td>
     <td class="tl_folder_tlist">'.$GLOBALS['TL_LANG']['tl_integrity_check']['cp_type_of_test'][0].'</td>
     <td class="tl_folder_tlist">'.$GLOBALS['TL_LANG']['tl_integrity_check']['cp_action'][0].'</td>
-    <td class="tl_folder_tlist">'.$GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status'].'</td>
+    <td class="tl_folder_tlist" style="text-align: center;">'.$GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status'].'</td>
   </tr>
   ';
         if (count($check_plans) > 0)
@@ -152,10 +158,10 @@ class DCA_integrity_check extends \Backend
             {
                 $class = (($lineCount % 2) == 0) ? ' even' : ' odd';
                 $title .= '<tr class='.$class.'>
-    <td class="tl_file_list" style="width: 30%;"><span class="cp_files">'. $step['cp_files'].'</span></td>
-    <td class="tl_file_list" style="width: 20%;"><span class="cp_interval">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_interval']].'</span></td>
-    <td class="tl_file_list" style="width: 20%;"><span class="cp_type_of_test">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_type_of_test']].'</span></td>
-    <td class="tl_file_list" style="width: 20%;"><span class="cp_action">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_action']].'</span></td>
+    <td class="tl_file_list" style=""><span class="cp_files">'. $step['cp_files'].'</span></td>
+    <td class="tl_file_list" style=""><span class="cp_interval">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_interval']].'</span></td>
+    <td class="tl_file_list" style=""><span class="cp_type_of_test">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_type_of_test']].'</span></td>
+    <td class="tl_file_list" style=""><span class="cp_action">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_action']].'</span></td>
     <td class="tl_file_list" style="width: 10%;text-align: center;"><span class="cp_file_status">'. $check_status[$step['cp_files']].'</span></td>
   </tr>
   ';
@@ -173,10 +179,10 @@ class DCA_integrity_check extends \Backend
                 {
                     $class = (($lineCount % 2) == 0) ? ' even' : ' odd';
                     $title .= '<tr class='.$class.'>
-        <td class="tl_file_list" style="width: 30%;"><span class="cp_files">'. $step['cp_files_expert'].'</span></td>
-        <td class="tl_file_list" style="width: 20%;"><span class="cp_interval">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_interval_expert']].'</span></td>
-        <td class="tl_file_list" style="width: 20%;"><span class="cp_type_of_test">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_type_of_test_expert']].'</span></td>
-        <td class="tl_file_list" style="width: 20%;"><span class="cp_action">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_action_expert']].'</span></td>
+        <td class="tl_file_list" style=""><span class="cp_files">'. $step['cp_files_expert'].'</span></td>
+        <td class="tl_file_list" style=""><span class="cp_interval">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_interval_expert']].'</span></td>
+        <td class="tl_file_list" style=""><span class="cp_type_of_test">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_type_of_test_expert']].'</span></td>
+        <td class="tl_file_list" style=""><span class="cp_action">'. $GLOBALS['TL_LANG']['tl_integrity_check'][$step['cp_action_expert']].'</span></td>
         <td class="tl_file_list" style="width: 10%;text-align: center;"><span class="cp_file_status">'. $check_status[$step['cp_files_expert']].'</span></td>
       </tr>
       ';
@@ -194,7 +200,7 @@ class DCA_integrity_check extends \Backend
 <table class="tl_listing_checks">
     <tr>
          <td class="tl_folder_tlist">'.$GLOBALS['TL_LANG']['tl_integrity_check']['expert_legend'].'</td>
-         <td class="tl_folder_tlist">'.$GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status'].'</td>
+         <td class="tl_folder_tlist" style="text-align: center;">'.$GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status'].'</td>
     </tr>
 ';
             if ($arrRow[update_check])
@@ -237,11 +243,11 @@ class DCA_integrity_check extends \Backend
             \Database::getInstance()->prepare("UPDATE 
                                                     tl_integrity_check 
                                                 SET 
-                                                    tstamp=". time() ."
+                                                    tstamp=?
                                                     , published='' 
                                                 WHERE 
                                                     id!=?")
-                                    ->execute($dc->id);
+                                    ->execute(time(),$dc->id);
         }
         return $varValue;
     }
@@ -255,7 +261,7 @@ class DCA_integrity_check extends \Backend
         $arrCronMoments = array('hourly','daily','weekly','monthly');
 
         if ( isset($GLOBALS['TL_CRON']['minutely']) &&
-                count($this->searchCron($GLOBALS['TL_CRON']['minutely'], 0, 'IntegrityCheck\Integrity_Check')) > 0 )
+                count($this->searchCron($GLOBALS['TL_CRON']['minutely'], 0, 'IntegrityCheck\IntegrityCheck')) > 0 )
         {
             $arrCronMoments = array('minutely','hourly','daily','weekly','monthly');
         }
@@ -268,7 +274,6 @@ class DCA_integrity_check extends \Backend
      */
     public function refreshTimestamps($redirect = true)
     {
-        $insertId = 0;
         $arrFiles = array
         (
                 'index.php',
@@ -318,7 +323,6 @@ class DCA_integrity_check extends \Backend
      */
     public function refreshTimestampOnlyHtaccess()
     {
-        $insertId = 0;
         $status   = false;
         $arrTimestamps = array();
 
@@ -419,11 +423,11 @@ class DCA_integrity_check extends \Backend
                 'published'   => 0
         );
 
-        $objInsert = \Database::getInstance()->prepare("INSERT INTO 
-                                                            `tl_integrity_check` 
-                                                            %s")
-                                             ->set($arrSet)
-                                             ->execute();
+        \Database::getInstance()->prepare("INSERT INTO 
+                                            `tl_integrity_check` 
+                                            %s")
+                                 ->set($arrSet)
+                                 ->execute();
         $this->addConfirmationMessage($GLOBALS['TL_LANG']['tl_integrity_check']['init_confirm_message']);
         $this->redirect($this->getReferer());
          
@@ -477,12 +481,19 @@ class DCA_integrity_check extends \Backend
      */
     protected function getCheckStatus($CheckPlanId)
     {
-        // 0=not tested, 1=ok, 2=not ok
+        // 0=not tested, 1=ok, 2=not ok, 3=warning, 4=file not found
         $icon_0 = \Image::getHtml('invisible.gif', $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_0'], 'title="' .specialchars($GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_0']).'"');
         $icon_1 = \Image::getHtml('ok.gif'       , $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_1'], 'title="' .specialchars($GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_1']).' (%s)"');
         $icon_2 = \Image::getHtml('error.gif'    , $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_2'], 'title="' .specialchars($GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_2']).' (%s)"');
         $icon_3 = \Image::getHtml('about.gif'    , $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_3'], 'title="' .specialchars($GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_3']).' (%s)"');
-
+        $icon_4 = \Image::getHtml('error.gif'    , $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_4'], 'title="' .specialchars($GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_4']).' (%s)"');
+        
+        $href = '&amp;cpid='.$CheckPlanId.'&amp;singletest=%s';
+        $icon_start  = '<span class="cp_step_start"><a href="'.$this->addToUrl($href).'" title="'.specialchars($GLOBALS['TL_LANG']['tl_integrity_check']['cp_step_start_now']).'">';
+        $icon_start .= \Image::getHtml('system/modules/integrity_check/assets/start_icon.png', $GLOBALS['TL_LANG']['tl_integrity_check']['cp_step_start_now'], 'title="' .specialchars($GLOBALS['TL_LANG']['tl_integrity_check']['cp_step_start_now']).'"');
+        $icon_start .= '</a></span>';
+        
+       
         $arrFiles = array
         (
             'index.php'               => $icon_0,
@@ -495,7 +506,8 @@ class DCA_integrity_check extends \Backend
         );
         
         $objCheckStatus = \Database::getInstance()
-                                ->prepare("SELECT 
+                                ->prepare("SELECT
+                                                `id`,
                                                 `tstamp` ,
                                                 `check_object` ,
                                                 `check_object_status`
@@ -516,16 +528,20 @@ class DCA_integrity_check extends \Backend
                         $arrFiles[$objCheckStatus->check_object] = sprintf($icon_1, $check_datetime);
                         break;
                     case 2 :
-                        $arrFiles[$objCheckStatus->check_object] = sprintf($icon_2, $check_datetime);
+                        $arrFiles[$objCheckStatus->check_object] = sprintf($icon_2, $check_datetime) . sprintf($icon_start, $objCheckStatus->id);
                         break;
                     case 3 :
-                        $arrFiles[$objCheckStatus->check_object] = sprintf($icon_3, $check_datetime);
+                        $arrFiles[$objCheckStatus->check_object] = sprintf($icon_3, $check_datetime) . sprintf($icon_start, $objCheckStatus->id);
+                        break;
+                    case 4 :
+                        $arrFiles[$objCheckStatus->check_object] = sprintf($icon_4, $check_datetime) . sprintf($icon_start, $objCheckStatus->id);
                         break;
                     default:
                         break;
                 }
             }
         }
+        
         return $arrFiles;
     }
     
@@ -598,5 +614,28 @@ class DCA_integrity_check extends \Backend
         }//$objCheckStatus->numRows > 0
         return ;
     }//cleanCheckStatus
+    
+    /**
+     * Return the "startChecks" button
+     * @param array
+     * @param string
+     * @param string
+     * @param string
+     * @param string
+     * @param string
+     * @return string
+     */
+    public function startChecks($row, $href, $label, $title, $icon, $attributes)
+    {
+        if (strlen(\Input::get('checkid')))
+        {
+            \IntegrityCheck\IntegrityCheckBackend::checkAll();
+            $this->redirect($this->getReferer());
+        }
+    
+        $href .= '&amp;checkid='.$row['id'].'';
+    
+        return '<a href="'.$this->addToUrl($href).'" title="'.specialchars($title).'"'.$attributes.'>'.$this->generateImage($icon, $label).'</a> ';
+    }
 
 }

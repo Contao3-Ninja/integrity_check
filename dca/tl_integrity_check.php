@@ -5,7 +5,7 @@
  *
  * Contao Module "Integrity Check" - Backend DCA tl_integrity_check
  *
- * @copyright  Glen Langer 2012..2014 <http://www.contao.glen-langer.de>
+ * @copyright  Glen Langer 2012..2015 <http://contao.ninja>
  * @author     Glen Langer (BugBuster)
  * @package    Integrity_Check
  * @license    LGPL
@@ -34,7 +34,7 @@ $GLOBALS['TL_DCA']['tl_integrity_check'] = array
         ),
 		'onload_callback' => array
 		(
-			array('BugBuster\IntegrityCheck\DCA_integrity_check', 'changeInitOperations'),
+			array('BugBuster\IntegrityCheck\DcaIntegrityCheck', 'changeInitOperations'),
 		) 
 	),
 
@@ -50,7 +50,7 @@ $GLOBALS['TL_DCA']['tl_integrity_check'] = array
 		(
 			'fields'                  => array('check_title'),
 			'format'                  => '%s' ,
-		    'label_callback'          => array('BugBuster\IntegrityCheck\DCA_integrity_check', 'listChecks')
+		    'label_callback'          => array('BugBuster\IntegrityCheck\DcaIntegrityCheck', 'listChecks')
 		),
 		'global_operations' => array
 		(
@@ -90,7 +90,14 @@ $GLOBALS['TL_DCA']['tl_integrity_check'] = array
 				'label'               => &$GLOBALS['TL_LANG']['tl_integrity_check']['toggle'],
 				'icon'                => 'visible.gif',
 				//'attributes'          => 'onclick="Backend.getScrollOffset();return AjaxRequest.toggleVisibility(this,%s)"',
-				'button_callback'     => array('BugBuster\IntegrityCheck\DCA_integrity_check', 'toggleIcon')
+				'button_callback'     => array('BugBuster\IntegrityCheck\DcaIntegrityCheck', 'toggleIcon')
+			),
+			'check' => array
+			(
+				'label'               => &$GLOBALS['TL_LANG']['tl_integrity_check']['cp_start_now_all'],
+				'icon'                => 'system/modules/integrity_check/assets/start_icon.png',
+				//'attributes'          => 'onclick="Backend.getScrollOffset();return AjaxRequest.toggleVisibility(this,%s)"',
+				'button_callback'     => array('BugBuster\IntegrityCheck\DcaIntegrityCheck', 'startChecks')
 			)
 		)
 		
@@ -158,7 +165,7 @@ $GLOBALS['TL_DCA']['tl_integrity_check'] = array
 	                    'label'                 => &$GLOBALS['TL_LANG']['tl_integrity_check']['cp_interval'],
 	                    'exclude'               => true,
 	                    'inputType'             => 'select',
-		                'options_callback'      => array('BugBuster\IntegrityCheck\DCA_integrity_check', 'getCronIntervals'),
+		                'options_callback'      => array('BugBuster\IntegrityCheck\DcaIntegrityCheck', 'getCronIntervals'),
 		                'reference'             => &$GLOBALS['TL_LANG']['tl_integrity_check'],
 	                    'eval' 			        => array('style' => 'width:120px', 'includeBlankOption'=>false, 'chosen'=>true)
 		            ),
@@ -209,7 +216,7 @@ $GLOBALS['TL_DCA']['tl_integrity_check'] = array
 	                    'label'                 => &$GLOBALS['TL_LANG']['tl_integrity_check']['cp_interval'],
 	                    'exclude'               => true,
 	                    'inputType'             => 'select',
-		                'options_callback'      => array('BugBuster\IntegrityCheck\DCA_integrity_check', 'getCronIntervals'),
+		                'options_callback'      => array('BugBuster\IntegrityCheck\DcaIntegrityCheck', 'getCronIntervals'),
 		                'reference'             => &$GLOBALS['TL_LANG']['tl_integrity_check'],
 	                    'eval' 			        => array('style' => 'width:120px', 'includeBlankOption'=>false, 'chosen'=>true)
 		            ),
@@ -267,7 +274,7 @@ $GLOBALS['TL_DCA']['tl_integrity_check'] = array
 	        'sql'                 => "char(1) NOT NULL default ''",
 	        'save_callback' => array
 	        (
-	                array('BugBuster\IntegrityCheck\DCA_integrity_check', 'setPublished')
+	                array('BugBuster\IntegrityCheck\DcaIntegrityCheck', 'setPublished')
 	        )
 		),
 		'check_debug' => array

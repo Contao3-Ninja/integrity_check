@@ -5,9 +5,9 @@
  * Contao extension: integrity_check 3.3.8 
  * Russian translation file 
  * 
- * Copyright : &copy; 2012..2014 Glen Langer 
+ * Copyright : &copy; 2012..2015 Glen Langer 
  * License   : LGPL 
- * Author    : Glen Langer (BugBuster), http://www.contao.glen-langer.de 
+ * Author    : Glen Langer (BugBuster), http://contao.ninja 
  * Translator: Dmitri Kuznetsov (Kuzmich) 
  * 
  * This file was created automatically be the Contao extension repository translation module.
@@ -35,10 +35,14 @@ $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_0']                   
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_1']                        = 'в порядке';
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_2']                        = 'поврежден';
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_3']                        = 'Предупреждение';
+$GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_4']                        = 'Файл не найден';
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_files']['0']                           = 'Файлы';
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_files']['1']                           = 'Выберите файлы для проверки';
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_interval']['0']                        = 'Время';
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_interval']['1']                        = 'Время проверки';
+$GLOBALS['TL_LANG']['tl_integrity_check']['cp_start_now_all']['0']                   = 'Запустить тест';
+$GLOBALS['TL_LANG']['tl_integrity_check']['cp_start_now_all']['1']                   = 'Запустить тест';
+$GLOBALS['TL_LANG']['tl_integrity_check']['cp_step_start_now']                       = 'Запустить тест';
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_type_of_test']['0']                    = 'Идентификация';
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_type_of_test']['1']                    = 'Вид идентификации';
 $GLOBALS['TL_LANG']['tl_integrity_check']['daily']                                   = 'ежедневно';

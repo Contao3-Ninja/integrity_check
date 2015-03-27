@@ -5,7 +5,7 @@
  *
  * Contao Module "Integrity Check"
  *
- * @copyright  Glen Langer 2012..2014 <http://www.contao.glen-langer.de>
+ * @copyright  Glen Langer 2012..2015 <http://contao.ninja>
  * @author     Glen Langer (BugBuster)
  * @package    Integrity_Check 
  * @license    LGPL 
@@ -18,7 +18,7 @@
  *
  * Runonce for integrity check
  *
- * @copyright  Glen Langer 2012..2014 <http://www.contao.glen-langer.de>
+ * @copyright  Glen Langer 2012..2015 <http://contao.ninja>
  * @author     Glen Langer (BugBuster)
  * @package    Integrity_Check
  */
@@ -65,9 +65,9 @@ class IntegrityCheckRunonce extends Controller
 	    	    }
 	    	}
 	    	// Insert
-	    	$objInsert = $this->Database->prepare("INSERT INTO `tl_integrity_timestamps` ( `id` , `tstamp` , `check_timestamps` )
-	    	                                       VALUES (?, ?, ?)")
-	    	                            ->execute(1, time(), serialize($arrTimestamps));
+	    	$this->Database->prepare("INSERT INTO `tl_integrity_timestamps` ( `id` , `tstamp` , `check_timestamps` )
+                                       VALUES (?, ?, ?)")
+                            ->execute(1, time(), serialize($arrTimestamps));
 		} // if !tableExists('tl_integrity_timestamps')
 		
 		//From Integrity Check 3.1
@@ -84,5 +84,3 @@ class IntegrityCheckRunonce extends Controller
 
 $objIntegrityCheckRunonce = new IntegrityCheckRunonce();
 $objIntegrityCheckRunonce->run();
-
-?>
