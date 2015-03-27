@@ -19,7 +19,7 @@
 namespace BugBuster\IntegrityCheck; 
 
 /**
- * Class Integrity_Check 
+ * Class IntegrityCheck 
  * 
  * Cronjob for integrity check 
  *
@@ -28,7 +28,7 @@ namespace BugBuster\IntegrityCheck;
  * @author     Leo Feyer (sourcecode parts from contao check tool)
  * @package    Integrity_Check
  */
-class Integrity_Check extends \Frontend 
+class IntegrityCheck extends \Frontend 
 {
     protected $fileEmailStatus = array();
     protected $fileLogStatus   = array();
@@ -115,7 +115,7 @@ class Integrity_Check extends \Frontend
         
         if (true === (bool) $this->check_debug)
         {
-            $this->log('installCount: '.print_r($GLOBALS['TL_CONFIG']['installCount'],true), 'Integrity_Check run()', TL_CRON);
+            $this->log('installCount: '.print_r($GLOBALS['TL_CONFIG']['installCount'],true), 'IntegrityCheck run()', TL_CRON);
         }
         //Contao Install Count Check
         //1. prüfe ob install_count_check=3 aus warning Tabelle
@@ -213,7 +213,7 @@ class Integrity_Check extends \Frontend
             if (true === (bool) $this->check_debug)
             {
                 // Add log entry
-                $this->log('['.$this->check_title .'] '. $GLOBALS['TL_LANG']['tl_integrity_check']['finished'], 'Integrity_Check checkFiles()', TL_CRON);
+                $this->log('['.$this->check_title .'] '. $GLOBALS['TL_LANG']['tl_integrity_check']['finished'], 'IntegrityCheck checkFiles()', TL_CRON);
             }
 	    }
 	}
@@ -239,7 +239,7 @@ class Integrity_Check extends \Frontend
 	        if (true === (bool) $this->check_debug)
 	        {
 	            // Add log entry
-	            $this->log('['.$this->check_title .'] '. sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['md5_blocked'], $cp_file), 'Integrity_Check checkFiles()', TL_ERROR);
+	            $this->log('['.$this->check_title .'] '. sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['md5_blocked'], $cp_file), 'IntegrityCheck checkFiles()', TL_ERROR);
 	        }
 	        // Mail to Admin
 	        $this->sendCheckEmailMD5Block();
@@ -301,7 +301,7 @@ class Integrity_Check extends \Frontend
         }
         elseif (true === (bool) $this->check_debug && $file_not_found === false)
         {
-            $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['ok'], $cp_file) . ' ['.$GLOBALS['TL_LANG']['tl_integrity_check']['md5'].']', 'Integrity_Check checkFileMD5()', TL_CRON);
+            $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['ok'], $cp_file) . ' ['.$GLOBALS['TL_LANG']['tl_integrity_check']['md5'].']', 'IntegrityCheck checkFileMD5()', TL_CRON);
         }
         //nur wenn getestet werden konnte
         if ($file_not_found === false) 
@@ -311,7 +311,7 @@ class Integrity_Check extends \Frontend
         else
         {
             $this->setCheckStatus($cp_file, 4); //nicht pruefbar
-            $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['file_not_found'], $cp_file), 'Integrity_Check checkFileMD5()', TL_CRON);
+            $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['file_not_found'], $cp_file), 'IntegrityCheck checkFileMD5()', TL_CRON);
         }
         
         return $status;
@@ -342,7 +342,7 @@ class Integrity_Check extends \Frontend
 	    else
 	    {
 	        $this->setCheckStatus($cp_file, 4);// nicht pruefbar
-	        $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['file_not_found'], $cp_file), 'Integrity_Check checkFileTimestamp()', TL_ERROR);
+	        $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['file_not_found'], $cp_file), 'IntegrityCheck checkFileTimestamp()', TL_ERROR);
 	        return false; // kein check möglich
 	    }
 	    
@@ -351,7 +351,7 @@ class Integrity_Check extends \Frontend
 	    if ($objTimestamps->numRows < 1)
 	    {
 	        $this->setCheckStatus($cp_file, 0);// nicht pruefbar
-	        $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['timestamp_not_found'], $cp_file), 'Integrity_Check checkFileTimestamp()', TL_ERROR);
+	        $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['timestamp_not_found'], $cp_file), 'IntegrityCheck checkFileTimestamp()', TL_ERROR);
 	        return false; // kein check möglich
 	    }
 	    
@@ -361,7 +361,7 @@ class Integrity_Check extends \Frontend
 	    if ( !isset($arrTimestamps[$cp_file]) )
 	    {
 	        $this->setCheckStatus($cp_file, 0);// nicht pruefbar
-	        $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['timestamp_not_found'], $cp_file), 'Integrity_Check checkFileTimestamp()', TL_ERROR);
+	        $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['timestamp_not_found'], $cp_file), 'IntegrityCheck checkFileTimestamp()', TL_ERROR);
 	        return false; // kein check möglich
 	    }
 	    
@@ -385,7 +385,7 @@ class Integrity_Check extends \Frontend
 	    }
         elseif (true === (bool) $this->check_debug)
 	    {
-	        $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['ok'], $cp_file) . ' ['.$GLOBALS['TL_LANG']['tl_integrity_check']['timestamp'].']', 'Integrity_Check checkFileTimestamp()', TL_CRON);
+	        $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['ok'], $cp_file) . ' ['.$GLOBALS['TL_LANG']['tl_integrity_check']['timestamp'].']', 'IntegrityCheck checkFileTimestamp()', TL_CRON);
 	    }
 	    
         $this->setCheckStatus($cp_file, $status);
@@ -471,7 +471,7 @@ class Integrity_Check extends \Frontend
 	                $sendmail_temp = false;
     	            if (true === (bool) $this->check_debug)
                     {
-                        $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['mail_blocked'], $key), 'Integrity_Check sendCheckEmail()', TL_CRON);
+                        $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['mail_blocked'], $key), 'IntegrityCheck sendCheckEmail()', TL_CRON);
                     }
 	            }
                 //wenn mail dann timestamp erneuern
@@ -546,7 +546,7 @@ class Integrity_Check extends \Frontend
 	        	    $sendLog_temp = false;
 	        	    if (true === (bool) $this->check_debug)
 	        	    {
-	        	        $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['log_blocked'], $key), 'Integrity_Check sendCheckLog()', TL_CRON);
+	        	        $this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['log_blocked'], $key), 'IntegrityCheck sendCheckLog()', TL_CRON);
 	        	    }
 	        	}
 	        	
@@ -555,11 +555,11 @@ class Integrity_Check extends \Frontend
 	        	{
 	        		if ($value == 'md5') 
 	        		{
-	        			$this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['corrupt'], $key) . ' ['.$GLOBALS['TL_LANG']['tl_integrity_check']['md5'].']', 'Integrity_Check checkFileMD5()', TL_ERROR);
+	        			$this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['corrupt'], $key) . ' ['.$GLOBALS['TL_LANG']['tl_integrity_check']['md5'].']', 'IntegrityCheck checkFileMD5()', TL_ERROR);
 	        		}
 	        		else 
 	        		{
-	        			$this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['corrupt'], $key) . ' ['.$GLOBALS['TL_LANG']['tl_integrity_check']['timestamp'].']', 'Integrity_Check checkFileTimestamp()', TL_ERROR);
+	        			$this->log(sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['corrupt'], $key) . ' ['.$GLOBALS['TL_LANG']['tl_integrity_check']['timestamp'].']', 'IntegrityCheck checkFileTimestamp()', TL_ERROR);
 	        		}
 	        		//wenn log dann timestamp erneuern
 	        	    $arrFiles[$key] = time();
@@ -716,7 +716,7 @@ class Integrity_Check extends \Frontend
 	    {
 	        if (true === (bool) $this->check_debug)
 	        {
-	            $this->log($GLOBALS['TL_LANG']['tl_integrity_check']['update_check_deactivated'], 'Integrity_Check '.__FUNCTION__, TL_CRON);
+	            $this->log($GLOBALS['TL_LANG']['tl_integrity_check']['update_check_deactivated'], 'IntegrityCheck '.__FUNCTION__, TL_CRON);
 	        }
 	        $this->setCheckStatus('contao_update_check', 0);
 	        return false; //test not necessary
@@ -728,8 +728,8 @@ class Integrity_Check extends \Frontend
 	        $contao_version_latest = explode('.',$GLOBALS['TL_CONFIG']['latestVersion']);
 	        if (true === (bool) $this->check_debug)
 	        {
-	            $this->log($GLOBALS['TL_LANG']['tl_integrity_check']['update_check_contao_installed'] .': '.VERSION . '.' . BUILD, 'Integrity_Check checkContaoUpdate()', TL_CRON);
-	            $this->log($GLOBALS['TL_LANG']['tl_integrity_check']['update_check_contao_latest'] .': '.$GLOBALS['TL_CONFIG']['latestVersion'], 'Integrity_Check checkContaoUpdate()', TL_CRON);
+	            $this->log($GLOBALS['TL_LANG']['tl_integrity_check']['update_check_contao_installed'] .': '.VERSION . '.' . BUILD, 'IntegrityCheck checkContaoUpdate()', TL_CRON);
+	            $this->log($GLOBALS['TL_LANG']['tl_integrity_check']['update_check_contao_latest'] .': '.$GLOBALS['TL_CONFIG']['latestVersion'], 'IntegrityCheck checkContaoUpdate()', TL_CRON);
 	        }
 	        if ($contao_version_live[0] < $contao_version_latest[0]) 
 	        {
@@ -758,7 +758,7 @@ class Integrity_Check extends \Frontend
 	    }
 	    if (true === (bool) $this->check_debug)
 	    {
-	        $this->log($GLOBALS['TL_LANG']['tl_integrity_check']['update_check_contao_latest_not_detected'], 'Integrity_Check '.__FUNCTION__, TL_CRON);
+	        $this->log($GLOBALS['TL_LANG']['tl_integrity_check']['update_check_contao_latest_not_detected'], 'IntegrityCheck '.__FUNCTION__, TL_CRON);
 	    }
 	    $this->setCheckStatus('contao_update_check', 0);
 	    return false; //test not possible
@@ -808,7 +808,7 @@ class Integrity_Check extends \Frontend
 	    
 	    if (true === (bool) $this->check_debug)
 	    {
-	        $this->log('Send warning e-mail', 'Integrity_Check sendWarningMail()', TL_CRON);
+	        $this->log('Send warning e-mail', 'IntegrityCheck sendWarningMail()', TL_CRON);
 	    }
 	    
 	    unset($objEmail);
@@ -845,7 +845,7 @@ class Integrity_Check extends \Frontend
                         	        ->execute('', '');
 	        if (true === (bool) $this->check_debug)
 	        {
-	            $this->log('Version Check, Delete', 'Integrity_Check setWarningMailBlock()', TL_CRON);
+	            $this->log('Version Check, Delete', 'IntegrityCheck setWarningMailBlock()', TL_CRON);
 	        }
 	        
 	        \Database::getInstance()->prepare("INSERT INTO `tl_integrity_warnings`
@@ -855,13 +855,13 @@ class Integrity_Check extends \Frontend
                                     ->execute(time(), $check);
 	        if (true === (bool) $this->check_debug)
 	        {
-	            $this->log('Version Check, Insert', 'Integrity_Check setWarningMailBlock()', TL_CRON);
+	            $this->log('Version Check, Insert', 'IntegrityCheck setWarningMailBlock()', TL_CRON);
 	        }
 	        return true;
 	    }
 	    if (true === (bool) $this->check_debug)
 	    {
-	        $this->log("Parameter Error! 1version:{$version} 2check:{$check}", 'Integrity_Check setWarningMailBlock()', TL_CRON);
+	        $this->log("Parameter Error! 1version:{$version} 2check:{$check}", 'IntegrityCheck setWarningMailBlock()', TL_CRON);
 	    }
 	    return false;
 	}
@@ -888,14 +888,14 @@ class Integrity_Check extends \Frontend
     	    {
     	        if (true === (bool) $this->check_debug)
     	        {
-    	            $this->log('Version Check, Blocking: No', 'Integrity_Check getWarningMailBlock()', TL_CRON);
+    	            $this->log('Version Check, Blocking: No', 'IntegrityCheck getWarningMailBlock()', TL_CRON);
     	        }
     	        return false; //Blocking: No
     	    }
     	    
     	    if (true === (bool) $this->check_debug)
     	    {
-    	        $this->log('Version Check, Blocking: Yes', 'Integrity_Check getWarningMailBlock()', TL_CRON);
+    	        $this->log('Version Check, Blocking: Yes', 'IntegrityCheck getWarningMailBlock()', TL_CRON);
     	    }
     	    return true; //Blocking: Yes
 	    }
@@ -914,14 +914,14 @@ class Integrity_Check extends \Frontend
 	        {
 	            if (true === (bool) $this->check_debug)
 	            {
-	                $this->log('Install Count Check, Blocking: No', 'Integrity_Check getWarningMailBlock()', TL_CRON);
+	                $this->log('Install Count Check, Blocking: No', 'IntegrityCheck getWarningMailBlock()', TL_CRON);
 	            }
 	            return false; //Blocking: No
 	        }
 	        
 	        if (true === (bool) $this->check_debug)
 	        {
-	            $this->log('Install Count Check, Blocking: Yes', 'Integrity_Check getWarningMailBlock()', TL_CRON);
+	            $this->log('Install Count Check, Blocking: Yes', 'IntegrityCheck getWarningMailBlock()', TL_CRON);
 	        }
 	        return true; //Blocking: Yes
 	    }
