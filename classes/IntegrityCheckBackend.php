@@ -203,6 +203,11 @@ class IntegrityCheckBackend extends \Backend
                 static::setCheckStatus('contao_update_check', 3, static::$check_plan['id']);
                 return true;
             }
+            if ($contao_version_live[1] > $contao_version_latest[1]) // GitHub #75
+            {
+                static::setCheckStatus('contao_update_check', true, static::$check_plan['id']);
+                return false; //can not be, not of interest.
+            }
             //bugfix check
             if ($contao_version_live[2] < $contao_version_latest[2])
             {

@@ -747,6 +747,11 @@ class IntegrityCheck extends \Frontend
 	            $this->setCheckStatus('contao_update_check', 3);
 	            return $GLOBALS['TL_CONFIG']['latestVersion'];
 	        }
+	        if ($contao_version_live[1] > $contao_version_latest[1]) // GitHub #75
+	        {
+	            $this->setCheckStatus('contao_update_check', true);
+	            return false; //can not be, not of interest.
+	        }
 	        //bugfix check
 	        if ($contao_version_live[2] < $contao_version_latest[2])
 	        {
