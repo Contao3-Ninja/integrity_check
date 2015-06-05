@@ -1,0 +1,50 @@
+{
+	"name":"bugbuster/integrity_check",
+	"description":"Contao CMS integrity check for some files",
+	"keywords":["integrity","check","security","contao"],
+	"type":"contao-module",
+	"homepage":"http://contao.ninja",
+	"license":"LGPL-3.0+",
+	"authors":[
+		{
+			"name":"Glen Langer",
+			"homepage":"http://contao.ninja",
+			"role":"Developer"
+		}
+	],
+	"support":{
+		"issues":"https://github.com/BugBuster1701/integrity_check/issues",
+		"irc":"irc://irc.freenode.org/contao.dev",
+		"source":"https://github.com/BugBuster1701/integrity_check",
+		"wiki":"http://de.contaowiki.org/Integrity_Check",
+		"forum":"https://community.contao.org/de/forumdisplay.php?119-Sonstige-Erweiterungen"
+	},
+	"require":{
+		"php":">=5.3",
+		"contao/core":">=3.1,<4",
+		"contao-community-alliance/composer-plugin": "*",
+		"menatwork/contao-multicolumnwizard": "~3"
+	},
+	"autoload":{
+		"classmap":[""]
+	},
+	"replace":{
+		"contao-legacy/integrity_check":"self.version"
+	},
+	"extra":{
+		"contao":{
+			"sources":{
+				"":"system/modules/integrity_check"
+			},
+			"transifex": {
+				"project": "contao-integrity_check",
+				"prefix": "master-",
+				"languages_cto": "languages",
+				"languages_tx": ".tx"
+			},
+			"runonce":[
+				"runonce/runonce.php"
+			]
+		}
+	}
+}

@@ -1,13 +1,13 @@
-<?php if (!defined('TL_ROOT')) die('You can not access this file directly!');
+<?php
 
 /**
  * Contao Open Source CMS
- * Copyright (C) 2005-2012 Leo Feyer
+ * Copyright (C) 2005-2014 Leo Feyer
  *
  * Formerly known as TYPOlight Open Source CMS.
  *
  * PHP version 5
- * @copyright  Glen Langer 2012 
+ * @copyright  Glen Langer 2012..2015 
  * @author     Glen Langer 
  * @package    Integrity_Check 
  * @license    LGPL 
@@ -20,7 +20,11 @@
 $GLOBALS['TL_LANG']['tl_integrity_check']['ok']           = 'Integrity status for file %s is: OK';
 $GLOBALS['TL_LANG']['tl_integrity_check']['corrupt']      = 'Integrity status for file %s is: Corrupt';
 $GLOBALS['TL_LANG']['tl_integrity_check']['finished']     = 'Checking files for integrity is completed.';
-$GLOBALS['TL_LANG']['tl_integrity_check']['mail_blocked'] = 'The mail for the file %s is not sent. (blocked)';
+$GLOBALS['TL_LANG']['tl_integrity_check']['mail_blocked'] = 'The mail for the file %s was not sent. (blocked)';
+$GLOBALS['TL_LANG']['tl_integrity_check']['log_blocked']  = 'The system log entry for the file %s was not performed.(blocked)';
+$GLOBALS['TL_LANG']['tl_integrity_check']['md5_blocked']  = 'Checking file %s for integrity was not performed.(No checksums available. Update is necessary!)';
+$GLOBALS['TL_LANG']['tl_integrity_check']['file_not_found']      = 'Integrity status for file %s is: File not found.';
+$GLOBALS['TL_LANG']['tl_integrity_check']['timestamp_not_found'] = 'Integrity status for file %s is: Timestamp not found for this file.';
 
 /**
  * Mail to admin
@@ -28,6 +32,9 @@ $GLOBALS['TL_LANG']['tl_integrity_check']['mail_blocked'] = 'The mail for the fi
 $GLOBALS['TL_LANG']['tl_integrity_check']['subject']   = 'Contao :: Integrity Check for %s';
 $GLOBALS['TL_LANG']['tl_integrity_check']['message_1'] = 'The integrity check for %s has found corrupt files:';
 $GLOBALS['TL_LANG']['tl_integrity_check']['message_2'] = 'This information can also be found in the system log.';
+$GLOBALS['TL_LANG']['tl_integrity_check']['message_3'] = 'The integrity check for %s has found no matching MD5 checksums. An update is necessary.';
+$GLOBALS['TL_LANG']['tl_integrity_check']['message_4'] = 'The integrity check for %s has found that a new Contao update is available: Version %s, Version installed: %s';
+$GLOBALS['TL_LANG']['tl_integrity_check']['message_5'] = 'The integrity check for %s has found that the install tool has been locked after a wrong password had been entered more than three times in a row.';
 
 /**
  * Buttons
@@ -47,19 +54,44 @@ $GLOBALS['TL_LANG']['tl_integrity_check']['check_title'] = array('Title','Title 
 $GLOBALS['TL_LANG']['tl_integrity_check']['check_debug'] = array('Debug','Activate debug mode, extended logging to system log');
 $GLOBALS['TL_LANG']['tl_integrity_check']['check_plans'] = array('Check plan','Planning of the checks and actions');
 $GLOBALS['TL_LANG']['tl_integrity_check']['published']   = array('Activate integrity check', 'Activate the integrity check.');
+$GLOBALS['TL_LANG']['tl_integrity_check']['alternateemail'] = array('Alternative recipient e-mail address','Please enter a valid e-mail address for the action e-mails.');
 
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_files']        = array('Files','Selecting files to check');
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_interval']     = array('Time','Time of the check');
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_type_of_test'] = array('Identification','Kind of identification');
 $GLOBALS['TL_LANG']['tl_integrity_check']['cp_action']       = array('Action','Kind of action');
+$GLOBALS['TL_LANG']['tl_integrity_check']['check_plans_expert'] = array('Check plan','Planning of the checks and actions. When reselecting please update the timestamps.');
+$GLOBALS['TL_LANG']['tl_integrity_check']['expert_legend']  = 'Expert checks';
+$GLOBALS['TL_LANG']['tl_integrity_check']['publish_legend'] = 'Publish settings';
+$GLOBALS['TL_LANG']['tl_integrity_check']['alternateemail_legend'] = 'Alternative e-mail (optional)';
+$GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status'] = 'Status';
+$GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_0'] = 'unchecked';
+$GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_1'] = 'OK';
+$GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_2'] = 'corrupt';
+$GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_3'] = 'Warning';
+$GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status_4'] = 'File not found';
+$GLOBALS['TL_LANG']['tl_integrity_check']['cp_step_start_now'] = 'Start this test now';
+$GLOBALS['TL_LANG']['tl_integrity_check']['cp_start_now_all']  = array('Start all tests now','Start all tests now');
+
+
+$GLOBALS['TL_LANG']['tl_integrity_check']['update_check'][0] = 'Check for new Contao versions';
+$GLOBALS['TL_LANG']['tl_integrity_check']['update_check'][1] = 'If a new Contao update is available (Minor/Bugfix), an e-mail goes to the admin.';
+$GLOBALS['TL_LANG']['tl_integrity_check']['update_check_deactivated']      = 'Check for new Contao versions is deactivated.';
+$GLOBALS['TL_LANG']['tl_integrity_check']['update_check_contao_latest']    = 'Latest Contao version';
+$GLOBALS['TL_LANG']['tl_integrity_check']['update_check_contao_installed'] = 'Installed Contao version';
+$GLOBALS['TL_LANG']['tl_integrity_check']['update_check_contao_latest_not_detected'] = 'Latest Contao version not detected.';
+
+$GLOBALS['TL_LANG']['tl_integrity_check']['install_count_check'][0] = 'Check for install tool locking';
+$GLOBALS['TL_LANG']['tl_integrity_check']['install_count_check'][1] = 'If the install tool has been locked after a wrong password has been entered more than three times in a row, an e-mail goes to the admin.';
 
 /**
  * Reference
  */
-$GLOBALS['TL_LANG']['tl_integrity_check']['hourly']  = 'hourly';
-$GLOBALS['TL_LANG']['tl_integrity_check']['daily']   = 'daily';
-$GLOBALS['TL_LANG']['tl_integrity_check']['weekly']  = 'weekly';
-$GLOBALS['TL_LANG']['tl_integrity_check']['monthly'] = 'monthly';
+$GLOBALS['TL_LANG']['tl_integrity_check']['minutely'] = 'minutely';
+$GLOBALS['TL_LANG']['tl_integrity_check']['hourly']   = 'hourly';
+$GLOBALS['TL_LANG']['tl_integrity_check']['daily']    = 'daily';
+$GLOBALS['TL_LANG']['tl_integrity_check']['weekly']   = 'weekly';
+$GLOBALS['TL_LANG']['tl_integrity_check']['monthly']  = 'monthly';
 
 $GLOBALS['TL_LANG']['tl_integrity_check']['md5']       = 'MD5';
 $GLOBALS['TL_LANG']['tl_integrity_check']['timestamp'] = 'Timestamp';
@@ -74,5 +106,3 @@ $GLOBALS['TL_LANG']['tl_integrity_check']['refresh_confirm_message'] = 'The time
 
 $GLOBALS['TL_LANG']['tl_integrity_check']['initConfirm']          = 'Add a new default integrity check with all 4 files?';
 $GLOBALS['TL_LANG']['tl_integrity_check']['init_confirm_message'] = 'It has been created an integrity check. Please modify and/or activate.';
-
-?>

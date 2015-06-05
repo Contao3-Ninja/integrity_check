@@ -1,13 +1,13 @@
-<?php if (!defined('TL_ROOT')) die('You can not access this file directly!');
+<?php
 
 /**
  * Contao Open Source CMS
- * Copyright (C) 2005-2012 Leo Feyer
+ * Copyright (C) 2005-2014 Leo Feyer
  *
  * Formerly known as TYPOlight Open Source CMS.
  *
  * PHP version 5
- * @copyright  Glen Langer 2012 
+ * @copyright  Glen Langer 2012..2015 
  * @author     Glen Langer 
  * @package    Integrity_Check 
  * @license    LGPL 
@@ -19,4 +19,3 @@
  */
 $GLOBALS['TL_LANG']['MOD']['integrity_check'] = array('Integritäts-Check','Integritäts-Check (CRON)');
 
-?>

@@ -1,0 +1,27 @@
+.tl_listing_checks {
+    margin: 2px 0 10px !important;
+    width: 100%;
+}
+
+.tl_listing_checks tr.odd td {
+    background-color: #FAFAFA;
+}
+
+.tl_listing_checks .cp_step_start {
+    padding-left: 6px;
+}
+
+#tl_integrity_check .tl_tip {
+	height: 26px;
+}
+
+#tl_integrity_check #saveNcreate {
+	visibility: hidden;
+}
+
+.tl_integrity_check_star {
+    background: url("../../../../system/themes/default/images/featured.gif") no-repeat scroll 5px center transparent;
+    padding: 2px 0 3px 24px;
+}
+
+.snowstorm { color: white; visibility: hidden; }
