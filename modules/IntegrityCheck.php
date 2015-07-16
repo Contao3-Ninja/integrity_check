@@ -429,7 +429,7 @@ class IntegrityCheck extends \Frontend
 	}
 	
 	/**
-	 * Send eMail to Admin
+	 * Send eMail to Admin when files are corrupt
 	 */
 	private function sendCheckEmail()
 	{
@@ -456,8 +456,8 @@ class IntegrityCheck extends \Frontend
 	    $objEmail->from     = $ADMIN_EMAIL;
 	    $objEmail->fromName = $ADMIN_NAME;
 	    
-	    $objEmail->subject  = sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['subject']  , $this->Environment->host);
-	    $objEmail->text     = sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['message_1'], $this->Environment->host);
+	    $objEmail->subject  = sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['subject']  , $this->Environment->host . $this->Environment->path);
+	    $objEmail->text     = sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['message_1'], $this->Environment->host . $this->Environment->path);
 	    
 	    foreach ($this->fileEmailStatus as $key => $value) // file => true/false
 	    {
@@ -588,7 +588,7 @@ class IntegrityCheck extends \Frontend
 	}// sendCheckLog()
 	
 	/**
-	 * Send eMail to Admin, an update is necessary
+	 * Send eMail to Admin, an update is necessary of integrity check
 	 */
 	private function sendCheckEmailMD5Block()
 	{
@@ -797,7 +797,7 @@ class IntegrityCheck extends \Frontend
 	    $objEmail->from     = $ADMIN_EMAIL;
 	    $objEmail->fromName = $ADMIN_NAME;
 	     
-	    $objEmail->subject  = sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['subject']  , $this->Environment->host);
+	    $objEmail->subject  = sprintf($GLOBALS['TL_LANG']['tl_integrity_check']['subject']  , $this->Environment->host . $this->Environment->path);
 	    $objEmail->text     = $text;
 	    $objEmail->text    .= "\n[".date($GLOBALS['TL_CONFIG']['datimFormat'])."]";
 	    
