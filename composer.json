@@ -20,7 +20,7 @@
 		"forum":"https://community.contao.org/de/forumdisplay.php?119-Sonstige-Erweiterungen"
 	},
 	"require":{
-		"php":">=5.3",
+		"php":">=5.3,<7",
 		"contao/core":">=3.1,<4",
 		"contao-community-alliance/composer-plugin": "*",
 		"menatwork/contao-multicolumnwizard": "~3"
