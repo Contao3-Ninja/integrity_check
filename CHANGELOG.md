@@ -1,6 +1,12 @@
 # Changelog Contao Integrity Check
 
-## [Version 3.5.7](https://github.com/BugBuster1701/integrity_check/issues?q=milestone%3A%22Version+3.5.7%22+is%3Aclosed) (2015-10-14)
+## [Version 3.5.8](https://github.com/BugBuster1701/integrity_check/issues?q=milestone%3A%22Version+3.5.8%22+is%3Aclosed) (2015-11-25)
+
+### Fixed bugs
+
+- [\#83](https://github.com/BugBuster1701/integrity_check/issues/83) Checksummen für Contao 3.5.5
+
+## [Version 3.5.7](https://github.com/BugBuster1701/integrity_check/issues?q=milestone%3A%22Version+3.5.7%22+is%3Aclosed) (2015-10-14)
 
 ### Fixed bugs
 
@@ -26,7 +32,7 @@
 
 ### Fixed bugs
 
-- [\#78](https://github.com/BugBuster1701/integrity_check/issues/78) Environment->path bei den Mail 
+- [\#78](https://github.com/BugBuster1701/integrity_check/issues/78) Environment->path bei den Mail
 
 ## [Version 3.5.3](https://github.com/BugBuster1701/integrity_check/issues?q=milestone%3A%22Version+3.5.3%22+is%3Aclosed) (2015-07-16)
 
@@ -34,7 +40,7 @@
 
 - [\#77](https://github.com/BugBuster1701/integrity_check/issues/77) MD5 Checksummen für 3.2.21
 
-## [Version 3.5.2](https://github.com/BugBuster1701/integrity_check/issues?q=milestone%3A%22Version+3.5.2%22+is%3Aclosed) (2015-06-05)
+## [Version 3.5.2](https://github.com/BugBuster1701/integrity_check/issues?q=milestone%3A%22Version+3.5.2%22+is%3Aclosed) (2015-06-06)
 
 ### New features
 
@@ -46,7 +52,7 @@
 
 - [\#75](https://github.com/BugBuster1701/integrity_check/issues/75) Versionsgrößen Vergleich falsch
 
-## [Version 3.5.0](https://github.com/BugBuster1701/integrity_check/issues?q=milestone%3A%22Version+3.5.0%22+is%3Aclosed) (2015-03-27)
+## [Version 3.5.0](https://github.com/BugBuster1701/integrity_check/issues?q=milestone%3A%22Version+3.5.0%22+is%3Aclosed) (2015-03-28)
 
 ### New features
 
@@ -112,16 +118,6 @@
 - [\#11](https://github.com/BugBuster1701/integrity_check/issues/11) [C3] Massenlogging verhindern
 - [\#8](https://github.com/BugBuster1701/integrity_check/issues/8) [C3] - Cron Interval "minutely"
 - [\#4](https://github.com/BugBuster1701/integrity_check/issues/4) [C3] zeitliche Kontrollplaene
-
-## [1.1.0](https://github.com/BugBuster1701/integrity_check/issues?q=milestone%3A%221.1.0%22+is%3Aclosed) (2012-09-03)
-
-### New features
-
-- [\#13](https://github.com/BugBuster1701/integrity_check/issues/13) Meldung bei Aktualisierung der Zeitstempel
-- [\#12](https://github.com/BugBuster1701/integrity_check/issues/12) Zeitstempel anlegen per runonce
-- [\#10](https://github.com/BugBuster1701/integrity_check/issues/10) Massenmailing verhindern
-- [\#9](https://github.com/BugBuster1701/integrity_check/issues/9) cron.php mit checken
-- [\#6](https://github.com/BugBuster1701/integrity_check/issues/6) Aenderungen erkennen
 
 
 
