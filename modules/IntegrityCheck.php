@@ -451,7 +451,7 @@ class IntegrityCheck extends \Frontend
 	    //////////////// MAIL OUT \\\\\\\\\\\\\\\\
 	    $sendmail = false;
 	    // Notification
-	    list($ADMIN_NAME, $ADMIN_EMAIL) = \String::splitFriendlyEmail($GLOBALS['TL_CONFIG']['adminEmail']); //from index.php
+	    list($ADMIN_NAME, $ADMIN_EMAIL) = \StringUtil::splitFriendlyEmail($GLOBALS['TL_CONFIG']['adminEmail']); //from index.php
 	    $objEmail = new \Email();
 	    $objEmail->from     = $ADMIN_EMAIL;
 	    $objEmail->fromName = $ADMIN_NAME;
@@ -617,7 +617,7 @@ class IntegrityCheck extends \Frontend
 	    
 	    //////////////// MAIL OUT \\\\\\\\\\\\\\\\
 	    // Notification
-	    list($ADMIN_NAME, $ADMIN_EMAIL) = \String::splitFriendlyEmail($GLOBALS['TL_CONFIG']['adminEmail']); //from index.php
+	    list($ADMIN_NAME, $ADMIN_EMAIL) = \StringUtil::splitFriendlyEmail($GLOBALS['TL_CONFIG']['adminEmail']); //from index.php
 	    $objEmail = new \Email();
 	    $objEmail->from     = $ADMIN_EMAIL;
 	    $objEmail->fromName = $ADMIN_NAME;
@@ -792,7 +792,7 @@ class IntegrityCheck extends \Frontend
 	            break;
 	    }
 	    
-	    list($ADMIN_NAME, $ADMIN_EMAIL) = \String::splitFriendlyEmail($GLOBALS['TL_CONFIG']['adminEmail']); //from index.php
+	    list($ADMIN_NAME, $ADMIN_EMAIL) = \StringUtil::splitFriendlyEmail($GLOBALS['TL_CONFIG']['adminEmail']); //from index.php
 	    $objEmail = new \Email();
 	    $objEmail->from     = $ADMIN_EMAIL;
 	    $objEmail->fromName = $ADMIN_NAME;
