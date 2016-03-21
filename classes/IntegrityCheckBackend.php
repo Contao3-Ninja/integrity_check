@@ -5,7 +5,7 @@
  *
  * Contao Module "Integrity Check"
  *
- * @copyright  Glen Langer 2012..2015 <http://contao.ninja>
+ * @copyright  Glen Langer 2012..2016 <http://contao.ninja>
  * @author     Glen Langer (BugBuster)
  * @package    Integrity_Check
  * @license    LGPL
@@ -24,7 +24,7 @@ namespace BugBuster\IntegrityCheck;
  * 
  * Backend Integrity check 
  *
- * @copyright  Glen Langer 2012..2015 <http://contao.ninja>
+ * @copyright  Glen Langer 2012..2016 <http://contao.ninja>
  * @author     Glen Langer (BugBuster)
  * @author     Leo Feyer (sourcecode parts from contao check tool)
  * @package    Integrity_Check

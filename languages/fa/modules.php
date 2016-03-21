@@ -5,7 +5,7 @@
  * Contao extension: integrity_check 3.3.2 stable 
  * Persian translation file 
  * 
- * Copyright : &copy; 2012..2015 Glen Langer 
+ * Copyright : &copy; 2012..2016 Glen Langer 
  * License   : LGPL 
  * Author    : Glen Langer (BugBuster), http://contao.ninja 
  * Translator: Hamid Abbaszadeh (respinar), http://contao.ir/ 

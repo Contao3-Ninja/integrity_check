@@ -4,7 +4,7 @@
  * 
  * Portugiesisch translation file 
  * 
- * Copyright : &copy; 2012..2015 Glen Langer 
+ * Copyright : &copy; 2012..2016 Glen Langer 
  * License   : LGPL 
  * Author    : Glen Langer (BugBuster), http://contao.ninja 
  * Translator: Luciano Sportelli (ciaobello), https://www.contao-community.de/member.php?4042-ciaobello 

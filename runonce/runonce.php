@@ -5,7 +5,7 @@
  *
  * Contao Module "Integrity Check"
  *
- * @copyright  Glen Langer 2012..2015 <http://contao.ninja>
+ * @copyright  Glen Langer 2012..2016 <http://contao.ninja>
  * @author     Glen Langer (BugBuster)
  * @package    Integrity_Check 
  * @license    LGPL 
@@ -18,7 +18,7 @@
  *
  * Runonce for integrity check
  *
- * @copyright  Glen Langer 2012..2015 <http://contao.ninja>
+ * @copyright  Glen Langer 2012..2016 <http://contao.ninja>
  * @author     Glen Langer (BugBuster)
  * @package    Integrity_Check
  */
