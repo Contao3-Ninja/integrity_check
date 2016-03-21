@@ -5,7 +5,7 @@
  *
  * Contao Module "Integrity Check"
  *
- * @copyright  Glen Langer 2012..2015 <http://contao.ninja>
+ * @copyright  Glen Langer 2012..2016 <http://contao.ninja>
  * @author     Glen Langer (BugBuster)
  * @package    Integrity_Check 
  * @license    LGPL 
@@ -23,7 +23,7 @@ namespace BugBuster\IntegrityCheck;
  * 
  * Cronjob for integrity check 
  *
- * @copyright  Glen Langer 2012..2015 <http://contao.ninja>
+ * @copyright  Glen Langer 2012..2016 <http://contao.ninja>
  * @author     Glen Langer (BugBuster)
  * @author     Leo Feyer (sourcecode parts from contao check tool)
  * @package    Integrity_Check
@@ -47,7 +47,7 @@ class IntegrityCheck extends \Frontend
     protected $cron_interval = '';
     
     
-    const LATEST_VERSION = '3.5.8';
+    const LATEST_VERSION = '3.5.9';
     const MESSAGE_CONTAO_UPDATE = 4;
     const MESSAGE_INSTALL_COUNT = 5;
     
