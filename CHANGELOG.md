@@ -1,5 +1,11 @@
 # Changelog Contao Integrity Check
 
+## [Version 3.5.12](https://github.com/BugBuster1701/integrity_check/issues?q=milestone%3A%22Version+3.5.12%22+is%3Aclosed) (2016-03-21)
+
+### New features
+
+- [\#88](https://github.com/BugBuster1701/integrity_check/issues/88) Checksummen für 3.5.9
+
 ## [Version 3.5.11](https://github.com/BugBuster1701/integrity_check/issues?q=milestone%3A%22Version+3.5.11%22+is%3Aclosed) (2016-03-02)
 
 ### New features
@@ -80,6 +86,7 @@
 - [\#72](https://github.com/BugBuster1701/integrity_check/issues/72) Neuen Status + Icon für Datei nicht gefunden
 - [\#68](https://github.com/BugBuster1701/integrity_check/issues/68) Integrity check auf flexible BE-Theme anpassen
 - [\#39](https://github.com/BugBuster1701/integrity_check/issues/39) Button zum "Jetzt prüfen"
+
 
 
 
