@@ -1,5 +1,11 @@
 # Changelog Contao Integrity Check
 
+## [Version 3.5.13](https://github.com/BugBuster1701/integrity_check/issues?q=milestone%3A%22Version+3.5.13%22+is%3Aclosed) (2016-04-20)
+
+### New features
+
+- [\#89](https://github.com/BugBuster1701/integrity_check/issues/89) Checksummen für 3.5.10
+
 ## [Version 3.5.12](https://github.com/BugBuster1701/integrity_check/issues?q=milestone%3A%22Version+3.5.12%22+is%3Aclosed) (2016-03-21)
 
 ### New features
@@ -87,6 +93,62 @@
 - [\#68](https://github.com/BugBuster1701/integrity_check/issues/68) Integrity check auf flexible BE-Theme anpassen
 - [\#39](https://github.com/BugBuster1701/integrity_check/issues/39) Button zum "Jetzt prüfen"
 
+## [Version 3.4.7](https://github.com/BugBuster1701/integrity_check/issues?q=milestone%3A%22Version+3.4.7%22+is%3Aclosed) (2015-02-12)
+
+### New features
+
+- [\#71](https://github.com/BugBuster1701/integrity_check/issues/71) Checksummen für 3.2.19 / 3.3.4
+
+## [Version 3.4.6](https://github.com/BugBuster1701/integrity_check/issues?q=milestone%3A%22Version+3.4.6%22+is%3Aclosed) (2015-01-30)
+
+### New features
+
+- [\#70](https://github.com/BugBuster1701/integrity_check/issues/70) Checksummen fuer Contao 3.4.3 und 3.2.18
+
+## [Version 3.4.5](https://github.com/BugBuster1701/integrity_check/issues?q=milestone%3A%22Version+3.4.5%22+is%3Aclosed) (2015-01-24)
+
+### New features
+
+- [\#69](https://github.com/BugBuster1701/integrity_check/issues/69) Checksummen für 3.2.17 / 3.4.1 / 3.4.2
+
+## [Version 3.4.2](https://github.com/BugBuster1701/integrity_check/issues?q=milestone%3A%22Version+3.4.2%22+is%3Aclosed) (2014-11-03)
+
+### New features
+
+- [\#67](https://github.com/BugBuster1701/integrity_check/issues/67) Checksummen für 3.2.15 / 3.3.6
+- [\#63](https://github.com/BugBuster1701/integrity_check/issues/63) Update Transifex Language Files
+
+## [Version 3.4.1](https://github.com/BugBuster1701/integrity_check/issues?q=milestone%3A%22Version+3.4.1%22+is%3Aclosed) (2014-09-30)
+
+### New features
+
+- [\#66](https://github.com/BugBuster1701/integrity_check/issues/66) Checksummen fuer Contao 3.3.5 und 3.2.14
+
+## [Version 3.4.0](https://github.com/BugBuster1701/integrity_check/issues?q=milestone%3A%22Version+3.4.0%22+is%3Aclosed) (2014-07-29)
+
+### New features
+
+- [\#64](https://github.com/BugBuster1701/integrity_check/issues/64) Checksummen fuer Contao 3.3.4 und 3.2.13
+- [\#62](https://github.com/BugBuster1701/integrity_check/issues/62) Grafik 3 für "Warning"
+- [\#61](https://github.com/BugBuster1701/integrity_check/issues/61) Optionaler Check / Mail wenn Updates verfügbar
+- [\#7](https://github.com/BugBuster1701/integrity_check/issues/7) Warnung bei installCount >= 3
+
+## [Version 3.3.0](https://github.com/BugBuster1701/integrity_check/issues?q=milestone%3A%22Version+3.3.0%22+is%3Aclosed) (2014-07-20)
+
+### New features
+
+- [\#44](https://github.com/BugBuster1701/integrity_check/issues/44) Gelöschte Tests aus dem Status löschen
+- [\#43](https://github.com/BugBuster1701/integrity_check/issues/43) Wenn Datei nicht prüfbar, besonders behandeln im Status / Debug Meldung
+- [\#40](https://github.com/BugBuster1701/integrity_check/issues/40) Status des letzten Checks
+
+## [Version 3.0.0](https://github.com/BugBuster1701/integrity_check/issues?q=milestone%3A%22Version+3.0.0%22+is%3Aclosed) (2014-01-19)
+
+### New features
+
+- [\#15](https://github.com/BugBuster1701/integrity_check/issues/15) [C3] Umstellung auf json testfiles
+- [\#11](https://github.com/BugBuster1701/integrity_check/issues/11) [C3] Massenlogging verhindern
+- [\#8](https://github.com/BugBuster1701/integrity_check/issues/8) [C3] - Cron Interval "minutely"
+- [\#4](https://github.com/BugBuster1701/integrity_check/issues/4) [C3] zeitliche Kontrollplaene
 
 
 
