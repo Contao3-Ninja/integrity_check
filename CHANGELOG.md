@@ -1,5 +1,11 @@
 # Changelog Contao Integrity Check
 
+## [Version 3.5.15](https://github.com/BugBuster1701/integrity_check/issues?q=milestone%3A%22Version+3.5.15%22+is%3Aclosed) (2016-06-17)
+
+### Fixed bugs
+
+- [\#92](https://github.com/BugBuster1701/integrity_check/issues/92) Checksummen für 3.5.13 und 3.5.14
+
 ## [Version 3.5.14](https://github.com/BugBuster1701/integrity_check/issues?q=milestone%3A%22Version+3.5.14%22+is%3Aclosed) (2016-04-22)
 
 ### New features
@@ -156,7 +162,6 @@
 - [\#11](https://github.com/BugBuster1701/integrity_check/issues/11) [C3] Massenlogging verhindern
 - [\#8](https://github.com/BugBuster1701/integrity_check/issues/8) [C3] - Cron Interval "minutely"
 - [\#4](https://github.com/BugBuster1701/integrity_check/issues/4) [C3] zeitliche Kontrollplaene
-
 
 
 
