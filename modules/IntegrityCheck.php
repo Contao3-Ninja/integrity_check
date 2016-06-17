@@ -47,7 +47,7 @@ class IntegrityCheck extends \Frontend
     protected $cron_interval = '';
     
     
-    const LATEST_VERSION = '3.5.12';
+    const LATEST_VERSION = '3.5.14';
     const MESSAGE_CONTAO_UPDATE = 4;
     const MESSAGE_INSTALL_COUNT = 5;
     
