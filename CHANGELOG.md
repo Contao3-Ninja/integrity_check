@@ -1,5 +1,11 @@
 # Changelog Contao Integrity Check
 
+## [Version 3.5.17](https://github.com/BugBuster1701/integrity_check/issues?q=milestone%3A%22Version+3.5.17%22+is%3Aclosed) (2016-09-19)
+
+### Fixed bugs
+
+- [\#94](https://github.com/BugBuster1701/integrity_check/issues/94) Checksummen für 3.5.16
+
 ## [Version 3.5.16](https://github.com/BugBuster1701/integrity_check/issues?q=milestone%3A%22Version+3.5.16%22+is%3Aclosed) (2016-07-15)
 
 ### Fixed bugs
