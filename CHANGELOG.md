@@ -1,4 +1,10 @@
-# Contao Module Integrity Check
+# Integrity Check Changelog
+
+## [Version 3.5.27](https://github.com/BugBuster1701/integrity_check/issues?q=milestone%3A%22Version+3.5.27%22+is%3Aclosed) (2017-04-20)
+
+### Fixed bugs
+
+- [\#105](https://github.com/BugBuster1701/integrity_check/issues/105) Checksummen für 3.5.26
 
 ## [Version 3.5.26](https://github.com/BugBuster1701/integrity_check/issues?q=milestone%3A%22Version+3.5.26%22+is%3Aclosed) (2017-03-20)
 
