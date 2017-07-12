@@ -1,5 +1,11 @@
 # Integrity Check Changelog
 
+## [Version 3.5.30](https://github.com/BugBuster1701/integrity_check/issues?q=milestone%3A%22Version+3.5.30%22+is%3Aclosed) (2017-07-12)
+
+### Fixed bugs
+
+- [\#108](https://github.com/BugBuster1701/integrity_check/issues/108) Checksummen für 3.5.28
+
 ## [Version 3.5.29](https://github.com/BugBuster1701/integrity_check/issues?q=milestone%3A%22Version+3.5.29%22+is%3Aclosed) (2017-04-25)
 
 ### Fixed bugs
@@ -160,7 +166,7 @@
 
 ### Fixed bugs
 
-- [\#78](https://github.com/BugBuster1701/integrity_check/issues/78) Environment->path bei den Mail
+- [\#78](https://github.com/BugBuster1701/integrity_check/issues/78) Environment->path bei den Mail 
 
 ## [Version 3.5.3](https://github.com/BugBuster1701/integrity_check/issues?q=milestone%3A%22Version+3.5.3%22+is%3Aclosed) (2015-07-16)
 
@@ -246,6 +252,7 @@
 - [\#11](https://github.com/BugBuster1701/integrity_check/issues/11) [C3] Massenlogging verhindern
 - [\#8](https://github.com/BugBuster1701/integrity_check/issues/8) [C3] - Cron Interval "minutely"
 - [\#4](https://github.com/BugBuster1701/integrity_check/issues/4) [C3] zeitliche Kontrollplaene
+
 
 
 
