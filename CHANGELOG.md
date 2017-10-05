@@ -1,5 +1,11 @@
 # Integrity Check Changelog
 
+## [Version 3.5.31](https://github.com/BugBuster1701/integrity_check/issues?q=milestone%3A%22Version+3.5.31%22+is%3Aclosed) (2017-10-06)
+
+### Fixed bugs
+
+- [\#109](https://github.com/BugBuster1701/integrity_check/issues/109) Checksummen für 3.5.29
+
 ## [Version 3.5.30](https://github.com/BugBuster1701/integrity_check/issues?q=milestone%3A%22Version+3.5.30%22+is%3Aclosed) (2017-07-12)
 
 ### Fixed bugs
@@ -252,7 +258,6 @@
 - [\#11](https://github.com/BugBuster1701/integrity_check/issues/11) [C3] Massenlogging verhindern
 - [\#8](https://github.com/BugBuster1701/integrity_check/issues/8) [C3] - Cron Interval "minutely"
 - [\#4](https://github.com/BugBuster1701/integrity_check/issues/4) [C3] zeitliche Kontrollplaene
-
 
 
 
