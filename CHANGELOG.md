@@ -1,5 +1,12 @@
 # Integrity Check Changelog
 
+## [Version 3.5.33](https://github.com/BugBuster1701/integrity_check/issues?q=milestone%3A%22Version+3.5.33%22+is%3Aclosed) (2017-11-15)
+
+### Fixed bugs
+
+- [\#112](https://github.com/BugBuster1701/integrity_check/issues/112) Checksummen für 3.5.31
+- [\#111](https://github.com/BugBuster1701/integrity_check/issues/111) conflict mcw definieren
+
 ## [Version 3.5.32](https://github.com/BugBuster1701/integrity_check/issues?q=milestone%3A%22Version+3.5.32%22+is%3Aclosed) (2017-10-06)
 
 ### Fixed bugs
