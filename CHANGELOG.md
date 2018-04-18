@@ -1,5 +1,12 @@
 # Integrity Check Changelog
 
+## [Version 3.5.37](https://github.com/BugBuster1701/integrity_check/issues?q=milestone%3A%22Version+3.5.37%22+is%3Aclosed) (2018-04-18)
+
+### Fixed bugs
+
+- [\#117](https://github.com/BugBuster1701/integrity_check/issues/117) Update portugiesisch translation file
+- [\#116](https://github.com/BugBuster1701/integrity_check/issues/116) Checksummen für 3.5.35
+
 ## [Version 3.5.36](https://github.com/BugBuster1701/integrity_check/issues?q=milestone%3A%22Version+3.5.36%22+is%3Aclosed) (2018-03-06)
 
 ### Fixed bugs
