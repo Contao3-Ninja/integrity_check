@@ -14,7 +14,6 @@
  * permanent text corrections which are update-safe. 
  */
 
-$GLOBALS['TL_LANG']['MOD']['integrity_check']      = 'Integrity Check (CRON)';
 $GLOBALS['TL_LANG']['MOD']['integrity_check']['0'] = 'Verificação de integridade';
 $GLOBALS['TL_LANG']['MOD']['integrity_check']['1'] = 'Verificação de integridade (CRON)';
 
