@@ -83,7 +83,7 @@ class DcaIntegrityCheck extends \Backend
             $icon = 'invisible.gif';
         }
 
-        return '<a href="'.$this->addToUrl($href).'" title="'.specialchars($title).'"'.$attributes.'>'.$this->generateImage($icon, $label).'</a> ';
+        return '<a href="'.$this->addToUrl($href).'" title="'.specialchars($title).'"'.$attributes.'>'.\Image::getHtml($icon, $label).'</a> ';
     }
 
 
@@ -135,12 +135,12 @@ class DcaIntegrityCheck extends \Backend
     public function listChecks($arrRow)
     {
         $lineCount = 0;
-        $check_plans        = deserialize($arrRow[check_plans]       ,true);
-        $check_plans_expert = deserialize($arrRow[check_plans_expert],true);
+        $check_plans        = deserialize($arrRow['check_plans']       ,true);
+        $check_plans_expert = deserialize($arrRow['check_plans_expert'],true);
         //Status Liste säubern
-        $this->cleanCheckStatus($arrRow[id], $check_plans, $check_plans_expert);
+        $this->cleanCheckStatus($arrRow['id'], $check_plans, $check_plans_expert);
         //Status Liste auslesen
-        $check_status = $this->getCheckStatus($arrRow[id]);
+        $check_status = $this->getCheckStatus($arrRow['id']);
         $title ='
   <table class="tl_listing_checks">
   <tr>
@@ -194,7 +194,7 @@ class DcaIntegrityCheck extends \Backend
         $title .= '</table>
 ';
         //Vorsorgetests
-        if ($arrRow[update_check] || $arrRow[install_count_check]) 
+        if ($arrRow['update_check'] || $arrRow['install_count_check']) 
         {
             $title .='
 <table class="tl_listing_checks">
@@ -203,7 +203,7 @@ class DcaIntegrityCheck extends \Backend
          <td class="tl_folder_tlist" style="text-align: center;">'.$GLOBALS['TL_LANG']['tl_integrity_check']['cp_file_status'].'</td>
     </tr>
 ';
-            if ($arrRow[update_check])
+            if ($arrRow['update_check'])
             {
                 $title .='
     <tr>
@@ -212,7 +212,7 @@ class DcaIntegrityCheck extends \Backend
     </tr>
 ';
             }
-            if ($arrRow[install_count_check])
+            if ($arrRow['install_count_check'])
             {
             $title .='
     <tr>
@@ -224,7 +224,7 @@ class DcaIntegrityCheck extends \Backend
             $title .='
 </table>
 ';
-        } // if ($arrRow[update_check] || $arrRow[install_count_check]) 
+        } // if ($arrRow['update_check'] || $arrRow['install_count_check']) 
                 
         return $title;
     }
@@ -311,7 +311,7 @@ class DcaIntegrityCheck extends \Backend
                                                     id=?")
                                     ->execute(time(),serialize($arrTimestamps),1);
         }
-        $this->addConfirmationMessage($GLOBALS['TL_LANG']['tl_integrity_check']['refresh_confirm_message']);
+        \Message::addConfirmation($GLOBALS['TL_LANG']['tl_integrity_check']['refresh_confirm_message']);
         if ($redirect)
         {
             $this->redirect($this->getReferer());
@@ -428,7 +428,7 @@ class DcaIntegrityCheck extends \Backend
                                             %s")
                                  ->set($arrSet)
                                  ->execute();
-        $this->addConfirmationMessage($GLOBALS['TL_LANG']['tl_integrity_check']['init_confirm_message']);
+        \Message::addConfirmation($GLOBALS['TL_LANG']['tl_integrity_check']['init_confirm_message']);
         $this->redirect($this->getReferer());
          
     }
@@ -635,7 +635,7 @@ class DcaIntegrityCheck extends \Backend
     
         $href .= '&amp;checkid='.$row['id'].'';
     
-        return '<a href="'.$this->addToUrl($href).'" title="'.specialchars($title).'"'.$attributes.'>'.$this->generateImage($icon, $label).'</a> ';
+        return '<a href="'.$this->addToUrl($href).'" title="'.specialchars($title).'"'.$attributes.'>'.\Image::getHtml($icon, $label).'</a> ';
     }
 
 }

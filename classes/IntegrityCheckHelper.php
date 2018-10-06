@@ -86,7 +86,7 @@ class IntegrityCheckHelper extends \System
             // check for required extensions
             foreach ($arrRequiredExtensions as $key => $val)
             {
-                if (!in_array($val, $this->Config->getActiveModules()))
+                if (!in_array($val, \ModuleLoader::getActive()))
                 {
                     $_SESSION["TL_INFO"] = array_merge($_SESSION["TL_INFO"], array($val => 'Please install the required extension <strong>' . $key . '</strong>'));
                 }
