@@ -1,11 +1,11 @@
 <?php 
 
 /**
- * Contao Open Source CMS, Copyright (C) 2005-2014 Leo Feyer
+ * Contao Open Source CMS, Copyright (C) 2005-2018 Leo Feyer
  *
  * Contao Module "Integrity Check"
  *
- * @copyright  Glen Langer 2012..2016 <http://contao.ninja>
+ * @copyright  Glen Langer 2012..2018 <http://contao.ninja>
  * @author     Glen Langer (BugBuster)
  * @package    Integrity_Check 
  * @license    LGPL 
@@ -18,7 +18,7 @@
  *
  * Runonce for integrity check
  *
- * @copyright  Glen Langer 2012..2016 <http://contao.ninja>
+ * @copyright  Glen Langer 2012..2018 <http://contao.ninja>
  * @author     Glen Langer (BugBuster)
  * @package    Integrity_Check
  */
@@ -42,7 +42,7 @@ class IntegrityCheckRunonce extends Controller
                                       `last_mail_tstamps` varchar(255) NOT NULL DEFAULT '',
                                       `last_minutely_log` varchar(255) NOT NULL DEFAULT '',
                                       `last_mail_md5_block` int(10) unsigned NOT NULL default '0',
-                                      `latest_contao_version` varchar(12) NOT NULL DEFAULT ''
+                                      `latest_contao_version` varchar(12) NOT NULL DEFAULT '',
                                       PRIMARY KEY (`id`)
                                     ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1");
             //Timestamps füllen
