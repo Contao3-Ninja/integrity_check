@@ -1,5 +1,12 @@
 # Integrity Check Changelog
 
+## [Version 3.5.39](https://github.com/BugBuster1701/integrity_check/issues?q=milestone%3A%22Version+3.5.39%22+is%3Aclosed) (2018-10-07)
+
+### Fixed bugs
+
+- [\#120](https://github.com/BugBuster1701/integrity_check/issues/120) PHP Warning: Use of undefined constant ...
+- [\#119](https://github.com/BugBuster1701/integrity_check/issues/119) integrity_check/runonce/runonce.php sql error
+
 ## [Version 3.5.38](https://github.com/BugBuster1701/integrity_check/issues?q=milestone%3A%22Version+3.5.38%22+is%3Aclosed) (2018-09-27)
 
 ### Fixed bugs
