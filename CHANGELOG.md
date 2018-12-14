@@ -1,5 +1,11 @@
 # Integrity Check Changelog
 
+## [Version 3.5.40](https://github.com/BugBuster1701/integrity_check/issues?q=milestone%3A%22Version+3.5.40%22+is%3Aclosed) (2018-12-14)
+
+### Fixed bugs
+
+- [\#121](https://github.com/BugBuster1701/integrity_check/issues/121) Checksummen für 3.5.37
+
 ## [Version 3.5.39](https://github.com/BugBuster1701/integrity_check/issues?q=milestone%3A%22Version+3.5.39%22+is%3Aclosed) (2018-10-07)
 
 ### Fixed bugs
