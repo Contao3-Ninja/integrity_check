@@ -1,5 +1,11 @@
 # Contao Module Integrity Check
 
+## [Version 3.5.43](https://github.com/BugBuster1701/integrity_check/issues?q=milestone%3A%22Version+3.5.43%22+is%3Aclosed) (2019-04-11)
+
+### Fixed bugs
+
+- [\#124](https://github.com/BugBuster1701/integrity_check/issues/124) Checksummen für 3.5.40
+
 ## [Version 3.5.42](https://github.com/BugBuster1701/integrity_check/issues?q=milestone%3A%22Version+3.5.42%22+is%3Aclosed) (2019-04-09)
 
 ### Fixed bugs
@@ -327,6 +333,7 @@
 - [\#11](https://github.com/BugBuster1701/integrity_check/issues/11) [C3] Massenlogging verhindern
 - [\#8](https://github.com/BugBuster1701/integrity_check/issues/8) [C3] - Cron Interval "minutely"
 - [\#4](https://github.com/BugBuster1701/integrity_check/issues/4) [C3] zeitliche Kontrollplaene
+
 
 
 
